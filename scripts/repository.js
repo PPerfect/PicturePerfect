@@ -13,7 +13,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
             JSON: 'application/json',
             IMAGE_JPEG: 'image/jpeg'
         }
-//TODO some request need to be changed in order to work. 
+//TODO some request need to be changed in order to work.
 
     function Repository(baseUrl) {
         this.photos = new Photo(baseUrl + uris.PHOTO);
@@ -65,12 +65,18 @@ define(['requestsExecutor'], function (requestsExecutor) {
             requestsExecutor.get(this.serviceUrl + uris.USERS, contentTypes.JSON, success, error);
         }
 
-        User.prototype.LogIn = function (id, success, error) {
-            requestsExecutor.get(this.serviceUrl + uris.LOGIN + '/' + id, contentTypes.JSON, success, error);
+        User.prototype.login = function (username, password, success, error) {
+
+            var url = this.serviceUrl + uris.LOGIN + '?username=' + username + '&password=' + password;
+
+            requestsExecutor.get(url, contentTypes.JSON, success, error);
 
         }
 
-        User.prototype.Register = function (data, success, error) {
+        User.prototype.register = function (username, password, success, error) {
+
+            var data = JSON.stringify({'username': username, 'password': password});
+
             requestsExecutor.post(this.serviceUrl + uris.USERS, contentTypes.JSON, data, success, error);
         }
 
@@ -92,7 +98,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
             requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
 
         }
-        //TODO this request url should be changed
+
         Album.prototype.createAlbum = function (userObjectId, data, success, error) {
             var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userObjectId + '"}}'
 
@@ -121,20 +127,20 @@ define(['requestsExecutor'], function (requestsExecutor) {
             requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
         }
 
-        Category.prototype.getAlbumById = function (id, success, error) {
+        Category.prototype.getCategoryById = function (id, success, error) {
             requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
 
         }
 
-        Category.prototype.createAlbum = function (data, success, error) {
+        Category.prototype.createCategory = function (data, success, error) {
             requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
         }
 
-        Category.prototype.deleteAlbumById = function (id, success, error) {
+        Category.prototype.deleteCategoryById = function (id, success, error) {
             requestsExecutor.delete(this.serviceUrl + '/' + id, success, error);
         }
 
-        Category.prototype.editAlbum = function (id, data, success, error) {
+        Category.prototype.editCategory = function (id, data, success, error) {
             requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
         }
         return Category;

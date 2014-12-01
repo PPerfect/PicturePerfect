@@ -6,8 +6,6 @@ define([ 'baseController'], function (baseController) {
 
     }
 
-    //PhotoController.extends(baseController);
-
     PhotoController.prototype = Object.create(baseController.prototype);
 
     PhotoController.prototype.getAllPhotos = function () {

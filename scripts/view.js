@@ -14,7 +14,9 @@ define(['photoController', 'albumController'], function (photoController, albumC
 
         photoController.getAllPhotos().then(
             function success(data) {
-
+                console.log('----------------');
+                console.log(data);
+                console.log('----------------');
                 var $ul = $('<ul/>').appendTo(document.body);
                 $.each(data.results, function (index, value) {
                     $('<li>' + value.photoName + '</li>').appendTo($ul);
@@ -40,10 +42,7 @@ define(['photoController', 'albumController'], function (photoController, albumC
             }, function error(errorS) {
 
             });
-
-
     }
-
 
     console.log(View);
     console.log(View.prototype);

@@ -6,12 +6,10 @@ define(['baseController'], function (baseController) {
 
     }
 
-    //PhotoController.extends(baseController);
-
     AlbumController.prototype = Object.create(baseController.prototype);
 
     AlbumController.prototype.getAllAlbums = function () {
-        console.log(this.repository.photos)
+        console.log(this.repository.photos);
 
         var defer = $.Deferred();
 
@@ -25,7 +23,6 @@ define(['baseController'], function (baseController) {
         )
         return defer.promise();
     }
-
 
     return new AlbumController();
 });
