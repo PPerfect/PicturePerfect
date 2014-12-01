@@ -1,6 +1,8 @@
-define(['photoController'], function (photoController) {
+define(['photoController', 'albumController'], function (photoController, albumController) {
 
     'use strict';
+
+    //TODO we should take decision whether to separate the view
 
     function View() {
 
@@ -9,28 +11,43 @@ define(['photoController'], function (photoController) {
     View.prototype.listAllPhotos = function listAllPhotos() {
         console.log(photoController);
 
-       //TODO use promises
-        photoController.getAllPhotos(resolveResult);
-        //.than(
-        //    function success(data) {
-        //
-        //        console.log(data);
-        //
-        //    }, function error(error) {
-        //    });
-    }
-//testing
-    function resolveResult(data) {
-        console.log(data);
-        console.log(data.results);
-       var $ul= $('<ul/>').appendTo(document.body);
-        $.each(data.results,function(index,value){
-            $('<li>'+value.photoName+'</li>').appendTo($ul);
 
-        })
+        photoController.getAllPhotos().then(
+            function success(data) {
+
+                var $ul = $('<ul/>').appendTo(document.body);
+                $.each(data.results, function (index, value) {
+                    $('<li>' + value.photoName + '</li>').appendTo($ul);
+
+                })
+
+            }, function error(error) {
+                console.log(error);
+
+            });
     }
+
+    View.prototype.listAllAlbums = function () {
+
+        albumController.getAllAlbums().then(
+            function success(data) {
+                var $ul = $('#topAlbumsList');
+                $.each(data.results, function (index, value) {
+                    $('<li>' + value.albumName + '</li>').appendTo($ul);
+
+                })
+
+            }, function error(errorS) {
+
+            });
+
+
+    }
+
 
     console.log(View);
     console.log(View.prototype);
+
+
     return new View();
 });

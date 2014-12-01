@@ -3,55 +3,150 @@ define(['requestsExecutor'], function (requestsExecutor) {
     'use strict';
 
     var uris = {
-        USERS: 'users',
-        PHOTOS: 'classes/Photo'
-    }
-
+            USERS: 'users',
+            PHOTO: 'classes/Photo',
+            LOGIN: 'login',
+            ALBUM: 'classes/Album',
+            CATEGORY: 'classes/Category'
+        },
+        contentTypes = {
+            JSON: 'application/json',
+            IMAGE_JPEG: 'image/jpeg'
+        }
+//TODO some request need to be changed in order to work. 
 
     function Repository(baseUrl) {
-        this.photos = new Data(baseUrl + uris.PHOTOS);
-        this.users = new Data(baseUrl + uris.USERS);
+        this.photos = new Photo(baseUrl + uris.PHOTO);
+        this.users = new User(baseUrl);
+        this.albums = new Album(baseUrl + uris.ALBUM);
+        this.categories = new Category(baseUrl + uris.CATEGORY);
     }
 
-    var Data = (function () {
+    var Photo = (function () {
 
-        function Data(url) {
+        function Photo(url) {
             this.serviceUrl = url;
 
         }
 
-        Data.prototype.getAll = function (contentType,success, error) {
-            console.log(this.serviceUrl+ '          servis url in repo')
-            requestsExecutor.get(this.serviceUrl,contentType, success, error);
-
+        Photo.prototype.getAll = function (success, error) {
+            requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
         }
-        Data.prototype.get = function (id, success, error) {
+
+        Photo.prototype.getPhotoById = function (id, success, error) {
             requestsExecutor.get(this.serviceUrl + '/' + id, success, error);
 
         }
-        Data.prototype.create = function (data, success, error) {
-            requestsExecutor.post(this.serviceUrl, data, success, error);
+
+        Photo.prototype.createPhoto = function (data, success, error) {
+            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
         }
 
-        Data.prototype.delete = function (id, success, error) {
+        Photo.prototype.deletePhotoById = function (id, success, error) {
+            requestsExecutor.delete(this.serviceUrl + '/' + id, contentTypes.JSON.success, error);
+        }
+
+        Photo.prototype.editPhoto = function (id, data, success, error) {
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
+        }
+
+        return Photo;
+
+    }());
+
+    var User = (function () {
+
+        function User(url) {
+            this.serviceUrl = url;
+        }
+
+        User.prototype.getAllUsers = function (success, error) {
+
+            requestsExecutor.get(this.serviceUrl + uris.USERS, contentTypes.JSON, success, error);
+        }
+
+        User.prototype.LogIn = function (id, success, error) {
+            requestsExecutor.get(this.serviceUrl + uris.LOGIN + '/' + id, contentTypes.JSON, success, error);
+
+        }
+
+        User.prototype.Register = function (data, success, error) {
+            requestsExecutor.post(this.serviceUrl + uris.USERS, contentTypes.JSON, data, success, error);
+        }
+
+        return User;
+
+    }());
+
+    var Album = (function () {
+
+        function Album(url) {
+            this.serviceUrl = url;
+        }
+
+        Album.prototype.getAll = function (success, error) {
+            requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
+        }
+
+        Album.prototype.getAlbumById = function (id, success, error) {
+            requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
+
+        }
+        //TODO this request url should be changed
+        Album.prototype.createAlbum = function (userObjectId, data, success, error) {
+            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userObjectId + '"}}'
+
+            requestsExecutor.post(url, contentTypes.JSON, data, success, error);
+        }
+
+        Album.prototype.deleteAlbumById = function (id, success, error) {
             requestsExecutor.delete(this.serviceUrl + '/' + id, success, error);
         }
 
-
-        Data.prototype.edit = function (id, data, success, error) {
-            requestsExecutor.put(this.serviceUrl + '/' + id, data, success, error)
+        Album.prototype.editAlbum = function (id, data, success, error) {
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
         }
 
-        return Data;
+        return Album;
 
     }());
+
+    var Category = (function () {
+
+        function Category(url) {
+            this.serviceUrl = url;
+        }
+
+        Category.prototype.getAll = function (success, error) {
+            requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
+        }
+
+        Category.prototype.getAlbumById = function (id, success, error) {
+            requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
+
+        }
+
+        Category.prototype.createAlbum = function (data, success, error) {
+            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
+        }
+
+        Category.prototype.deleteAlbumById = function (id, success, error) {
+            requestsExecutor.delete(this.serviceUrl + '/' + id, success, error);
+        }
+
+        Category.prototype.editAlbum = function (id, data, success, error) {
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
+        }
+        return Category;
+
+    }());
+
 
     return {
         get: function get(baseUrl) {
             return new Repository(baseUrl);
         }
     }
-
 
 });
 

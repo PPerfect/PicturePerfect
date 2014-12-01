@@ -4,11 +4,6 @@ define(['repository',], function (repository) {
 
     }
 
-    BaseController.prototype.contentTypes = {
-        JSON: 'application/json',
-        IMAGE_JPEG: 'image/jpeg'
-    }
-
     BaseController.prototype.repository = repository.get('https://api.parse.com/1/');
 
 
