@@ -10,9 +10,9 @@ define(['extender', 'baseController'], function (extender, baseController) {
 
     PhotoController.prototype = Object.create(baseController.prototype);
 
-
     PhotoController.prototype.getAllPhotos = function (resolveResult) {
         console.log(this.repository.photos)
+        //TODO use promises
         //  var defer = $.Deferred();
         this.repository.photos.getAll(this.contentTypes.JSON,
             function success(data) {
@@ -20,14 +20,11 @@ define(['extender', 'baseController'], function (extender, baseController) {
                 resolveResult(data);
             },
             function error(error) {
-               // resolveResult(error);
+                // resolveResult(error);
                 console.log(error + ' error in controller');
-                console.log(error );
-
+                console.log(error);
             }
         )
-        //  return 'hello';
     }
-
     return new PhotoController();
 });
