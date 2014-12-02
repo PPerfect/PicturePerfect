@@ -18,7 +18,7 @@ define(['baseController'], function (baseController) {
                 defer.resolve(data);
             },
             function error(error) {
-                defer.reject(error)
+                defer.reject(error);
             }
         )
         return defer.promise();
@@ -26,7 +26,7 @@ define(['baseController'], function (baseController) {
 
 
     UserController.prototype.register = function (username, password) {
-        console.log(this.repository.photos)
+        console.log(this.repository.photos);
 
         var defer = $.Deferred();
 
@@ -41,7 +41,7 @@ define(['baseController'], function (baseController) {
     }
 
     UserController.prototype.login = function (username, password) {
-        console.log(this.repository.photos)
+        console.log(this.repository.photos);
 
         var defer = $.Deferred();
 

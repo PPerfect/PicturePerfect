@@ -2,18 +2,17 @@ define(['baseController'], function (baseController) {
 
     'use strict';
 
-    function AlbumController() {
+    function CategoryController() {
 
     }
 
-    AlbumController.prototype = Object.create(baseController.prototype);
+    CategoryController.prototype = Object.create(baseController.prototype);
 
-    AlbumController.prototype.getAllAlbums = function () {
-        console.log(this.repository.photos);
-
+    CategoryController.prototype.getAllCategories = function () {
+        
         var defer = $.Deferred();
 
-        this.repository.albums.getAll(
+        this.repository.categories.getAll(
             function success(data) {
                 defer.resolve(data);
             },
@@ -25,5 +24,5 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
-    return new AlbumController();
+    return new CategoryController();
 });

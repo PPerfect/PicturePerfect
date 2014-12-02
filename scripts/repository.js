@@ -129,7 +129,6 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         Category.prototype.getCategoryById = function (id, success, error) {
             requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
-
         }
 
         Category.prototype.createCategory = function (data, success, error) {
@@ -143,8 +142,8 @@ define(['requestsExecutor'], function (requestsExecutor) {
         Category.prototype.editCategory = function (id, data, success, error) {
             requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
         }
-        return Category;
 
+        return Category;
     }());
 
 

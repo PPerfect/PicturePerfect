@@ -1,15 +1,14 @@
 define([], function () {
 
-    var PARSE_APPLICATION_ID = 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
-        PARSE_REST_API_KEY = '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD';
+    var heders = {
+        'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+        'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+    }
 
     var makeRequest = function (method, url, contentType, data, success, error) {
 
         $.ajax({
-            headers: {
-                "X-Parse-Application-Id": PARSE_APPLICATION_ID,
-                'X-Parse-REST-API-Key': PARSE_REST_API_KEY
-            },
+            headers: heders,
             method: method,
             url: url,
             contentType: contentType,

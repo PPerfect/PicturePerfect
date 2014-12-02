@@ -11,6 +11,7 @@
             "baseController": "controllers/base-controller",
             "photoController": "controllers/photo-controller",
             "albumController": "controllers/album-controller",
+            "categoryController": "controllers/category-controller",
             "userController": "controllers/user-controller",
             "view": "view"
         }
@@ -18,9 +19,8 @@
         //waitSeconds: 15
     });
 
-
-    require(["jquery", "requestsExecutor", "repository", "photoController", "albumController", "userController", "view"],
-        function ($, reqExecutor, repo, photoController, albumController, userController, view) {
+    require(["jquery", "requestsExecutor", "repository", "photoController", "albumController", "categoryController", "userController", "view"],
+        function($, reqExecutor, repo, photoController, albumController, categoryController, userController, view) {
 
             $('html').append('Hello requireJs!');
             // console.log(extender);
@@ -30,5 +30,6 @@
             userController.login('zkalev', '123123');
             view.listAllPhotos();
             view.listAllAlbums();
-        })
+            view.listAllCategories();
+        });
 }());
