@@ -112,6 +112,12 @@ define(['requestsExecutor'], function (requestsExecutor) {
         Album.prototype.editAlbum = function (id, data, success, error) {
             requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error);
         }
+        
+
+        Album.prototype.getAlbumsByCategoryId = function (categoryId, success, error) {
+            var url = this.serviceUrl + '?where={"categoryId":{"__type":"Pointer","className":"Category","objectId":"' + categoryId + '"}}'; 
+            requestsExecutor.get(url, contentTypes.JSON, success, error);
+        }
 
         return Album;
 
@@ -145,7 +151,6 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         return Category;
     }());
-
 
     return {
         get: function get(baseUrl) {

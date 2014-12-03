@@ -24,6 +24,22 @@ define(['baseController'], function (baseController) {
 
         return defer.promise();
     }
-
+    
+    AlbumController.prototype.getAlbumsByCategoryId = function (categoryId) {
+        console.log(this.repository.albums);
+        
+        var defer = $.Deferred();
+        
+        this.repository.albums.getAlbumsByCategoryId(categoryId,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            }
+        );
+        
+        return defer.promise();
+    }
     return new AlbumController();
 });

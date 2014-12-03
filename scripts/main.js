@@ -22,7 +22,7 @@
     require(["jquery", "requestsExecutor", "repository", "photoController", "albumController", "categoryController", "userController", "view"],
         function($, reqExecutor, repo, photoController, albumController, categoryController, userController, view) {
 
-            $('html').append('Hello requireJs!');
+            //$('html').append('Hello requireJs!');
             // console.log(extender);
             // alert(extender)
             //  extender.attachExtendsFunction();
@@ -31,5 +31,6 @@
             view.listAllPhotos();
             view.listAllAlbums();
             view.listAllCategories();
+            view.listAlbumsByCategory('3pc17xjC46'); // TODO remove this hardcoded to test 
         });
 }());

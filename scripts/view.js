@@ -42,6 +42,22 @@ define(['photoController', 'albumController', 'categoryController'], function (p
             });
     }
     
+    View.prototype.listAlbumsByCategory = function (categoryId) {
+        albumController.getAlbumsByCategoryId(categoryId).then(
+            function success(data) {
+                // alert(JSON.stringify(data)); // TODO remove this it checks that the request is working 
+                $.each(data.results, function (index, value) {
+                    var name = value.albumName;
+                    $('<div>')
+                    .text(name)
+                    .css('color', 'red')
+                    .appendTo($('body')); // TODO fix it harcoded body
+                });
+            }, function error(error) {
+                console.log(error);
+            });
+    }
+
     View.prototype.listAllCategories = function () {
         
         categoryController.getAllCategories().then(
@@ -52,13 +68,14 @@ define(['photoController', 'albumController', 'categoryController'], function (p
                         .addClass('category')
                         .css({
                             'background-image' : 'url(' + defaultImageUrl + ')',
-                            'background-repeat' : 'no-repeat'
+                            'background-repeat' : 'no-repeat',
+                            'background-size' : '100%'
                             })
-                         // TODO write better css, that one below is just for developing
+                         // TODO write better css then that one below, it is just for developing
                         .css({
                             'color' : 'white',
-                            'width' : '120px',
-                            'height' : '120px',
+                            'width' : '180px',
+                            'height' : '180px',
                             'text-align' : 'center',
                             'float' : 'left'
                         })
@@ -71,6 +88,7 @@ define(['photoController', 'albumController', 'categoryController'], function (p
                 console.log(error);
             });
     }
+
 
     console.log(View);
     console.log(View.prototype);

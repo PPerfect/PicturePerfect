@@ -9,7 +9,7 @@ define(['baseController'], function (baseController) {
     UserController.prototype = Object.create(baseController.prototype);
 
     UserController.prototype.getAllAlbums = function () {
-        console.log(this.repository.photos)
+        console.log(this.repository.photos);
 
         var defer = $.Deferred();
 
