@@ -46,12 +46,27 @@ define(['photoController', 'albumController', 'categoryController'], function (p
         
         categoryController.getAllCategories().then(
             function success(data) {
-               var $ul = $('<ul></ul>').css('color', 'red'); // TODO remove css, and make mindfull view
+                var defaultImageUrl = 'images/logo.png';
                 $.each(data.results, function (index, value) {
-                    $('<li>' + value.categoryName + '</li>').appendTo($ul);
-                });
+                    $('<div>' + value.categoryName + '</div>')
+                        .addClass('category')
+                        .css({
+                            'background-image' : 'url(' + defaultImageUrl + ')',
+                            'background-repeat' : 'no-repeat'
+                            })
+                         // TODO write better css, that one below is just for developing
+                        .css({
+                            'color' : 'white',
+                            'width' : '120px',
+                            'height' : '120px',
+                            'text-align' : 'center',
+                            'float' : 'left'
+                        })
+                        .appendTo('#imagesView');
 
-                $ul.appendTo($('#imagesView'));
+                    $('#imagesView').css('display', 'inline-block'); // TODO REMOVE THIS !!!
+
+                });
             }, function error(error) {
                 console.log(error);
             });

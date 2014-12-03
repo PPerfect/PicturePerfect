@@ -100,7 +100,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
         Album.prototype.createAlbum = function (userObjectId, data, success, error) {
-            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userObjectId + '"}}'
+            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userObjectId + '"}}';
 
             requestsExecutor.post(url, contentTypes.JSON, data, success, error);
         }
@@ -110,7 +110,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
         Album.prototype.editAlbum = function (id, data, success, error) {
-            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error);
         }
 
         return Album;
@@ -140,7 +140,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
         Category.prototype.editCategory = function (id, data, success, error) {
-            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error);
         }
 
         return Category;

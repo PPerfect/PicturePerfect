@@ -9,7 +9,7 @@ define([ 'baseController'], function (baseController) {
     PhotoController.prototype = Object.create(baseController.prototype);
 
     PhotoController.prototype.getAllPhotos = function () {
-        console.log(this.repository.photos)
+        console.log(this.repository.photos);
         //TODO use promises
         var defer = $.Deferred();
         this.repository.photos.getAll(
@@ -17,10 +17,12 @@ define([ 'baseController'], function (baseController) {
                 defer.resolve(data);
             },
             function error(error) {
-                defer.reject(error)
+                defer.reject(error);
             }
-        )
+        );
+
         return defer.promise();
     }
+
     return new PhotoController();
 });
