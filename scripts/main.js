@@ -34,7 +34,8 @@
             view.listAllAlbums();
             view.listAllCategories();
             // TODO remove this hardcoded to test if it returns the albums
-            view.listAlbumsByCategory('3pc17xjC46');
+        view.listAlbumsByCategory('3pc17xjC46');
+
             // TODO remove this hardcoded to test if it returns the pictures
             view.photosByAlbumId('tv85UIyeRP');
         });
