@@ -28,11 +28,14 @@
             //  extender.attachExtendsFunction();
             // console.log(view);
 
-            view.loadRegisterLink('#top-nav ul', '#user-log')
+            view.loadRegisterLink('#top-nav ul', '#user-log');
             userController.login('zkalev', '123123');
             view.listAllPhotos();
             view.listAllAlbums();
             view.listAllCategories();
-            view.listAlbumsByCategory('3pc17xjC46'); // TODO remove this hardcoded to test 
+            // TODO remove this hardcoded to test if it returns the albums
+            view.listAlbumsByCategory('3pc17xjC46');
+            // TODO remove this hardcoded to test if it returns the pictures
+            view.photosByAlbumId('tv85UIyeRP');
         });
 }());

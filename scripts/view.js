@@ -54,7 +54,6 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         }
 
         View.prototype.listAllAlbums = function () {
-
             albumController.getAllAlbums().then(
                 function success(data) {
                     var $ul = $('#topAlbumsList');
@@ -71,21 +70,35 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         View.prototype.listAlbumsByCategory = function (categoryId) {
             albumController.getAlbumsByCategoryId(categoryId).then(
                 function success(data) {
-                    // alert(JSON.stringify(data)); // TODO remove this it checks that the request is working
                     $.each(data.results, function (index, value) {
                         var name = value.albumName;
                         $('<div>')
                             .text(name)
                             .css('color', 'red')
-                            .appendTo($('body')); // TODO fix it harcoded body
+                            .appendTo($('body')); // TODO fix it harcoded body and css
                     });
                 }, function error(error) {
                     console.log(error);
                 });
         }
 
-        View.prototype.listAllCategories = function () {
+        View.prototype.photosByAlbumId = function (albumId) {
+            photoController.getPhotosByAlbumId(albumId).then(
+                function success(data) {
+                    //alert(JSON.stringify(data)); // TODO remove this it checks that the request is working
+                    $.each(data.results, function (index, value) {
+                        var name = value.photoName;
+                        $('<div>')
+                                .text(name)
+                                .css('color', 'blue')
+                                .appendTo($('body')); // TODO fix it harcoded body and css
+                    });
+                }, function error(error) {
+                    console.log(error);
+                });
+        }    
 
+        View.prototype.listAllCategories = function () {
             categoryController.getAllCategories().then(
                 function success(data) {
                     var defaultImageUrl = 'images/logo.png';

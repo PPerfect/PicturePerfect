@@ -49,6 +49,11 @@ define(['requestsExecutor'], function (requestsExecutor) {
         Photo.prototype.editPhoto = function (id, data, success, error) {
             requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
         }
+        
+        Photo.prototype.getPhotosByAlbumId = function (albumId, success, error) {
+            var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}';
+            requestsExecutor.get(url, contentTypes.JSON, success, error);
+        }
 
         return Photo;
 
