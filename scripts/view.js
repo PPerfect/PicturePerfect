@@ -9,29 +9,94 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         }
 
-        View.prototype.loadRegisterLink = function loadRegisterLink(linkParent, registerFormParent) {
+        View.prototype.loadRegisterLink = function loadRegisterLink(linkParent) {
             var _this = this;
+
             $(linkParent).append($('<li />').append($('<a href="#register" id="reg-link">Register</a>')));
 
-            $('#reg-link').on('click', function (ev, registerFormParent) {
-              //  _this.loadUserRegisterForm(registerFormParent);
+            $('#reg-link').on('click', function registerLinkClickHandler(ev) {
+                if ($('#register-frm').length < 1) {
+                    _this.loadUserRegisterForm('#top-nav');
+//                    $('#reg-link').parent().remove();
+
+                    $('#reg-btn').on('click', function onRegisterButtonClick(ev) {
+                        var username = $('#username-reg-input').val(),
+                            password = $('#password-reg-input').val(),
+                            repeatPassword = $('#password-repeat-input').val();
+
+                        ev.preventDefault();
+                        _this.registerUser(username, password, repeatPassword);
+                    });
+                }
             });
         };
 
-        View.prototype.loadLoginLink = function loadLoginLink(selector) {
-            $(selector).append($('<li />').append($('<a href="#login">Login</a>')));
+        View.prototype.loadLoginLink = function loadLoginLink(linkParent) {
+            var _this = this;
+            $(linkParent).append($('<li />').append($('<a href="#login" id="login-link">Login</a>')));
+
+            $('#login-link').on('click', function loginLinkClickHandler() {
+                if ($('#login-frm').length < 1) {
+                    _this.loadUserLoginForm('#top-nav');
+                    $('#login-link').parent().remove();
+
+                    $('#login-btn').on('click', function onLoginButtonClick(ev) {
+                        ev.preventDefault();
+                        // TODO: send login data to server, hide login form, hide login link
+                        //hide login form
+
+                    });
+                }
+            });
         };
 
         View.prototype.loadLogoutLink = function loadLogoutLink(selector) {
-            $(selector).append($('<li />').append($('<a href="">Logout</a>')));
+            $(selector).append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
         };
 
         View.prototype.loadUserRegisterForm = function loadUserRegisterForm(selector) {
-            $(selector).append($('<form id="register" action=""></form>')
+            $(selector).append($('<form id="register-frm" action=""></form>')
                 .append($('<label>username <input type="text" id="username-reg-input" class="register-input"/></label>'))
                 .append($('<label>password <input type="text" id="password-reg-input" class="register-input"/></label>'))
-                .append($('<label>repeat password <input type="text" id="username-repeat-input" class="register-input"/></label>')));
+                .append($('<label>repeat password <input type="text" id="password-repeat-input" class="register-input"/></label>'))
+                .append($('<input type="submit" id="reg-btn" value="Register"/>')));
+        };
 
+        View.prototype.loadUserLoginForm = function loadUserLoginForm(selector) {
+            $(selector).append($('<form id="login-frm" action=""></form>')
+                .append($('<label>username <input type="text" id="username-login-input" class="login-input"/></label>'))
+                .append($('<label>password <input type="text" id="password-login-input" class="login-input"/></label>'))
+                .append($('<input type="submit" id="login-btn" value="Login"/>')));
+        };
+
+        View.prototype.loadUserGreeting = function loadUserGreeting(username) {
+            $('#user-log').append($('<span id="user-greeting">Hello ' + username + '!</span>'));
+        };
+
+        View.prototype.registerUser = function registerUser(username, password, repeatPassword) {
+            var _this = this;
+            if (password != repeatPassword) {
+                throw new Error('Passwords do not match!');
+            } else {
+                userController.register(username, password)
+                    .then(
+                    function (data) {
+                        console.dir(data);
+                        $('#register-frm').remove();
+                        $('#reg-link').parent().remove();
+                        $('#login-link').parent().remove();
+                        sessionStorage.setItem('PPUser', JSON.stringify({
+                            'sessionToken': data.sessionToken,
+                            'userId': data.objectId
+                        }));
+
+                        _this.loadUserGreeting(username);
+                    },
+                    function (err) {
+                        console.dir(err.responseText);
+                    }
+                );
+            }
         };
 
         View.prototype.listAllPhotos = function listAllPhotos() {

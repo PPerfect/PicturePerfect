@@ -28,7 +28,9 @@
             //  extender.attachExtendsFunction();
             // console.log(view);
 
-            view.loadRegisterLink('#top-nav ul', '#user-log');
+            view.loadRegisterLink('#top-nav ul');
+            view.loadLoginLink('#top-nav ul');
+            view.loadLogoutLink('#top-nav ul');
             userController.login('zkalev', '123123');
             view.listAllPhotos();
             view.listAllAlbums();
