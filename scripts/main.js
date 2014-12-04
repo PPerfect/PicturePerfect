@@ -27,6 +27,8 @@
             // alert(extender)
             //  extender.attachExtendsFunction();
             // console.log(view);
+
+            view.loadRegisterLink('#top-nav ul', '#user-log')
             userController.login('zkalev', '123123');
             view.listAllPhotos();
             view.listAllAlbums();
