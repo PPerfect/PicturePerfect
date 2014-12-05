@@ -40,12 +40,18 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     };
 
-    UserController.prototype.isLoggedIn = function isLoggedIn() {
-        if (sessionStorage.ppUser) {
-            return true;
-        } else {
-            return false;
+    UserController.prototype.getLoggedUserData = function getLoggedUserData() {
+        if (sessionStorage['PPUser']) {
+            return JSON.parse(sessionStorage['PPUser']);
         }
+    };
+
+    UserController.prototype.setLoggedUserData = function setLoggedUserData(username, userID, sessionToken) {
+        sessionStorage.setItem('PPUser', JSON.stringify({
+            'username': username,
+            'sessionToken': sessionToken,
+            'userId': userID
+        }));
     };
 
     UserController.prototype.getAllAlbums = function () {

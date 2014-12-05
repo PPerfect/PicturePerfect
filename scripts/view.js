@@ -41,9 +41,12 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     $('#login-link').parent().remove();
 
                     $('#login-btn').on('click', function onLoginButtonClick(ev) {
-                        ev.preventDefault();
                         // TODO: send login data to server, hide login form, hide login link
-                        //hide login form
+                        var username = $('#username-login-input').val(),
+                            password = $('#password-login-input').val();
+                        ev.preventDefault();
+
+                        _this.loginUser(username, password);
 
                     });
                 }
@@ -80,16 +83,14 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             } else {
                 userController.register(username, password)
                     .then(
-                    function (data) {
-                        console.dir(data);
+                    function (userRegisterData) {
+                        console.dir(userRegisterData);
                         $('#register-frm').remove();
+                        $('#login-frm').remove();
                         $('#reg-link').parent().remove();
                         $('#login-link').parent().remove();
-                        sessionStorage.setItem('PPUser', JSON.stringify({
-                            'sessionToken': data.sessionToken,
-                            'userId': data.objectId
-                        }));
 
+                        userController.setLoggedUserData(username, userRegisterData.objectId, userRegisterData.sessionToken);
                         _this.loadUserGreeting(username);
                     },
                     function (err) {
@@ -98,6 +99,27 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 );
             }
         };
+
+        View.prototype.loginUser = function loginUser(username, password) {
+            var _this = this;
+            userController.login(username, password)
+                .then(
+                function (userLoginData) {
+                    $('#register-frm').remove();
+                    $('#login-frm').remove();
+                    $('#reg-link').parent().remove();
+                    $('#login-link').parent().remove();
+
+                    userController.setLoggedUserData(username, userLoginData.objectId, userLoginData.sessionToken);
+                    _this.loadUserGreeting(username);
+                },
+                function (err) {
+                    console.dir(err.responseText);
+                }
+            );
+        };
+
+        //=========================================================== Delete This Line
 
         View.prototype.listAllPhotos = function listAllPhotos() {
             console.log(photoController);
@@ -154,14 +176,14 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     $.each(data.results, function (index, value) {
                         var name = value.photoName;
                         $('<div>')
-                                .text(name)
-                                .css('color', 'blue')
-                                .appendTo($('body')); // TODO fix it harcoded body and css
+                            .text(name)
+                            .css('color', 'blue')
+                            .appendTo($('body')); // TODO fix it harcoded body and css
                     });
                 }, function error(error) {
                     console.log(error);
                 });
-        }    
+        }
 
         View.prototype.listAllCategories = function () {
             categoryController.getAllCategories().then(
