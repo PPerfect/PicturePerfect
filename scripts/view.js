@@ -11,24 +11,28 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.loadRegisterLink = function loadRegisterLink(linkParent) {
             var _this = this;
+            if ($('#reg-link').length < 1) {
+                $(linkParent).append($('<li />').append($('<a href="#register" id="reg-link">Register</a>')));
 
-            $(linkParent).append($('<li />').append($('<a href="#register" id="reg-link">Register</a>')));
+                $('#reg-link').on('click', function registerLinkClickHandler(ev) {
+                    if ($('#login-frm').length > 0) {
+                        _this.removeUserLoginForm();
+                    }
 
-            $('#reg-link').on('click', function registerLinkClickHandler(ev) {
-                if ($('#register-frm').length < 1) {
-                    _this.loadUserRegisterForm('#top-nav');
-//                    $('#reg-link').parent().remove();
+                    if ($('#register-frm').length < 1) {
+                        _this.loadUserRegisterForm('#top-nav');
 
-                    $('#reg-btn').on('click', function onRegisterButtonClick(ev) {
-                        var username = $('#username-reg-input').val(),
-                            password = $('#password-reg-input').val(),
-                            repeatPassword = $('#password-repeat-input').val();
+                        $('#reg-btn').on('click', function onRegisterButtonClick(ev) {
+                            var username = $('#username-reg-input').val(),
+                                password = $('#password-reg-input').val(),
+                                repeatPassword = $('#password-repeat-input').val();
 
-                        ev.preventDefault();
-                        _this.registerUser(username, password, repeatPassword);
-                    });
-                }
-            });
+                            ev.preventDefault();
+                            _this.registerUser(username, password, repeatPassword);
+                        });
+                    }
+                });
+            }
         };
 
         View.prototype.removeRegisterLink = function removeRegisterLink() {
@@ -37,24 +41,30 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.loadLoginLink = function loadLoginLink(linkParent) {
             var _this = this;
-            $(linkParent).append($('<li />').append($('<a href="#login" id="login-link">Login</a>')));
+            if ($('#login-link').length < 1) {
+                $(linkParent).append($('<li />').append($('<a href="#login" id="login-link">Login</a>')));
 
-            $('#login-link').on('click', function loginLinkClickHandler() {
-                if ($('#login-frm').length < 1) {
-                    _this.loadUserLoginForm('#top-nav');
-                    _this.removeLoginLink();
+                $('#login-link').on('click', function loginLinkClickHandler() {
+                    if ($('#register-frm').length > 0) {
+                        _this.removeUserRegisterForm();
+                    }
 
-                    $('#login-btn').on('click', function onLoginButtonClick(ev) {
-                        // TODO: send login data to server, hide login form, hide login link
-                        var username = $('#username-login-input').val(),
-                            password = $('#password-login-input').val();
-                        ev.preventDefault();
+                    if ($('#login-frm').length < 1) {
+                        _this.loadUserLoginForm('#top-nav');
+//                        _this.removeLoginLink();
 
-                        _this.loginUser(username, password);
+                        $('#login-btn').on('click', function onLoginButtonClick(ev) {
+                            // TODO: send login data to server, hide login form, hide login link
+                            var username = $('#username-login-input').val(),
+                                password = $('#password-login-input').val();
+                            ev.preventDefault();
 
-                    });
-                }
-            });
+                            _this.loginUser(username, password);
+
+                        });
+                    }
+                });
+            }
         };
 
         View.prototype.removeLoginLink = function removeLoginLink() {
@@ -63,11 +73,13 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.loadLogoutLink = function loadLogoutLink(selector) {
             var _this = this;
-            $(selector).append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
+            if ($('#logout-link').length < 1) {
+                $(selector).append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
 
-            $('#logout-link').on('click', function logoutLinkClickHandler() {
-                _this.logout();
-            });
+                $('#logout-link').on('click', function logoutLinkClickHandler() {
+                    _this.logout();
+                });
+            }
         };
 
         View.prototype.removeLogoutLink = function removeLogoutLink() {
@@ -75,11 +87,13 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         };
 
         View.prototype.loadUserRegisterForm = function loadUserRegisterForm(selector) {
-            $(selector).append($('<form id="register-frm" action=""></form>')
-                .append($('<label>username <input type="text" id="username-reg-input" class="register-input"/></label>'))
-                .append($('<label>password <input type="text" id="password-reg-input" class="register-input"/></label>'))
-                .append($('<label>repeat password <input type="text" id="password-repeat-input" class="register-input"/></label>'))
-                .append($('<input type="submit" id="reg-btn" value="Register"/>')));
+            if ($('#register-frm').length < 1) {
+                $(selector).append($('<form id="register-frm" action=""></form>')
+                    .append($('<label>username <input type="text" id="username-reg-input" class="register-input"/></label>'))
+                    .append($('<label>password <input type="text" id="password-reg-input" class="register-input"/></label>'))
+                    .append($('<label>repeat password <input type="text" id="password-repeat-input" class="register-input"/></label>'))
+                    .append($('<input type="submit" id="reg-btn" value="Register"/>')));
+            }
         };
 
         View.prototype.removeUserRegisterForm = function removeUserRegisterForm() {
@@ -87,10 +101,12 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         };
 
         View.prototype.loadUserLoginForm = function loadUserLoginForm(selector) {
-            $(selector).append($('<form id="login-frm" action=""></form>')
-                .append($('<label>username <input type="text" id="username-login-input" class="login-input"/></label>'))
-                .append($('<label>password <input type="text" id="password-login-input" class="login-input"/></label>'))
-                .append($('<input type="submit" id="login-btn" value="Login"/>')));
+            if ($('#login-frm').length < 1) {
+                $(selector).append($('<form id="login-frm" action=""></form>')
+                    .append($('<label>username <input type="text" id="username-login-input" class="login-input"/></label>'))
+                    .append($('<label>password <input type="text" id="password-login-input" class="login-input"/></label>'))
+                    .append($('<input type="submit" id="login-btn" value="Login"/>')));
+            }
         };
 
         View.prototype.removeUserLoginForm = function removeUserLoginForm() {
@@ -118,6 +134,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         _this.removeUserLoginForm();
                         _this.removeRegisterLink();
                         _this.removeLoginLink();
+                        _this.loadLogoutLink($('#top-nav ul'));
 
                         userController.setLoggedUserData(username, userRegisterData.objectId, userRegisterData.sessionToken);
                         _this.loadUserGreeting(username);
@@ -138,6 +155,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     _this.removeUserLoginForm();
                     _this.removeRegisterLink();
                     _this.removeLoginLink();
+                    _this.loadLogoutLink($('#top-nav ul'));
 
                     userController.setLoggedUserData(username, userLoginData.objectId, userLoginData.sessionToken);
                     _this.loadUserGreeting(username);
