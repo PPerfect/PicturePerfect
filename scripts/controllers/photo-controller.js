@@ -39,5 +39,8 @@ define([ 'baseController'], function (baseController) {
         return defer.promise();
     }
 
+    //getPhotosByUserId;
+
+
     return new PhotoController();
 });

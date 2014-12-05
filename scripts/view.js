@@ -272,6 +272,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         }
 
 
+       // TODO check  getLoggedUserData, visualizate Photos
+
         console.log(View);
         console.log(View.prototype);
 

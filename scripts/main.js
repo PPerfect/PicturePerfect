@@ -39,5 +39,8 @@
 
             // TODO remove this hardcoded to test if it returns the pictures
             view.photosByAlbumId('tv85UIyeRP');
+
+            //TODO call check function oconne;
+
         });
 }());

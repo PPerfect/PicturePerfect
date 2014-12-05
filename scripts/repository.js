@@ -124,6 +124,9 @@ define(['requestsExecutor'], function (requestsExecutor) {
             requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
 
+
+        //TODO getAlbumsByUserId
+
         return Album;
 
     }());
