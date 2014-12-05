@@ -40,6 +40,10 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     };
 
+    UserController.prototype.logout = function logout() {
+        sessionStorage.removeItem('PPUser');
+    };
+
     UserController.prototype.getLoggedUserData = function getLoggedUserData() {
         if (sessionStorage['PPUser']) {
             return JSON.parse(sessionStorage['PPUser']);

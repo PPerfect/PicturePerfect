@@ -31,6 +31,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             });
         };
 
+        View.prototype.removeRegisterLink = function removeRegisterLink() {
+            $('#reg-link').parent().remove();
+        };
+
         View.prototype.loadLoginLink = function loadLoginLink(linkParent) {
             var _this = this;
             $(linkParent).append($('<li />').append($('<a href="#login" id="login-link">Login</a>')));
@@ -38,7 +42,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             $('#login-link').on('click', function loginLinkClickHandler() {
                 if ($('#login-frm').length < 1) {
                     _this.loadUserLoginForm('#top-nav');
-                    $('#login-link').parent().remove();
+                    _this.removeLoginLink();
 
                     $('#login-btn').on('click', function onLoginButtonClick(ev) {
                         // TODO: send login data to server, hide login form, hide login link
@@ -53,8 +57,21 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             });
         };
 
+        View.prototype.removeLoginLink = function removeLoginLink() {
+            $('#login-link').parent().remove();
+        };
+
         View.prototype.loadLogoutLink = function loadLogoutLink(selector) {
+            var _this = this;
             $(selector).append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
+
+            $('#logout-link').on('click', function logoutLinkClickHandler() {
+                _this.logout();
+            });
+        };
+
+        View.prototype.removeLogoutLink = function removeLogoutLink() {
+            $('#logout-link').parent().remove();
         };
 
         View.prototype.loadUserRegisterForm = function loadUserRegisterForm(selector) {
@@ -65,6 +82,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 .append($('<input type="submit" id="reg-btn" value="Register"/>')));
         };
 
+        View.prototype.removeUserRegisterForm = function removeUserRegisterForm() {
+            $('#register-frm').remove();
+        };
+
         View.prototype.loadUserLoginForm = function loadUserLoginForm(selector) {
             $(selector).append($('<form id="login-frm" action=""></form>')
                 .append($('<label>username <input type="text" id="username-login-input" class="login-input"/></label>'))
@@ -72,8 +93,16 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 .append($('<input type="submit" id="login-btn" value="Login"/>')));
         };
 
+        View.prototype.removeUserLoginForm = function removeUserLoginForm() {
+            $('#login-frm').remove();
+        };
+
         View.prototype.loadUserGreeting = function loadUserGreeting(username) {
             $('#user-log').append($('<span id="user-greeting">Hello ' + username + '!</span>'));
+        };
+
+        View.prototype.removeUserGreeting = function removeUserGreeting() {
+            $('#user-greeting').remove();
         };
 
         View.prototype.registerUser = function registerUser(username, password, repeatPassword) {
@@ -85,10 +114,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     .then(
                     function (userRegisterData) {
                         console.dir(userRegisterData);
-                        $('#register-frm').remove();
-                        $('#login-frm').remove();
-                        $('#reg-link').parent().remove();
-                        $('#login-link').parent().remove();
+                        _this.removeUserRegisterForm();
+                        _this.removeUserLoginForm();
+                        _this.removeRegisterLink();
+                        _this.removeLoginLink();
 
                         userController.setLoggedUserData(username, userRegisterData.objectId, userRegisterData.sessionToken);
                         _this.loadUserGreeting(username);
@@ -105,10 +134,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             userController.login(username, password)
                 .then(
                 function (userLoginData) {
-                    $('#register-frm').remove();
-                    $('#login-frm').remove();
-                    $('#reg-link').parent().remove();
-                    $('#login-link').parent().remove();
+                    _this.removeUserRegisterForm();
+                    _this.removeUserLoginForm();
+                    _this.removeRegisterLink();
+                    _this.removeLoginLink();
 
                     userController.setLoggedUserData(username, userLoginData.objectId, userLoginData.sessionToken);
                     _this.loadUserGreeting(username);
@@ -117,6 +146,15 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     console.dir(err.responseText);
                 }
             );
+        };
+
+        View.prototype.logout = function logout() {
+            var _this = this;
+            userController.logout();
+            _this.loadLoginLink('#top-nav ul');
+            _this.loadRegisterLink('#top-nav ul');
+            _this.removeLogoutLink();
+            _this.removeUserGreeting();
         };
 
         //=========================================================== Delete This Line
