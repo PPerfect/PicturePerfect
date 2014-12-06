@@ -7,7 +7,8 @@ define(['requestsExecutor'], function (requestsExecutor) {
             PHOTO: 'classes/Photo',
             LOGIN: 'login',
             ALBUM: 'classes/Album',
-            CATEGORY: 'classes/Category'
+            CATEGORY: 'classes/Category',
+            COMMENT: 'classes/Comment'
         },
         contentTypes = {
             JSON: 'application/json',
@@ -20,6 +21,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         this.users = new User(baseUrl);
         this.albums = new Album(baseUrl + uris.ALBUM);
         this.categories = new Category(baseUrl + uris.CATEGORY);
+        this.comments = new Comment(baseUrl + uris.COMMENT);
     }
 
     var Photo = (function () {
@@ -49,7 +51,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         Photo.prototype.editPhoto = function (id, data, success, error) {
             requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error)
         }
-        
+
         Photo.prototype.getPhotosByAlbumId = function (albumId, success, error) {
             var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
@@ -117,12 +119,15 @@ define(['requestsExecutor'], function (requestsExecutor) {
         Album.prototype.editAlbum = function (id, data, success, error) {
             requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error);
         }
-        
+
 
         Album.prototype.getAlbumsByCategoryId = function (categoryId, success, error) {
-            var url = this.serviceUrl + '?where={"categoryId":{"__type":"Pointer","className":"Category","objectId":"' + categoryId + '"}}'; 
+            var url = this.serviceUrl + '?where={"categoryId":{"__type":"Pointer","className":"Category","objectId":"' + categoryId + '"}}';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
+
+
+        //TODO getAlbumsByUserId
 
         return Album;
 
@@ -156,6 +161,41 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         return Category;
     }());
+
+    var Comment = (function () {
+
+        function Comment(url) {
+            this.serviceUrl = url;
+        }
+
+        Comment.prototype.getAll = function (success, error) {
+            requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
+        }
+
+        Comment.prototype.getCommentById = function (id, success, error) {
+            requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
+        }
+
+        Comment.prototype.createComment = function (data, success, error) {
+            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
+        }
+
+        Comment.prototype.deleteCommentById = function (id, success, error) {
+            requestsExecutor.delete(this.serviceUrl + '/' + id, success, error);
+        }
+
+        Comment.prototype.editComment = function (id, data, success, error) {
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error);
+        }
+
+        Comment.prototype.getCommentsByAlbumId = function (albumID, success, error) {
+            var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumID + '"}}';
+
+            requestsExecutor.get(url, success, error);
+        }
+        return Comment;
+    }());
+
 
     return {
         get: function get(baseUrl) {

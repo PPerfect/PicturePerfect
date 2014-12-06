@@ -41,5 +41,10 @@ define(['baseController'], function (baseController) {
         
         return defer.promise();
     }
+
+
+
+    //ot getAlbumsByCategoryId
+
     return new AlbumController();
 });
