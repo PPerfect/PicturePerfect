@@ -42,6 +42,7 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
+
     //TODO getAlbumsByUserId---->oconne
     AlbumController.prototype.getAlbumsByUserId=function (UserId){
         console.log(this.repository.albums);
@@ -60,6 +61,11 @@ define(['baseController'], function (baseController) {
 
     }
 
+
+
+
+
+    //ot getAlbumsByCategoryId
 
 
     return new AlbumController();

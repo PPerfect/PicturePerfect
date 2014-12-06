@@ -1,7 +1,8 @@
-﻿html, body{
+﻿html, body {
     width: 100%;
     height: 100%;
 }
+
 html, body, div, span, header, footer, main, aside, a, ul, li, nav, section, article, h1, h2, p, img, figure, aside, small, time {
     margin: 0;
     padding: 0;
@@ -23,6 +24,7 @@ a {
     text-decoration: none;
     color: inherit;
 }
+
 /*CLEARFIX*/
 .clearfix {
     zoom: 1;
@@ -37,25 +39,50 @@ a {
     height: 0;
     clear: both;
 }
+
 /*BODY HEADER*/
-#top-logo{
+#top-logo {
     display: inline;
     float: left;
 }
-#top-header h1, #top-header h2{
+
+#top-header h1, #top-header h2 {
     width: 50%;
 }
 
-#top-nav{
+#top-nav {
 
 }
-#top-nav li{
+
+#top-nav li {
     display: inline-block;
     margin: 0 15px;
 }
-#login-frm, #register-frm{
-    text-align:right;
+
+#login-frm, #register-frm {
+    text-align: right;
 }
-#login-frm label, #register-frm label{
+
+#login-frm label, #register-frm label {
     display: block;
+}
+
+#imagesView {
+    display: inline-block;
+}
+
+
+/*css whriten from js view If don like can be canget ;)*/
+.category, .album {
+    color: dimgrey;
+    font-weight: bold;
+    width: 180px;
+    height: 180px;
+    text-align: center;
+    float: left;
+}
+
+.category:hover, .album:hover {
+    cursor: pointer;
+    border: 2px solid transparent;
 }

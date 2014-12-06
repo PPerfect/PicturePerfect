@@ -10,7 +10,6 @@ define([ 'baseController'], function (baseController) {
 
     PhotoController.prototype.getAllPhotos = function () {
         console.log(this.repository.photos);
-        //TODO use promises
         var defer = $.Deferred();
         this.repository.photos.getAll(
             function success(data) {
@@ -38,7 +37,7 @@ define([ 'baseController'], function (baseController) {
         
         return defer.promise();
     }
-
+  
     //getPhotosByUserId;
 
 
