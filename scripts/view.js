@@ -272,7 +272,35 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         }
 
 
-       // TODO check  getLoggedUserData, visualizate Photos
+       // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
+        View.prototype.ListAlbumsByUserLogged=function(){
+
+             var   checkLoggedUser= userController.getLoggedUserData();
+             if(checkLoggedUser!=undefined){
+                 alert(JSON.stringify( checkLoggedUser));
+
+                 // loginUser(checkLoggedUser.username,'1111')
+                 // userController.login(checkLoggedUser.username,'1111' );
+             }
+
+
+
+       /*     albumController.getAlbumsByUserId(userId).then(
+                function success(data) {
+                   //  var   checkLoggedUser= userController.getLoggedUserData();
+
+                       // alert(JSON.stringify( checkLoggedUser));
+
+                        if(Object.keys(checkLoggedUser).length>0){
+
+                          //TODO
+
+
+                        }}, function error(error) {
+                     console.log(error);
+                }
+            );*/
+        }
 
         console.log(View);
         console.log(View.prototype);

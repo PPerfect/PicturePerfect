@@ -42,7 +42,25 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
-    //ot getAlbumsByCategoryId
+    //TODO getAlbumsByUserId---->oconne
+    AlbumController.prototype.getAlbumsByUserId=function (UserId){
+        console.log(this.repository.albums);
+
+        var defer = $.Deferred();
+
+        this.repository.albums.getAlbumsByUserId(UserId,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            }
+        );
+
+
+    }
+
+
 
     return new AlbumController();
 });

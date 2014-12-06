@@ -125,7 +125,17 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
 
-        //TODO getAlbumsByUserId
+        //TODO getAlbumsByUserId------>oconne
+        Album.prototype.getAlbumsByUserId = function (userId, success, error) {
+            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"Albums","objectId":"' + userId + '"}}';
+            requestsExecutor.get(url, contentTypes.JSON, success, error);
+        }
+
+
+
+
+        //-------------------END
+
 
         return Album;
 
