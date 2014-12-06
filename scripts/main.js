@@ -23,18 +23,18 @@
         function ($, reqExecutor, repo, photoController, albumController, categoryController, userController, commentController, view) {
 
 
-            //view.loadRegisterLink('#top-nav ul');
-            //view.loadLoginLink('#top-nav ul');
+            view.loadRegisterLink('#top-nav ul');
+            view.loadLoginLink('#top-nav ul');
 
             view.listAllPhotos();
             view.listAllAlbums();
             view.listAllCategories();
 
             // TODO remove this hardcoded to test if it returns the albums
-          //  view.listAlbumsByCategory('3pc17xjC46');
+            view.listAlbumsByCategory('3pc17xjC46');
 
             // TODO remove this hardcoded to test if it returns the pictures
-           // view.photosByAlbumId('tv85UIyeRP');
+            view.photosByAlbumId('tv85UIyeRP');
 
 
 

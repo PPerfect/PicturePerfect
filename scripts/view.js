@@ -327,15 +327,18 @@ function (err) {
     View.prototype.ListAlbumsByUserLogged=function(){
 
         var   checkLoggedUser= userController.getLoggedUserData();
-        if(checkLoggedUser!=undefined){
-        alert(JSON.stringify( checkLoggedUser));
+        
+      console.log(JSON.stringify( checkLoggedUser));
 
+        if(checkLoggedUser!=undefined){
+
+            $('#user-greeting').html(checkLoggedUser.username);
         // loginUser(checkLoggedUser.username,'1111')
         // userController.login(checkLoggedUser.username,'1111' );
         }
 
 
-
+;
         /*     albumController.getAlbumsByUserId(userId).then(
          function success(data) {
          //  var   checkLoggedUser= userController.getLoggedUserData();
