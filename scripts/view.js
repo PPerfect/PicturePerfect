@@ -394,7 +394,7 @@ function (err) {
                     });
                 }
 
-                albumController.getAlbumsByCategoryId(checkLoggedUser.userId).then(
+                albumController.getAlbumsByUserId(checkLoggedUser.userId).then(
                    function success(data) {
 
                        alert(JSON.stringify(data));
@@ -402,7 +402,7 @@ function (err) {
 
                    },
                    function error(error) {
-                        console.log(error);
+                        console.log(error); //alert(JSON.stringify(error));
                    }
 
                 );
