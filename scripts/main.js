@@ -23,34 +23,17 @@
         function ($, reqExecutor, repo, photoController, albumController, categoryController, userController, commentController, view) {
 
 
-            view.loadRegisterLink('#top-nav ul');
-            view.loadLoginLink('#top-nav ul');
+            //view.loadRegisterLink('#top-nav ul');
+            //view.loadLoginLink('#top-nav ul');
 
             view.listAllPhotos();
             view.listAllAlbums();
             view.listAllCategories();
-          <<<<<<< .mine
-
-
-
-
-
-
-
-
-
-
-=======
-           // view.listAlbumsByCategory('3pc17xjC46');
-
-            // TODO remove this hardcoded to test if it returns the pictures
-           // view.photosByAlbumId('tv85UIyeRP');
 
             //TODO call check function oconne;
 
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
 
->>>>>>> .theirs
         });
 }());
