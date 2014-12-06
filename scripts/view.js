@@ -1,5 +1,5 @@
 define(['photoController', 'albumController', 'categoryController', 'userController'],
-    function (photoController, albumController, categoryController, userController) { // added categoryController
+    function(photoController, albumController, categoryController, userController) { // added categoryController
 
         'use strict';
 
@@ -112,20 +112,20 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             } else {
                 userController.register(username, password)
                     .then(
-                    function (userRegisterData) {
-                        console.dir(userRegisterData);
-                        _this.removeUserRegisterForm();
-                        _this.removeUserLoginForm();
-                        _this.removeRegisterLink();
-                        _this.removeLoginLink();
+                        function(userRegisterData) {
+                            console.dir(userRegisterData);
+                            _this.removeUserRegisterForm();
+                            _this.removeUserLoginForm();
+                            _this.removeRegisterLink();
+                            _this.removeLoginLink();
 
-                        userController.setLoggedUserData(username, userRegisterData.objectId, userRegisterData.sessionToken);
-                        _this.loadUserGreeting(username);
-                    },
-                    function (err) {
-                        console.dir(err.responseText);
-                    }
-                );
+                            userController.setLoggedUserData(username, userRegisterData.objectId, userRegisterData.sessionToken);
+                            _this.loadUserGreeting(username);
+                        },
+                        function(err) {
+                            console.dir(err.responseText);
+                        }
+                    );
             }
         };
 
@@ -133,19 +133,19 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             var _this = this;
             userController.login(username, password)
                 .then(
-                function (userLoginData) {
-                    _this.removeUserRegisterForm();
-                    _this.removeUserLoginForm();
-                    _this.removeRegisterLink();
-                    _this.removeLoginLink();
+                    function(userLoginData) {
+                        _this.removeUserRegisterForm();
+                        _this.removeUserLoginForm();
+                        _this.removeRegisterLink();
+                        _this.removeLoginLink();
 
-                    userController.setLoggedUserData(username, userLoginData.objectId, userLoginData.sessionToken);
-                    _this.loadUserGreeting(username);
-                },
-                function (err) {
-                    console.dir(err.responseText);
-                }
-            );
+                        userController.setLoggedUserData(username, userLoginData.objectId, userLoginData.sessionToken);
+                        _this.loadUserGreeting(username);
+                    },
+                    function(err) {
+                        console.dir(err.responseText);
+                    }
+                );
         };
 
         View.prototype.logout = function logout() {
@@ -168,7 +168,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     console.log(data);
                     console.log('----------------');
                     var $ul = $('<ul/>').appendTo(document.body);
-                    $.each(data.results, function (index, value) {
+                    $.each(data.results, function(index, value) {
                         $('<li>' + value.photoName + '</li>').appendTo($ul);
 
                     });
@@ -178,75 +178,45 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 });
         }
 
-        View.prototype.listAllAlbums = function () {
+        View.prototype.listAllAlbums = function() {
             albumController.getAllAlbums().then(
                 function success(data) {
                     var $ul = $('#topAlbumsList');
-                    $.each(data.results, function (index, value) {
+                    $.each(data.results, function(index, value) {
                         $('<li>' + value.albumName + '</li>').appendTo($ul);
 
                     });
-
                 }, function error(error) {
                     console.log(error);
                 });
         }
 
-        View.prototype.listAlbumsByCategory = function (categoryId) {
-            albumController.getAlbumsByCategoryId(categoryId).then(
-                function success(data) {
-                    $.each(data.results, function (index, value) {
-                        var name = value.albumName;
-                        $('<div>')
-                            .text(name)
-                            .css('color', 'red')
-                            .appendTo($('body')); // TODO fix it harcoded body and css
-                    });
-                }, function error(error) {
-                    console.log(error);
-                });
-        }
 
-        View.prototype.photosByAlbumId = function (albumId) {
-            photoController.getPhotosByAlbumId(albumId).then(
-                function success(data) {
-                    //alert(JSON.stringify(data)); // TODO remove this it checks that the request is working
-                    $.each(data.results, function (index, value) {
-                        var name = value.photoName;
-                        $('<div>')
-                            .text(name)
-                            .css('color', 'blue')
-                            .appendTo($('body')); // TODO fix it harcoded body and css
-                    });
-                }, function error(error) {
-                    console.log(error);
-                });
-        }
-
-        View.prototype.listAllCategories = function () {
+        View.prototype.listAllCategories = function() {
             categoryController.getAllCategories().then(
                 function success(data) {
-                    var defaultImageUrl = 'images/logo.png';
-                    $.each(data.results, function (index, value) {
+                    var DEFAULT_IMAGE_URL = 'images/No_image.png';
+                    $.each(data.results, function(index, value) {
+                        var categoryId = value.objectId;
                         $('<div>' + value.categoryName + '</div>')
+                            .attr('id', categoryId)
                             .addClass('category')
                             .css({
-                                'background-image': 'url(' + defaultImageUrl + ')',
-                                'background-repeat': 'no-repeat',
-                                'background-size': '100%'
+                                'background-image': 'url(' + DEFAULT_IMAGE_URL + ')',
                             })
                             // TODO write better css then that one below, it is just for developing
                             .css({
-                                'color': 'white',
+                                'background-repeat': 'no-repeat',
+                                'background-size': '100%',
+                                'color': 'darkcyan',
                                 'width': '180px',
                                 'height': '180px',
                                 'text-align': 'center',
                                 'float': 'left'
                             })
                             .appendTo('#imagesView');
-
                         $('#imagesView').css('display', 'inline-block'); // TODO REMOVE THIS !!!
-
+                        changeCategoryBackgroundPhoto();
                     });
                 }, function error(error) {
                     console.log(error);
@@ -254,9 +224,37 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         }
 
 
+        function changeCategoryBackgroundPhoto() {
+
+            var $categories = $('.category');
+            $categories.each(function() {
+                var categoryId = this.id;
+                albumController.getAlbumsByCategoryId(categoryId).then(
+                    function success(data) {
+                        var albums = data.results;
+                        var randomAlbum = albums[Math.floor(Math.random() * albums.length)];
+                        var randomAlbumId = randomAlbum.objectId;
+                        photoController.getPhotosByAlbumId(randomAlbumId).then(
+                            function succesed(dataPhotos) {
+                                var photos = dataPhotos.results;
+                                var randomPhoto = photos[Math.floor(Math.random() * photos.length)];
+                                var randomPhotoUrl = randomPhoto.content.url;
+                                if (randomPhotoUrl) {
+                                    var categoryIdStr = '#' + categoryId;
+                                    $(categoryIdStr).css({
+                                        'background-image' : 'url(' + randomPhotoUrl + ')',
+                                    });
+                                }
+                            }, function errored(errored) {
+                                console.log(errored);
+                            });
+                    }, function error(error) {
+                        console.log(error);
+                    });
+                });
+        }
         console.log(View);
         console.log(View.prototype);
 
-
         return new View();
-    });
+});

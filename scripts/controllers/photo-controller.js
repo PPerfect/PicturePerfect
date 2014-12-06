@@ -38,6 +38,6 @@ define([ 'baseController'], function (baseController) {
         
         return defer.promise();
     }
-
+  
     return new PhotoController();
 });

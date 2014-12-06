@@ -54,7 +54,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
             var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
-
+    
         return Photo;
 
     }());
