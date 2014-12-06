@@ -307,6 +307,7 @@ function (err) {
                 }, function error(error) {
                     console.log(error);
                 });
+
         });
 
         return _this;
@@ -344,5 +345,58 @@ function (err) {
     
     console.log(View);
     console.log(View.prototype);
+
+
+
+
+
+    // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
+    View.prototype.ListAlbumsByUserLogged=function(){
+
+        var   checkLoggedUser= userController.getLoggedUserData();
+        console.log( 'k');
+        console.log(JSON.stringify( checkLoggedUser));
+
+        if(checkLoggedUser!=undefined){
+
+            $('#user-greeting').html(checkLoggedUser.username);
+        // loginUser(checkLoggedUser.username,'1111')
+        // userController.login(checkLoggedUser.username,'1111' );
+        }
+
+
+;
+        /*     albumController.getAlbumsByUserId(userId).then(
+         function success(data) {
+         //  var   checkLoggedUser= userController.getLoggedUserData();
+
+         // alert(JSON.stringify( checkLoggedUser));
+
+         if(Object.keys(checkLoggedUser).length>0){
+
+         //TODO
+
+
+         }}, function error(error) {
+         console.log(error);
+         }
+         );*/
+        }
+
+    console.log(View);
+    console.log(View.prototype);
+
+
     return new View();
-});
+    });
+
+
+
+
+
+
+
+
+
+
+

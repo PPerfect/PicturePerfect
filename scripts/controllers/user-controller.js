@@ -74,5 +74,8 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     };
 
+    //TODO Log LoggedUser--->oconne automaticLogin
+    UserController.prototype.autoLogin = function () {};
+
     return new UserController();
 });
