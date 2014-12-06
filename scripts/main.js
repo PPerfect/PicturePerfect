@@ -35,6 +35,6 @@
 
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
-
+            view.attachClickOnPhoto();
         });
 }());

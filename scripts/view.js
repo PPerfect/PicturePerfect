@@ -290,26 +290,55 @@ function (err) {
         var _this = this;
         $('#imagesView').on('click', '.album', function (ev) {
             var albumId = $(this).attr('id'),
-                $imagesWrapper = $('<div/>').attr('id', 'images-wrapper').appendTo('#imagesView');
+                $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
             $('#albums-wrapper').remove();
+
             photoController.getPhotosByAlbumId(albumId).then(
                 function success(data) {
-                    var images = data.results,
+                    var photos = data.results,
+                        noPhotos = 'noPhotos',
+                        className = 'photo',
                         defaultImageUrl = 'images/no-image.png';
-                    if (images.length === 0) {
-                        _this.createPhotoHolder('No Images', 'images', defaultImageUrl, undefined, $imagesWrapper);
-                        return;
+
+                    if (photos.length !== 0) {
+                        photos.forEach(function (photo) {
+                            _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+                        });
+                    } else {
+                        _this.createPhotoHolder(noPhotos , className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
-                    $.each(images, function (index, value) {
-                        _this.createPhotoHolder(undefined, 'images', value.content.url, value.objectId, $imagesWrapper);
-                    });
-                    _this.loadCommentsForAlbum(albumId, $imagesWrapper);
+              
+                    _this.loadCommentsForAlbum(albumId, $photosWrapper);
                 }, function error(error) {
                     console.log(error);
                 });
-
         });
 
+        return _this;
+    }
+    
+    View.prototype.attachClickOnPhoto = function () {
+        var _this = this;
+        $('#imagesView').on('click', '.photo', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            $('#photos-wrapper').remove();
+            var $photoViewer = $('<div/>').attr('id', 'photo-viewer');
+            $photoViewer
+                .css({
+                // todo move this in css file 
+                    'position': 'absolute',
+                    'top': '10%',
+                    'left': '10%',
+                    'width': '80%',
+                    'height': '80%',
+                    'background-image': 'url("http://files.parsetfss.com/a2bed305-1f87-416b-8fd4-736dd009071e/tfss-b1d9ae44-b591-4dd0-9acb-59c974dc29e4-avatar.jpg")',
+                    'background-repeat': 'no-repeat',
+                    'background-size': '100% 100%'
+                }).appendTo($('#imagesView'));
+            
+        });
+        
         return _this;
     }
 
@@ -343,12 +372,6 @@ function (err) {
     }
     // TODO check getLoggedUserData, visualizate Photos
     
-    console.log(View);
-    console.log(View.prototype);
-
-
-
-
 
     // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
     View.prototype.ListAlbumsByUserLogged=function(){
@@ -389,14 +412,3 @@ function (err) {
 
     return new View();
     });
-
-
-
-
-
-
-
-
-
-
-

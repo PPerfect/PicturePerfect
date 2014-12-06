@@ -73,7 +73,7 @@ a {
 
 
 /*css whriten from js view If don like can be canget ;)*/
-.category, .album {
+.category, .album, .photo {
     color: dimgrey;
     font-weight: bold;
     width: 180px;
@@ -82,7 +82,7 @@ a {
     float: left;
 }
 
-.category:hover, .album:hover {
+.category:hover, .album:hover, .photo:hover {
     cursor: pointer;
     border: 2px solid transparent;
 }
