@@ -195,6 +195,7 @@ function (err) {
                     _this.createPhotoHolder(value.categoryName, 'category', defaultImageUrl, value.objectId, $categoryWrapper);
                 });
                 $categoryWrapper.appendTo('#imagesView');
+
                 changeCategoryBackgroundPhoto();
             }, function error(error) {
                 console.log(error);
@@ -231,7 +232,7 @@ function (err) {
                 });
         });
     }
-
+    
     View.prototype.attachClickOnCategory = function () {
         var _this = this;
         $('#imagesView').on('click', '.category', function (ev) {
@@ -250,6 +251,8 @@ function (err) {
                     $.each(albums, function (index, value) {
                         _this.createPhotoHolder(value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
                     });
+
+                    changeAlbumBackgroundPhoto();
                 },
                 function error(error) {
                     console.log(error);
@@ -258,6 +261,29 @@ function (err) {
         });
 
         return _this;
+    }
+    
+    function changeAlbumBackgroundPhoto() {
+        var $albums = $('.album');
+        $albums.each(function () {
+            var albumId = this.id;
+            photoController.getPhotosByAlbumId(albumId).then(
+                function succesed(dataPhotos) {
+                    var photos = dataPhotos.results;
+                    var randomPhoto = photos[Math.floor(Math.random() * photos.length)];
+                    var randomPhotoUrl = randomPhoto.content.url;
+                    if (randomPhotoUrl) {
+                        var albumIdStr = '#' + albumId;
+                        $(albumIdStr).css({
+                            'background-image' : 'url(' + randomPhotoUrl + ')',
+                        });
+                    }
+                }, function errored(errored) {
+                    console.log(errored);
+                });
+        }, function error(error) {
+            console.log(error);
+        });
     }
 
     View.prototype.attachClickOnAlbum = function () {
@@ -315,6 +341,7 @@ function (err) {
         );
     }
     // TODO check getLoggedUserData, visualizate Photos
+    
     console.log(View);
     console.log(View.prototype);
     return new View();
