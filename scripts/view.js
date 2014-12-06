@@ -242,7 +242,7 @@ function (err) {
                 function success(data) {
                     var albums = data.results,
                         defaultImageUrl = 'images/no-image.png';
-                    console.log(albums)
+                    console.log(albums);
                     if (albums.length === 0) {
                         _this.createPhotoHolder('No Albums', 'album', defaultImageUrl, undefined, $albumWrapper);
                         return;
@@ -268,8 +268,8 @@ function (err) {
             $('#albums-wrapper').remove();
             photoController.getPhotosByAlbumId(albumId).then(
                 function success(data) {
-                    var images = data.results;
-                        defaultImageUrl = 'images/logo.png';
+                    var images = data.results,
+                        defaultImageUrl = 'images/no-image.png';
                     if (images.length === 0) {
                         _this.createPhotoHolder('No Images', 'images', defaultImageUrl, undefined, $imagesWrapper);
                         return;
