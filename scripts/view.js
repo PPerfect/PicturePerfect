@@ -356,7 +356,7 @@ function (err) {
         var   checkLoggedUser= userController.getLoggedUserData();
 
         if(checkLoggedUser!=undefined ) {
-            alert(checkLoggedUser.username);
+           // alert(checkLoggedUser.username); uncoment to se what hapened when page is refreshing
             if (!document.getElementById("user-greeting")) {
                 $('#user-log').html('<span id="user-greeting">Hello, ' + checkLoggedUser.username + '!</span>');
                 $('#login-link').parent().hide();// wrong behaviour
@@ -371,9 +371,18 @@ function (err) {
                     });
                 }
 
-                //TODO
+                albumController.getAlbumsByCategoryId(checkLoggedUser.userId).then(
+                   function success(data) {
+
+                       alert(JSON.stringify(data));
 
 
+                   },
+                   function error(error) {
+                        console.log(error);
+                   }
+
+                );
             }
         }
     }
