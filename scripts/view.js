@@ -1,5 +1,5 @@
-define(['photoController', 'albumController', 'categoryController', 'userController'],
-    function (photoController, albumController, categoryController, userController) { // added categoryController
+define(['photoController', 'albumController', 'categoryController', 'userController', "commentController"],
+    function (photoController, albumController, categoryController, userController, commentController) { // added categoryController
 
         'use strict';
 
@@ -178,13 +178,9 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         //=========================================================== Delete This Line
 
         View.prototype.listAllPhotos = function listAllPhotos() {
-            console.log(photoController);
-
             photoController.getAllPhotos().then(
                 function success(data) {
-                    console.log('----------------');
                     console.log(data);
-                    console.log('----------------');
                     var $ul = $('<ul/>').appendTo(document.body);
                     $.each(data.results, function (index, value) {
                         $('<li>' + value.photoName + '</li>').appendTo($ul);
@@ -210,69 +206,165 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 });
         }
 
-        View.prototype.listAlbumsByCategory = function (categoryId) {
-            albumController.getAlbumsByCategoryId(categoryId).then(
-                function success(data) {
-                    $.each(data.results, function (index, value) {
-                        var name = value.albumName;
-                        $('<div>')
-                            .text(name)
-                            .css('color', 'red')
-                            .appendTo($('body')); // TODO fix it harcoded body and css
-                    });
-                }, function error(error) {
-                    console.log(error);
-                });
-        }
+        //View.prototype.listAlbumsByCategory = function (categoryId) { //TODO remove this
+        //    albumController.getAlbumsByCategoryId(categoryId).then(
+        //        function success(data) {
+        //            $.each(data.results, function (index, value) {
+        //                var name = value.albumName;
+        //                $('<div>')
+        //                    .text(name)
+        //                    .css('color', 'red')
+        //                    .appendTo($('body')); // TODO fix it harcoded body and css
+        //            });
+        //        }, function error(error) {
+        //            console.log(error);
+        //        });
+        //}
 
-        View.prototype.photosByAlbumId = function (albumId) {
-            photoController.getPhotosByAlbumId(albumId).then(
-                function success(data) {
-                    //alert(JSON.stringify(data)); // TODO remove this it checks that the request is working
-                    $.each(data.results, function (index, value) {
-                        var name = value.photoName;
-                        $('<div>')
-                            .text(name)
-                            .css('color', 'blue')
-                            .appendTo($('body')); // TODO fix it harcoded body and css
-                    });
-                }, function error(error) {
-                    console.log(error);
-                });
-        }
+        //View.prototype.photosByAlbumId = function (albumId) {//TODO remove this
+        //    photoController.getPhotosByAlbumId(albumId).then(
+        //        function success(data) {
+        //            //alert(JSON.stringify(data)); // TODO remove this it checks that the request is working
+        //            $.each(data.results, function (index, value) {
+        //                var name = value.photoName;
+        //                $('<div>')
+        //                    .text(name)
+        //                    .css('color', 'blue')
+        //                    .appendTo($('body')); // TODO fix it harcoded body and css
+        //            });
+        //        }, function error(error) {
+        //            console.log(error);
+        //        });
+        //
+        //    return this;
+        //}
 
         View.prototype.listAllCategories = function () {
+            var _this = this
             categoryController.getAllCategories().then(
                 function success(data) {
-                    var defaultImageUrl = 'images/logo.png';
+                    var defaultImageUrl = 'images/logo.png',
+                        $categoryWrapper = $('<div/>').attr('id', 'category-wrapper');
+
                     $.each(data.results, function (index, value) {
-                        $('<div>' + value.categoryName + '</div>')
-                            .addClass('category')
-                            .css({
-                                'background-image': 'url(' + defaultImageUrl + ')',
-                                'background-repeat': 'no-repeat',
-                                'background-size': '100%'
-                            })
-                            // TODO write better css then that one below, it is just for developing
-                            .css({
-                                'color': 'white',
-                                'width': '180px',
-                                'height': '180px',
-                                'text-align': 'center',
-                                'float': 'left'
-                            })
-                            .appendTo('#imagesView');
 
-                        $('#imagesView').css('display', 'inline-block'); // TODO REMOVE THIS !!!
-
+                        _this.createPhotoHolder(value.categoryName, 'category', defaultImageUrl, value.objectId, $categoryWrapper);
                     });
+                    $categoryWrapper.appendTo('#imagesView');
                 }, function error(error) {
                     console.log(error);
                 });
+
+            return _this;
+        }
+
+        View.prototype.attachClickOnCategory = function () {
+            var _this = this;
+            $('#imagesView').on('click', '.category', function (ev) {
+                ev.preventDefault();
+                $('#category-wrapper').remove();
+                var $albumWrapper = $('<div/>').attr('id', 'albums-wrapper').appendTo('#imagesView');
+                albumController.getAlbumsByCategoryId($(this).attr('id')).then(
+                    function success(data) {
+                        var albums = data.results,
+                            defaultImageUrl = 'images/logo.png';
+                        console.log(albums)
+                        if (albums.length === 0) {
+                            _this.createPhotoHolder('No Albums', 'album', defaultImageUrl, undefined, $albumWrapper);
+                            return;
+                        }
+
+                        $.each(albums, function (index, value) {
+
+                            _this.createPhotoHolder(value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
+                        });
+                    },
+                    function error(error) {
+                        console.log(error);
+                    }
+                );
+            });
+
+            return _this;
+        }
+
+        View.prototype.attachClickOnAlbum = function () {
+            var _this = this;
+            $('#imagesView').on('click', '.album', function (ev) {
+                var albumId = $(this).attr('id'),
+                    $imagesWrapper = $('<div/>').attr('id', 'images-wrapper').appendTo('#imagesView');
+                $('#albums-wrapper').remove();
+                photoController.getPhotosByAlbumId(albumId).then(
+                    function success(data) {
+                        var images = data.results,
+                            defaultImageUrl = 'images/logo.png';
+
+                        if (images.length === 0) {
+                            _this.createPhotoHolder('No Images', 'images', defaultImageUrl, undefined, $imagesWrapper);
+                            return;
+                        }
+                        $.each(images, function (index, value) {
+
+                            _this.createPhotoHolder(undefined, 'images', value.content.url, value.objectId, $imagesWrapper);
+
+                        });
+                        _this.loadCommentsForAlbum(albumId,$imagesWrapper);
+
+                    }, function error(error) {
+                        console.log(error);
+                    });
+            });
+            return _this;
         }
 
 
-       // TODO check  getLoggedUserData, visualizate Photos
+        View.prototype.createPhotoHolder = function (holderName, className, imageUrl, objectId, appendTo) {
+
+            holderName = holderName || "";
+
+            $('<div>' + holderName + '</div>').attr('id', objectId)
+                .addClass(className)
+                .css({
+                    'background-image': 'url(' + imageUrl + ')',
+                    'background-repeat': 'no-repeat',
+                    'background-size': '100%'
+                })
+                // TODO write better css then that one below, it is just for developing
+                .css({
+                    'color': 'white',
+                    'width': '180px',
+                    'height': '180px',
+                    'text-align': 'center',
+                    'float': 'left'
+                })
+                .appendTo(appendTo);
+        }
+
+        //TODO repeare this method to work
+        View.prototype.loadCommentsForAlbum = function (albumId, parent) {
+            var $albumCommentsWrapper = $('<div/>').attr('id', 'album-comments-wrapper').appendTo(parent),
+                $comment;
+
+            commentController.getCommentsByAlbumId(albumId).then(
+                function success(data){
+                    $.each(data.results, function (index, value) {
+                        $comment=$('<div/>').html();
+
+                        $albumCommentsWrapper.append($comment);
+                    })
+
+                },
+                function error(error) {
+                    console.log(error);
+                }
+
+            )
+
+
+        }
+
+
+        // TODO check  getLoggedUserData, visualizate Photos
 
         console.log(View);
         console.log(View.prototype);
