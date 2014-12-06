@@ -241,7 +241,7 @@ function (err) {
             albumController.getAlbumsByCategoryId($(this).attr('id')).then(
                 function success(data) {
                     var albums = data.results,
-                        defaultImageUrl = 'images/logo.png';
+                        defaultImageUrl = 'images/no-image.png';
                     console.log(albums)
                     if (albums.length === 0) {
                         _this.createPhotoHolder('No Albums', 'album', defaultImageUrl, undefined, $albumWrapper);
@@ -268,7 +268,7 @@ function (err) {
             $('#albums-wrapper').remove();
             photoController.getPhotosByAlbumId(albumId).then(
                 function success(data) {
-                    var images = data.results,
+                    var images = data.results;
                         defaultImageUrl = 'images/logo.png';
                     if (images.length === 0) {
                         _this.createPhotoHolder('No Images', 'images', defaultImageUrl, undefined, $imagesWrapper);
@@ -293,15 +293,7 @@ function (err) {
             .css({
                             'background-image': 'url(' + imageUrl + ')',
                             'background-repeat': 'no-repeat',
-                            'background-size': '100%'
-                        })
-            // TODO write better css then that one below, it is just for developing
-            .css({
-                            'color': 'darkcyan',
-                            'width': '180px',
-                            'height': '180px',
-                            'text-align': 'center',
-                            'float': 'left'
+                            'background-size' : '100% 100%'
                         })
             .appendTo(appendTo);
     }
