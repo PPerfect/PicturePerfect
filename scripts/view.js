@@ -327,8 +327,8 @@ function (err) {
     View.prototype.ListAlbumsByUserLogged=function(){
 
         var   checkLoggedUser= userController.getLoggedUserData();
-        
-      console.log(JSON.stringify( checkLoggedUser));
+        console.log( 'k');
+        console.log(JSON.stringify( checkLoggedUser));
 
         if(checkLoggedUser!=undefined){
 
