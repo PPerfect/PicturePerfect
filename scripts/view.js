@@ -354,34 +354,29 @@ function (err) {
     View.prototype.ListAlbumsByUserLogged=function(){
 
         var   checkLoggedUser= userController.getLoggedUserData();
-        console.log( 'k');
-        console.log(JSON.stringify( checkLoggedUser));
 
-        if(checkLoggedUser!=undefined){
+        if(checkLoggedUser!=undefined ) {
+            alert(checkLoggedUser.username);
+            if (!document.getElementById("user-greeting")) {
+                $('#user-log').html('<span id="user-greeting">Hello, ' + checkLoggedUser.username + '!</span>');
+                $('#login-link').parent().hide();// wrong behaviour
+                $('#reg-link').parent().hide();//wrong behaviour
 
-            $('#user-greeting').html(checkLoggedUser.username);
-        // loginUser(checkLoggedUser.username,'1111')
-        // userController.login(checkLoggedUser.username,'1111' );
+                //  loadLogoutLink('#top-nav ul'); doesnt work when calling in this way :)
+
+                if ($('#logout-link').length < 1) {
+                    $('#top-nav ul').append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
+                    $('#logout-link').on('click', function logoutLinkClickHandler() {
+                        this.logout();
+                    });
+                }
+
+                //TODO
+
+
+            }
         }
-
-
-;
-        /*     albumController.getAlbumsByUserId(userId).then(
-         function success(data) {
-         //  var   checkLoggedUser= userController.getLoggedUserData();
-
-         // alert(JSON.stringify( checkLoggedUser));
-
-         if(Object.keys(checkLoggedUser).length>0){
-
-         //TODO
-
-
-         }}, function error(error) {
-         console.log(error);
-         }
-         );*/
-        }
+    }
 
     console.log(View);
     console.log(View.prototype);
