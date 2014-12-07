@@ -37,19 +37,17 @@
         </nav>
     </header>
 
-    <nav class="TopAlbums">
-        <ul id="topAlbumsList">
-            <li>TODO make JS to insert top albums :)</li>
-        </ul>
-    </nav>
-    <div id="albums-view">
-    <div id="imagesView">
+    <aside id="last-albums"></aside>
+    <aside id="top-albums"></aside>
 
-    </div>
+    <div id="albums-view">
+        <div id="imagesView">
+
+        </div>
     </div>
 
     <button id="uploadPic">Upload Picture</button>
-    <input type="file" id="fileselect" />
+    <input type="file" id="fileselect"/>
     <script>
         $('#fileselect').bind("change", function (e) {
             var files = e.target.files || e.dataTransfer.files;
