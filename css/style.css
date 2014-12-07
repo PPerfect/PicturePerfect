@@ -128,3 +128,21 @@ background-color: #cccccc;
     border-radius: 6px;
     width: 90%;
 }
+
+#file-select{
+    display: inline;
+    /* width: 91px; */
+    margin-left: 34%;
+    border-radius: 10px;
+    border: solid;
+}
+#upload-btn{
+    width: 91px;
+    
+    border: solid;
+    border-radius: 10px;
+}
+
+#upload-field-set{
+    
+}

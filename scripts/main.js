@@ -22,16 +22,21 @@
     require(["jquery", "requestsExecutor", "repository", "photoController", "albumController", "categoryController", "userController", "commentController", "view"],
         function ($, reqExecutor, repo, photoController, albumController, categoryController, userController, commentController, view) {
 
+            if (!userController.getLoggedUserData()) {
+                view.loadRegisterLink('#top-nav ul');
+                view.loadLoginLink('#top-nav ul');
+            }
 
-            view.loadRegisterLink('#top-nav ul');
-            view.loadLoginLink('#top-nav ul');
+            view.loadLastAddedAlbums(6);
+
 
             //view.listAllPhotos();
             //view.listAllAlbums();
             view.listAllCategories();
-            
+
             //TODO call check function oconne;
             view.ListAlbumsByUserLogged();
+            view.uploadImage();
 
             view.attachClickOnCategory();
             view.attachClickOnAlbum();

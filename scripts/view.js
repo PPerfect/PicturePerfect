@@ -7,6 +7,77 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         function View() {
         }
 
+    View.prototype.uploadImage = function () {
+        
+        var file;
+
+        // Set an event listener on the Choose File field.
+        $('#fileselect').bind("change", function (e) {
+            var files = e.target.files || e.dataTransfer.files;
+            // Our file var now holds the selected file
+            file = files[0];
+        });
+        
+        // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
+        $('#uploadPic').click(function () {
+            var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+            
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+                    'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+                },
+                contentType: file.type,
+                url: serverUrl,
+                data: file,
+                processData: false,
+                dataType: 'json',
+                success: function (data) {
+                    
+                    //Change variable to reflect your class to upload to
+                    var classUrl = "https://api.parse.com/1/classes/Photo";
+                    
+                    if (data) {
+                        var fileName = "" + data.name;
+                        var finalData = {
+                            "photoName" : file.name, 
+                            "content" : { "name" : "" + fileName + "", "__type" : "File" }
+                        };
+                        finalData = JSON.stringify(finalData);
+                        
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+                                'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+                            },
+                            contentType: 'application/json',
+                            url: classUrl,
+                            data: finalData,
+                            processData: false,
+
+                            success: function(data) {
+                                console.log("Image successfully uploaded.");
+                            },
+
+                            error: function(error) {
+                                console.log("Error: " + error.message);
+                            }
+                        });
+                    } else {
+                        //Data is null
+                        console.log("Data IS NULL");
+                    }
+                },
+                error: function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    alert(obj.error);
+                }
+            });
+        });
+        };
+
         View.prototype.loadRegisterLink = function loadRegisterLink(linkParent) {
             var _this = this;
             if ($('#reg-link').length < 1) {
@@ -158,6 +229,28 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             _this.removeLogoutLink();
             _this.removeUserGreeting();
         };
+
+        View.prototype.loadLastAddedAlbums = function loadLastAddedAlbums(count) {
+            albumController.getAllAlbums()
+                .then(
+                function (allAlbumsData) {
+                    var lastAlbums = allAlbumsData.results.sort(function (a, b) {
+                        return Date.parse(a.createdAt) < Date.parse(b.createdAt);
+                    });
+                    renderSpecialAlbums('#last-albums', lastAlbums, count);
+                },
+                function (err) {
+                    console.log(err.responseText);
+                }
+            );
+        };
+
+        function renderSpecialAlbums(selector, albums, count) {
+            for (var i = 0; i < count; i++) {
+                var album = albums[i];
+                $(selector).append($('<li><a href="#/album/' + album.objectId + '" class="special-album" data-id="' + album.objectId + '">' + album.albumName + '</a></li>'));
+            }
+        }
         //=========================================================== Delete This Line
         View.prototype.listAllPhotos = function listAllPhotos() {
             photoController.getAllPhotos().then(
@@ -287,20 +380,28 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         View.prototype.attachClickOnAlbum = function () {
             var _this = this;
             $('#imagesView').on('click', '.album', function (ev) {
-                var albumId = $(this).attr('id'),
-                    $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
-                $('#albums-wrapper').remove();
+                var albumId = $(this).attr('id');
 
-                photoController.getPhotosByAlbumId(albumId).then(
-                    function success(data) {
-                        var photos = data.results,
-                            noPhotos = 'noPhotos',
-                            className = 'photo',
-                            defaultImageUrl = 'images/no-image.png';
-                        if (photos.length !== 0) {
-                            var counter = 0;
-                            var photosUrlarr = [];
-                            photos.forEach(function (photo) {
+                $('#albums-wrapper').remove();
+                _this.loadPhotosByAlbumId(albumId);
+
+            });
+            return _this;
+        }
+
+        View.prototype.loadPhotosByAlbumId = function (albumId) {
+            var _this = this,
+                $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
+            photoController.getPhotosByAlbumId(albumId).then(
+                function success(data) {
+                    var photos = data.results,
+                        noPhotos = 'noPhotos',
+                        className = 'photo',
+                        defaultImageUrl = 'images/no-image.png';
+
+                    if (photos.length !== 0) {
+                        photos.forEach(function (photo) {
+                            if (photo.content !== undefined) {
                                 _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
                                 photosUrlarr[counter] = photo.content.url;
                                 counter++;
@@ -311,14 +412,14 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                         }
 
-                        _this.loadCommentsForAlbum(albumId, $('#albums-view'));
-                    }, function error(error) {
-                        console.log(error);
-                    });
-            });
+                    _this.attachPhotoUploader(albumId);
+                    _this.loadCommentsForAlbum(albumId, $('#albums-view'));
 
-            return _this;
+                }, function error(error) {
+                    console.log(error);
+                });
         }
+
 
         View.prototype.attachClickOnPhoto = function () {
             var _this = this;
@@ -367,19 +468,21 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.createPhotoHolder = function (holderName, className, imageUrl, objectId, appendTo) {
             holderName = holderName || "";
-            $('<div>' + holderName + '</div>').attr('id', objectId)
-                .addClass(className)
-                .css({
-                    'background-image': 'url(' + imageUrl + ')',
-                    'background-repeat': 'no-repeat',
-                    'background-size': '100% 100%'
-                })
-                .appendTo(appendTo);
+            if (imageUrl !== undefined) {
+                $('<div>' + holderName + '</div>').attr('id', objectId)
+                    .addClass(className)
+                    .css({
+                        'background-image': 'url(' + imageUrl + ')',
+                        'background-repeat': 'no-repeat',
+                        'background-size': '100% 100%'
+                    })
+                    .appendTo(appendTo);
+            }
         }
 
         View.prototype.loadCommentsForAlbum = function (albumId, parent) {
-            var $albumCommentsWrapper = $('<div/>').attr('id', 'album-comments-wrapper').appendTo(parent),
-                $commentsContainer=$('<div/>').attr('id','album-comments-container').appendTo($albumCommentsWrapper),
+            var $albumCommentsWrapper = $('<div/>').attr('id', 'album-comments-wrapper'),
+                $commentsContainer = $('<div/>').attr('id', 'album-comments-container').appendTo($albumCommentsWrapper),
                 $addCommentWrapper = this.generateAddCommentDiv(),
                 _this = this,
                 $comment;
@@ -390,21 +493,23 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     $commentsContainer.append('<h3 id="comments-title">Comments</h3>');
 
                     if (comments.length > 0) {
-                        $.each(comments, function(index, value) {
+                        $albumCommentsWrapper.appendTo(parent);
+                        $.each(comments, function (index, value) {
                             console.log(value);
                             _this.generateComment(value.content, value.userId.username, $commentsContainer);
 
                         });
-                        if (sessionStorage.getItem('PPUser') !== null) {
-                            $addCommentWrapper.appendTo($albumCommentsWrapper);
-                            _this.attachClickSubmitAlbumCommentHandler(albumId);
-                        }
                     }
                 },
                 function error(error) {
                     console.log(error);
                 }
             );
+            if (sessionStorage.getItem('PPUser') !== null) {
+                $albumCommentsWrapper.appendTo(parent);
+                $addCommentWrapper.appendTo($albumCommentsWrapper);
+                _this.attachClickSubmitAlbumCommentHandler(albumId);
+            }
         }
 
         View.prototype.eventsListener = function () {
@@ -509,6 +614,45 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 ev.preventDefault();
             })
         }
+
+        View.prototype.attachPhotoUploader = function (albumId) {
+            var $uploadFieldSet = $('<fieldset/>').attr('id', 'upload-field-set'),
+                $inputFile = $('<input/>').attr('type', 'file').attr('id', 'file-select').attr('name', 'file-select').appendTo($uploadFieldSet),
+                $uploadBtn = $('<button>upload</button>').attr('id', 'upload-btn').appendTo($uploadFieldSet),
+                _this = this,
+                file;
+            if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
+
+                $uploadFieldSet.appendTo($('#albums-view'))
+            }
+
+            $inputFile.on('change', function (ev) {
+                var files = ev.target.files;
+                file = files[0];
+            });
+
+            $('#upload-btn').click(function () {
+
+                if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
+                    var userId = userController.getLoggedUserData().userId;
+                    photoController.createPhoto(file, userId, albumId).then(
+                        function success(data) {
+                           // $('#album-comments-wrapper').remove();
+                            //$('#photos-wrapper').remove();
+                           // $('#upload-field-set').remove();
+                            console.log(data);
+                            _this.createPhotoHolder(undefined, 'photo', localStorage.getItem('newPhotoUrl'), undefined, $('#photos-wrapper'));
+                           _this.attachClickOnPhoto();
+                            //_this.loadPhotosByAlbumId(albumId)
+                        },
+                        function error(error) {
+                            console.log(error);
+                        });
+                }
+            });
+        }
+
+
         // TODO check getLoggedUserData, visualizate Photos
 
 
@@ -535,22 +679,60 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
                     albumController.getAlbumsByUserId(checkLoggedUser.userId).then(
                         function success(data) {
+                            //  alert(JSON.stringify(data));
+                            var $buttonAddAlbum=$('<button>Add Album</button>');
+                            var $buttonRemoveAlbum=$('<button>Del</button>');
 
-                            alert(JSON.stringify(data));
+                             $buttonAddAlbum.on('click', addAlbum);
+                             $buttonRemoveAlbum.on('click',delAlbum);
+
+                             function addAlbum(){
+                                 alert('Add Album to '+$(this).parent().find('h5').text());
+                             }
+                             function delAlbum(){
+                                 alert('Remove Album '+$(this).parent().find('h6').text()+'from');
+                             }
+
+                            var  $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
+                            var  $Nature = $('<ul class="albumNature">').append('<li class="categoryName"><h5>Nature</h5></li>').appendTo($myAlbums);
+                            var  $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName"><h5>Celebs</h5></li>').appendTo($myAlbums);
+                            var  $Others = $('<ul class="albumOthers">').append('<li class="categoryName"><h5>Others</h5></li>').appendTo($myAlbums);
+                            var    $Team = $('<ul class="albumTeam">').append('<li class="categoryName"><h5>TEAM</h5></li>').appendTo($myAlbums);
+                            var  $Events = $('<ul class="albumEvents">').append('<li class="categoryName"><h5>Eventss</h5></li>').appendTo($myAlbums);
+                            var  $City = $('<ul class="albumCity">').append('<li class="categoryName"><h5>City</h5></li>').appendTo($myAlbums);
+
+                            $('.categoryName').append($buttonAddAlbum);
+
+                            $.each(data.results, function(index,object) {
+
+                                switch(object.categoryId.categoryName){
+                                    case 'Nature': $Nature.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
+                                    case 'Celebrities': $Celebs.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
+                                    case 'Others': $Others.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
+                                    case 'The Team':  $Team.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
+                                    case 'Events': $Events.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
+                                    case 'City sightseeing': $City.append('<li class="albumUser"><h6>'+object.albumName+'</li>') ;break;
+                                }
+                                //alert(object.albumName+"--"+object.categoryId.categoryName);
+                            });
+
+                            $('.albumUser').append( $buttonRemoveAlbum);
 
 
                         },
                         function error(error) {
-                            console.log(error); //alert(JSON.stringify(error));
+                            console.log(error); alert(JSON.stringify(error));
                         }
                     );
                 }
             }
         }
-    
+        // new View().attachPhotoUploader();
         console.log(View);
         console.log(View.prototype);
 
 
         return new View();
-    });
+    }
+)
+;
