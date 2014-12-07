@@ -7,76 +7,76 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         function View() {
         }
 
-    //View.prototype.uploadImage = function () {
-    //
-    //    var file;
-    //
-    //    // Set an event listener on the Choose File field.
-    //    $('#fileselect').bind("change", function (e) {
-    //        var files = e.target.files || e.dataTransfer.files;
-    //        // Our file var now holds the selected file
-    //        file = files[0];
-    //    });
-    //
-    //    // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
-    //    $('#uploadPic').click(function () {
-    //        var serverUrl = 'https://api.parse.com/1/files/' + file.name;
-    //
-    //        $.ajax({
-    //            type: "POST",
-    //            headers: {
-    //                'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
-    //                'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
-    //            },
-    //            contentType: file.type,
-    //            url: serverUrl,
-    //            data: file,
-    //            processData: false,
-    //            dataType: 'json',
-    //            success: function (data) {
-    //
-    //                //Change variable to reflect your class to upload to
-    //                var classUrl = "https://api.parse.com/1/classes/Photo";
-    //
-    //                if (data) {
-    //                    var fileName = "" + data.name;
-    //                    var finalData = {
-    //                        "photoName" : file.name,
-    //                        "content" : { "name" : "" + fileName + "", "__type" : "File" }
-    //                    };
-    //                    finalData = JSON.stringify(finalData);
-    //
-    //                    $.ajax({
-    //                        type: "POST",
-    //                        headers: {
-    //                            'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
-    //                            'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
-    //                        },
-    //                        contentType: 'application/json',
-    //                        url: classUrl,
-    //                        data: finalData,
-    //                        processData: false,
-    //
-    //                        success: function(data) {
-    //                            console.log("Image successfully uploaded.");
-    //                        },
-    //
-    //                        error: function(error) {
-    //                            console.log("Error: " + error.message);
-    //                        }
-    //                    });
-    //                } else {
-    //                    //Data is null
-    //                    console.log("Data IS NULL");
-    //                }
-    //            },
-    //            error: function (data) {
-    //                var obj = jQuery.parseJSON(data);
-    //                alert(obj.error);
-    //            }
-    //        });
-    //    });
-    //    };
+        //View.prototype.uploadImage = function () {
+        //
+        //    var file;
+        //
+        //    // Set an event listener on the Choose File field.
+        //    $('#fileselect').bind("change", function (e) {
+        //        var files = e.target.files || e.dataTransfer.files;
+        //        // Our file var now holds the selected file
+        //        file = files[0];
+        //    });
+        //
+        //    // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
+        //    $('#uploadPic').click(function () {
+        //        var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+        //
+        //        $.ajax({
+        //            type: "POST",
+        //            headers: {
+        //                'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+        //                'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+        //            },
+        //            contentType: file.type,
+        //            url: serverUrl,
+        //            data: file,
+        //            processData: false,
+        //            dataType: 'json',
+        //            success: function (data) {
+        //
+        //                //Change variable to reflect your class to upload to
+        //                var classUrl = "https://api.parse.com/1/classes/Photo";
+        //
+        //                if (data) {
+        //                    var fileName = "" + data.name;
+        //                    var finalData = {
+        //                        "photoName" : file.name,
+        //                        "content" : { "name" : "" + fileName + "", "__type" : "File" }
+        //                    };
+        //                    finalData = JSON.stringify(finalData);
+        //
+        //                    $.ajax({
+        //                        type: "POST",
+        //                        headers: {
+        //                            'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+        //                            'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+        //                        },
+        //                        contentType: 'application/json',
+        //                        url: classUrl,
+        //                        data: finalData,
+        //                        processData: false,
+        //
+        //                        success: function(data) {
+        //                            console.log("Image successfully uploaded.");
+        //                        },
+        //
+        //                        error: function(error) {
+        //                            console.log("Error: " + error.message);
+        //                        }
+        //                    });
+        //                } else {
+        //                    //Data is null
+        //                    console.log("Data IS NULL");
+        //                }
+        //            },
+        //            error: function (data) {
+        //                var obj = jQuery.parseJSON(data);
+        //                alert(obj.error);
+        //            }
+        //        });
+        //    });
+        //    };
 
         View.prototype.loadRegisterLink = function loadRegisterLink(linkParent) {
             var _this = this;
@@ -229,6 +229,29 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             _this.removeLogoutLink();
             _this.removeUserGreeting();
         };
+
+        View.prototype.loadLastAddedAlbums = function loadLastAddedAlbums(count) {
+            albumController.getAllAlbums()
+                .then(
+                function (allAlbumsData) {
+                    var lastAlbums = allAlbumsData.results.sort(function (a, b) {
+                        return Date.parse(a.createdAt) < Date.parse(b.createdAt);
+                    });
+                    renderSpecialAlbums('#last-albums', lastAlbums, count);
+                },
+                function (err) {
+                    console.log(err.responseText);
+                }
+            );
+        };
+
+        function renderSpecialAlbums(selector, albums, count) {
+            for (var i = 0; i < count; i++) {
+                var album = albums[i];
+                $(selector).append($('<li><a href="#/album/' + album.objectId + '" class="special-album" data-id="' + album.objectId + '">' + album.albumName + '</a></li>'));
+            }
+        }
+
         //=========================================================== Delete This Line
         //View.prototype.listAllPhotos = function listAllPhotos() {
         //    photoController.getAllPhotos().then(
@@ -287,11 +310,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             function succesed(dataPhotos) {
                                 var photos = dataPhotos.results;
                                 var randomPhoto = photos[Math.floor(Math.random() * photos.length)];
-                                var randomPhotoUrl = randomPhoto.content.url;
-                                if (randomPhotoUrl) {
+                                if (randomPhoto.content.url) {
                                     var categoryIdStr = '#' + categoryId;
                                     $(categoryIdStr).css({
-                                        'background-image': 'url(' + randomPhotoUrl + ')'
+                                        'background-image': 'url(' + randomPhoto.content.url + ')'
                                     });
                                 }
                             }, function errored(errored) {
@@ -365,10 +387,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 _this.loadPhotosByAlbumId(albumId);
 
             });
-
             return _this;
         }
-
         View.prototype.loadPhotosByAlbumId = function (albumId) {
             var _this = this,
                 $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
@@ -377,14 +397,19 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     var photos = data.results,
                         noPhotos = 'noPhotos',
                         className = 'photo',
+                        photoUrlArray = [],
+                        counter = 0,
                         defaultImageUrl = 'images/no-image.png';
 
                     if (photos.length !== 0) {
                         photos.forEach(function (photo) {
                             if (photo.content !== undefined) {
+                                photoUrlArray[counter] = photo.content.url;
                                 _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+                                counter++;
                             }
                         });
+                        sessionStorage.setItem('photUrlsString', JSON.stringify(photoUrlArray));
                     } else {
                         _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
@@ -397,30 +422,44 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 });
         }
 
-
         View.prototype.attachClickOnPhoto = function () {
             var _this = this;
             $('#imagesView').on('click', '.photo', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
-                $('#photos-wrapper').remove();
                 var $photoViewer = $('<div/>').attr('id', 'photo-viewer'),
                     currImgUrl = $(this).css('background-image');
                 currImgUrl = currImgUrl.substr(4, currImgUrl.length - 5);
-
+                sessionStorage.setItem('currentImageIndex', $(this).attr('id')); // it is needed to know from where to start preview of next pictures
                 console.log(currImgUrl);
+
                 $photoViewer
                     .css({
                         // todo move this in css file
                         'position': 'absolute',
-                        'top': '10%',
+                        'top': '15%',
                         'left': '10%',
-                        'width': '80%',
-                        'height': '80%',
+                        'width': '75%',
+                        'height': '75%',
                         'background-image': 'url(' + currImgUrl + ')',
                         'background-repeat': 'no-repeat',
                         'background-size': '100% 100%'
-                    }).appendTo($('#imagesView'));
+                    });
+                var $previousButton = $('<button>Previous</button>').attr('id', 'previous-button');
+                var $nextButton = $('<button>Next</button>').attr('id', 'next-button');
+                //var $infoButton = $('<button>Information</button>').attr('id', 'info-button'); // TODO there is no property info in picture delete if you diside that is useless
+                var $deleteButton = $('<button>Delete Picture</button>').attr('id', 'delete-button');
+                var $backButton = $('<button>Back to the Album</button>').attr('id', 'back-to-album-button');
+
+                $photoViewer
+                    .append($previousButton)
+                    .append($nextButton)
+                    //.append($infoButton)
+                    .append($deleteButton)
+                    .append($backButton);
+
+                $('#container').hide();
+                $photoViewer.appendTo($('body'));
 
             });
 
@@ -459,7 +498,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             console.log(value);
                             _this.generateComment(value.content, value.userId.username, $commentsContainer);
 
-                        })
+                        });
                     }
                 },
                 function error(error) {
@@ -472,6 +511,73 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 _this.attachClickSubmitAlbumCommentHandler(albumId);
             }
         }
+
+        View.prototype.eventsListener = function () {
+            var _this = this,
+                photosUrlArr,
+                currentImageIndex,
+                nextUrl;
+
+            $('body').on('click', '#next-button', function (ev) {
+                getLocalStorageItems();
+                ev.preventDefault();
+                ev.stopPropagation();
+                var nextPhotoIndex = parseInt(currentImageIndex) + 1;
+                if (nextPhotoIndex <= photosUrlArr.length - 1) {
+                    sessionStorage['currentImageIndex'] = nextPhotoIndex;
+                    nextUrl = photosUrlArr[nextPhotoIndex];
+                } else {
+                    nextUrl = photosUrlArr[0];
+                    sessionStorage['currentImageIndex'] = '0';
+                }
+
+                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');
+            });
+
+            $('body').on('click', '#previous-button', function (ev) {
+                getLocalStorageItems();
+                ev.preventDefault();
+                ev.stopPropagation();
+                var previousPhotoIndex = parseInt(currentImageIndex) - 1;
+                if (previousPhotoIndex >= 0) {
+                    sessionStorage['currentImageIndex'] = previousPhotoIndex;
+                    nextUrl = photosUrlArr[previousPhotoIndex];
+                } else {
+                    nextUrl = photosUrlArr[photosUrlArr.length - 1];
+                    sessionStorage['currentImageIndex'] = (photosUrlArr.length - 1).toString();
+                }
+
+                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');
+            });
+
+            // TODO implement this if you disede to delete picture from here !!!
+            $('body').on('click', '#delete-button', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
+
+
+            //$('body').on('click', '#info-button', function (ev) {
+            //    ev.preventDefault();
+            //    ev.stopPropagation();
+            //    //todo diside if you use that                 
+            //});
+
+            $('body').on('click', '#back-to-album-button', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                $('#container').show();
+                $('#photo-viewer').remove();
+            });
+
+            function getLocalStorageItems() {
+                photosUrlArr = JSON.parse(sessionStorage.getItem('photUrlsString'));
+                currentImageIndex = sessionStorage.getItem('currentImageIndex');
+            }
+
+            return _this;
+        }
+
 
         View.prototype.generateAddCommentDiv = function () {
             var $addCommentWrapper = $('<div/>').attr('id', 'add-album-comment-wrapper'),
@@ -504,7 +610,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     function error(error) {
                         console.log(error);
                     }
-                )
+                );
                 ev.preventDefault();
             })
         }
@@ -526,18 +632,16 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             });
 
             $('#upload-btn').click(function () {
-
+                var fileName = file.name;
                 if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
                     var userId = userController.getLoggedUserData().userId;
                     photoController.createPhoto(file, userId, albumId).then(
                         function success(data) {
-                           // $('#album-comments-wrapper').remove();
-                            //$('#photos-wrapper').remove();
-                           // $('#upload-field-set').remove();
+                            fileName = fileName.substr(0, fileName.indexOf('.'));
                             console.log(data);
-                            _this.createPhotoHolder(undefined, 'photo', localStorage.getItem('newPhotoUrl'), undefined, $('#photos-wrapper'));
-                           _this.attachClickOnPhoto();
-                            //_this.loadPhotosByAlbumId(albumId)
+                            _this.createPhotoHolder(fileName, 'photo', localStorage.getItem('newPhotoUrl'), data.objectId, $('#photos-wrapper'));
+                            _this.attachClickOnPhoto();
+
                         },
                         function error(error) {
                             console.log(error);
@@ -574,46 +678,67 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     albumController.getAlbumsByUserId(checkLoggedUser.userId).then(
                         function success(data) {
                             //  alert(JSON.stringify(data));
-                            var $buttonAddAlbum=$('<button>Add Album</button>');
-                            var $buttonRemoveAlbum=$('<button>Del</button>');
-                            var  $myAlbums = $('<ul class="albums">').append('<li>My Albums</li>').insertBefore('#imagesView');
-                            var  $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').appendTo($myAlbums);
-                            var  $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName">Celebs</li>').appendTo($myAlbums);
-                            var  $Others = $('<ul class="albumOthers">').append('<li class="categoryName">Others</li>').appendTo($myAlbums);
-                            var    $Team = $('<ul class="albumTeam">').append('<li class="categoryName">TEAM</li>').appendTo($myAlbums);
-                            var  $Events = $('<ul class="albumEvents">').append('<li class="categoryName">Eventss</li>').appendTo($myAlbums);
-                            var  $City = $('<ul class="albumCity">').append('<li class="categoryName">City</li>').appendTo($myAlbums);
+                            var $buttonAddAlbum = $('<button>Add Album</button>');
+                            var $buttonRemoveAlbum = $('<button>Del</button>');
+
+                            $buttonAddAlbum.on('click', addAlbum);
+                            $buttonRemoveAlbum.on('click', delAlbum);
+
+                            function addAlbum() {
+                                alert('Add Album to ' + $(this).parent().find('h5').text());
+                            }
+
+                            function delAlbum() {
+                                alert('Remove Album ' + $(this).parent().find('h6').text() + 'from');
+                            }
+
+                            var $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
+                            var $Nature = $('<ul class="albumNature">').append('<li class="categoryName"><h5>Nature</h5></li>').appendTo($myAlbums);
+                            var $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName"><h5>Celebs</h5></li>').appendTo($myAlbums);
+                            var $Others = $('<ul class="albumOthers">').append('<li class="categoryName"><h5>Others</h5></li>').appendTo($myAlbums);
+                            var $Team = $('<ul class="albumTeam">').append('<li class="categoryName"><h5>TEAM</h5></li>').appendTo($myAlbums);
+                            var $Events = $('<ul class="albumEvents">').append('<li class="categoryName"><h5>Eventss</h5></li>').appendTo($myAlbums);
+                            var $City = $('<ul class="albumCity">').append('<li class="categoryName"><h5>City</h5></li>').appendTo($myAlbums);
 
                             $('.categoryName').append($buttonAddAlbum);
 
-                            $.each(data.results, function(index,object) {
+                            $.each(data.results, function (index, object) {
 
-                                switch(object.categoryId.categoryName){
-                                    case 'Nature': $Nature.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
-                                    case 'Celebrities': $Celebs.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
-                                    case 'Others': $Others.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
-                                    case 'The Team':  $Team.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
-                                    case 'Events': $Events.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
-                                    case 'City sightseeing': $City.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                switch (object.categoryId.categoryName) {
+                                    case 'Nature':
+                                        $Nature.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        break;
+                                    case 'Celebrities':
+                                        $Celebs.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        break;
+                                    case 'Others':
+                                        $Others.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        break;
+                                    case 'The Team':
+                                        $Team.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        break;
+                                    case 'Events':
+                                        $Events.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        break;
+                                    case 'City sightseeing':
+                                        $City.append('<li class="albumUser"><h6>' + object.albumName + '</li>');
+                                        break;
                                 }
                                 //alert(object.albumName+"--"+object.categoryId.categoryName);
                             });
 
-                            $('.albumUser').append( $buttonRemoveAlbum);
+                            $('.albumUser').append($buttonRemoveAlbum);
 
-                            
+
                         },
                         function error(error) {
-                            console.log(error); alert(JSON.stringify(error));
+                            console.log(error);
+                            alert(JSON.stringify(error));
                         }
                     );
                 }
             }
         }
-
-
-
-
 
         console.log(View);
         console.log(View.prototype);

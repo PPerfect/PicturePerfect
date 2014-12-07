@@ -40,12 +40,13 @@ define(['baseController'], function (baseController) {
 
     PhotoController.prototype.createPhoto = function (file, albumId, userId) {
         var defer = $.Deferred(),
-            _this=this;
+            _this=this,
+            fileName=file.name;
 
         this.repository.photos.uploadFile(file,
             function (data) {
 
-                _this.repository.photos.createPhoto(data, albumId, userId,
+                _this.repository.photos.createPhoto(data,fileName, albumId, userId,
                     function success(data) {
                         defer.resolve(data);
                      console.log(data);
@@ -61,19 +62,19 @@ define(['baseController'], function (baseController) {
             })
         return defer.promise();
     }
-    PhotoController.prototype.uploadFile = function (file) {
-
-        var defer = $.Deferred();
-        this.repository.photos.createPhoto(file,
-            function success(data) {
-                defer.resolve(data);
-            },
-            function error(error) {
-                defer.reject(error);
-            }
-        );
-        return defer.promise();
-    }
+    //PhotoController.prototype.uploadFile = function (file) {
+    //
+    //    var defer = $.Deferred();
+    //    this.repository.photos.createPhoto(file,
+    //        function success(data) {
+    //            defer.resolve(data);
+    //        },
+    //        function error(error) {
+    //            defer.reject(error);
+    //        }
+    //    );
+    //    return defer.promise();
+    //}
 
     return new PhotoController();
 });

@@ -27,7 +27,8 @@
                 view.loadLoginLink('#top-nav ul');
             }
 
-            //view.loadLastAddedAlbums(6);
+            view.loadLastAddedAlbums(6);
+
 
 
          //   view.listAllPhotos();
@@ -41,5 +42,6 @@
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
             view.attachClickOnPhoto();
+            view.eventsListener();
         });
 }());
