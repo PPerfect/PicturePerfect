@@ -229,6 +229,28 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             _this.removeLogoutLink();
             _this.removeUserGreeting();
         };
+
+        View.prototype.loadLastAddedAlbums = function loadLastAddedAlbums(count) {
+            albumController.getAllAlbums()
+                .then(
+                function (allAlbumsData) {
+                    var lastAlbums = allAlbumsData.results.sort(function (a, b) {
+                        return Date.parse(a.createdAt) < Date.parse(b.createdAt);
+                    });
+                    renderSpecialAlbums('#last-albums', lastAlbums, count);
+                },
+                function (err) {
+                    console.log(err.responseText);
+                }
+            );
+        };
+
+        function renderSpecialAlbums(selector, albums, count) {
+            for (var i = 0; i < count; i++) {
+                var album = albums[i];
+                $(selector).append($('<li><a href="#/album/' + album.objectId + '" class="special-album" data-id="' + album.objectId + '">' + album.albumName + '</a></li>'));
+            }
+        }
         //=========================================================== Delete This Line
         View.prototype.listAllPhotos = function listAllPhotos() {
             photoController.getAllPhotos().then(
