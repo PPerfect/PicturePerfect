@@ -114,7 +114,9 @@ background-color: #cccccc;
 
 
 }
-
+.comment-content{
+    word-wrap: break-word;
+}
 #add-album-comment-wrapper{
     border:1px solid;
     border-radius:3px;
@@ -145,4 +147,7 @@ background-color: #cccccc;
 
 #upload-field-set{
     
+}
+#footer-line{
+    margin-left:30%;
 }

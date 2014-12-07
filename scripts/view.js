@@ -7,76 +7,76 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         function View() {
         }
 
-    View.prototype.uploadImage = function () {
-        
-        var file;
-
-        // Set an event listener on the Choose File field.
-        $('#fileselect').bind("change", function (e) {
-            var files = e.target.files || e.dataTransfer.files;
-            // Our file var now holds the selected file
-            file = files[0];
-        });
-        
-        // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
-        $('#uploadPic').click(function () {
-            var serverUrl = 'https://api.parse.com/1/files/' + file.name;
-            
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
-                    'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
-                },
-                contentType: file.type,
-                url: serverUrl,
-                data: file,
-                processData: false,
-                dataType: 'json',
-                success: function (data) {
-                    
-                    //Change variable to reflect your class to upload to
-                    var classUrl = "https://api.parse.com/1/classes/Photo";
-                    
-                    if (data) {
-                        var fileName = "" + data.name;
-                        var finalData = {
-                            "photoName" : file.name, 
-                            "content" : { "name" : "" + fileName + "", "__type" : "File" }
-                        };
-                        finalData = JSON.stringify(finalData);
-                        
-                        $.ajax({
-                            type: "POST",
-                            headers: {
-                                'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
-                                'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
-                            },
-                            contentType: 'application/json',
-                            url: classUrl,
-                            data: finalData,
-                            processData: false,
-
-                            success: function(data) {
-                                console.log("Image successfully uploaded.");
-                            },
-
-                            error: function(error) {
-                                console.log("Error: " + error.message);
-                            }
-                        });
-                    } else {
-                        //Data is null
-                        console.log("Data IS NULL");
-                    }
-                },
-                error: function (data) {
-                    var obj = jQuery.parseJSON(data);
-                    alert(obj.error);
-                }
-            });
-        });
-        };
+    //View.prototype.uploadImage = function () {
+    //
+    //    var file;
+    //
+    //    // Set an event listener on the Choose File field.
+    //    $('#fileselect').bind("change", function (e) {
+    //        var files = e.target.files || e.dataTransfer.files;
+    //        // Our file var now holds the selected file
+    //        file = files[0];
+    //    });
+    //
+    //    // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
+    //    $('#uploadPic').click(function () {
+    //        var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+    //
+    //        $.ajax({
+    //            type: "POST",
+    //            headers: {
+    //                'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+    //                'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+    //            },
+    //            contentType: file.type,
+    //            url: serverUrl,
+    //            data: file,
+    //            processData: false,
+    //            dataType: 'json',
+    //            success: function (data) {
+    //
+    //                //Change variable to reflect your class to upload to
+    //                var classUrl = "https://api.parse.com/1/classes/Photo";
+    //
+    //                if (data) {
+    //                    var fileName = "" + data.name;
+    //                    var finalData = {
+    //                        "photoName" : file.name,
+    //                        "content" : { "name" : "" + fileName + "", "__type" : "File" }
+    //                    };
+    //                    finalData = JSON.stringify(finalData);
+    //
+    //                    $.ajax({
+    //                        type: "POST",
+    //                        headers: {
+    //                            'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+    //                            'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+    //                        },
+    //                        contentType: 'application/json',
+    //                        url: classUrl,
+    //                        data: finalData,
+    //                        processData: false,
+    //
+    //                        success: function(data) {
+    //                            console.log("Image successfully uploaded.");
+    //                        },
+    //
+    //                        error: function(error) {
+    //                            console.log("Error: " + error.message);
+    //                        }
+    //                    });
+    //                } else {
+    //                    //Data is null
+    //                    console.log("Data IS NULL");
+    //                }
+    //            },
+    //            error: function (data) {
+    //                var obj = jQuery.parseJSON(data);
+    //                alert(obj.error);
+    //            }
+    //        });
+    //    });
+    //    };
 
         View.prototype.loadRegisterLink = function loadRegisterLink(linkParent) {
             var _this = this;
@@ -230,30 +230,30 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             _this.removeUserGreeting();
         };
         //=========================================================== Delete This Line
-        View.prototype.listAllPhotos = function listAllPhotos() {
-            photoController.getAllPhotos().then(
-                function success(data) {
-                    console.log(data);
-                    var $ul = $('<ul/>').appendTo(document.body);
-                    $.each(data.results, function (index, value) {
-                        $('<li>' + value.photoName + '</li>').appendTo($ul);
-                    });
-                }, function error(error) {
-                    console.log(error);
-                });
-        }
+        //View.prototype.listAllPhotos = function listAllPhotos() {
+        //    photoController.getAllPhotos().then(
+        //        function success(data) {
+        //            console.log(data);
+        //            var $ul = $('<ul/>').appendTo(document.body);
+        //            $.each(data.results, function (index, value) {
+        //                $('<li>' + value.photoName + '</li>').appendTo($ul);
+        //            });
+        //        }, function error(error) {
+        //            console.log(error);
+        //        });
+        //}
 
-        View.prototype.listAllAlbums = function () {
-            albumController.getAllAlbums().then(
-                function success(data) {
-                    var $ul = $('#topAlbumsList');
-                    $.each(data.results, function (index, value) {
-                        $('<li>' + value.albumName + '</li>').appendTo($ul);
-                    });
-                }, function error(error) {
-                    console.log(error);
-                });
-        }
+        //View.prototype.listAllAlbums = function () {
+        //    albumController.getAllAlbums().then(
+        //        function success(data) {
+        //            var $ul = $('#topAlbumsList');
+        //            $.each(data.results, function (index, value) {
+        //                $('<li>' + value.albumName + '</li>').appendTo($ul);
+        //            });
+        //        }, function error(error) {
+        //            console.log(error);
+        //        });
+        //}
 
         View.prototype.listAllCategories = function () {
             var _this = this;
@@ -610,7 +610,11 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 }
             }
         }
-        // new View().attachPhotoUploader();
+
+
+
+
+
         console.log(View);
         console.log(View.prototype);
 

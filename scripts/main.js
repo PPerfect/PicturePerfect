@@ -30,13 +30,13 @@
             //view.loadLastAddedAlbums(6);
 
 
-            view.listAllPhotos();
-            view.listAllAlbums();
+         //   view.listAllPhotos();
+           // view.listAllAlbums();
             view.listAllCategories();
 
             //TODO call check function oconne;
             view.ListAlbumsByUserLogged();
-            view.uploadImage();
+          //  view.uploadImage();
 
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
