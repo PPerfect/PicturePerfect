@@ -14,6 +14,7 @@
             "categoryController": "controllers/category-controller",
             "userController": "controllers/user-controller",
             "commentController": "controllers/comment-controller",
+            "voteController": "controllers/vote-controller",
             "view": "view"
         }
     });
@@ -28,6 +29,7 @@
             }
 
             view.loadLastAddedAlbums(6);
+            view.loadTopAlbums(6);
 
 
             //view.listAllPhotos();
