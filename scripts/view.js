@@ -1,12 +1,12 @@
-define(['photoController', 'albumController', 'categoryController', 'userController', "commentController"],
-    function (photoController, albumController, categoryController, userController, commentController) {
+define(['photoController', 'albumController', 'categoryController', 'userController', "commentController", "voteController"],
+    function (photoController, albumController, categoryController, userController, commentController, voteController) {
         // added categoryController
         'use strict';
         //TODO we should take decision whether to separate the view
 
         function View() {
         }
-
+        //TODO delete commented code
         //View.prototype.uploadImage = function () {
         //
         //    var file;
@@ -149,8 +149,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             if ($('#register-frm').length < 1) {
                 $(selector).append($('<form id="register-frm" action=""></form>')
                     .append($('<label>username <input type="text" id="username-reg-input" class="register-input"/></label>'))
-                    .append($('<label>password <input type="text" id="password-reg-input" class="register-input"/></label>'))
-                    .append($('<label>repeat password <input type="text" id="password-repeat-input" class="register-input"/></label>'))
+                    .append($('<label>password <input type="password" id="password-reg-input" class="register-input"/></label>'))
+                    .append($('<label>repeat password <input type="password" id="password-repeat-input" class="register-input"/></label>'))
                     .append($('<input type="submit" id="reg-btn" value="Register"/>')));
             }
         };
@@ -163,7 +163,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             if ($('#login-frm').length < 1) {
                 $(selector).append($('<form id="login-frm" action=""></form>')
                     .append($('<label>username <input type="text" id="username-login-input" class="login-input"/></label>'))
-                    .append($('<label>password <input type="text" id="password-login-input" class="login-input"/></label>'))
+                    .append($('<label>password <input type="password" id="password-login-input" class="login-input"/></label>'))
                     .append($('<input type="submit" id="login-btn" value="Login"/>')));
             }
         };
@@ -231,13 +231,14 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         };
 
         View.prototype.loadLastAddedAlbums = function loadLastAddedAlbums(count) {
+            var _this = this;
             albumController.getAllAlbums()
                 .then(
                 function (allAlbumsData) {
                     var lastAlbums = allAlbumsData.results.sort(function (a, b) {
                         return Date.parse(a.createdAt) < Date.parse(b.createdAt);
                     });
-                    renderSpecialAlbums('#last-albums', lastAlbums, count);
+                    renderSpecialAlbums.call(_this, '#last-albums', lastAlbums, count);
                 },
                 function (err) {
                     console.log(err.responseText);
@@ -245,12 +246,70 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             );
         };
 
+        View.prototype.loadTopAlbums = function loadTopAlbums(count) {
+            var _this = this;
+            voteController.getVotesWithAlbums()
+                .then(
+                function (votesData) {
+                    var sortedVotes = votesData.results.sort(function (a, b) {
+                            return a.value < b.value;
+                        }),
+                        sortedAlbums = [];
+                    for (var i = 0; i < sortedVotes.length; i++) {
+                        var vote = sortedVotes[i];
+                        console.log('sorted');
+                        console.dir(vote);
+                        if (vote.albumId) {
+                            sortedAlbums.push(vote.albumId);
+//                        sortedAlbums[i].votes = vote.value;
+                        }
+                    }
+                    console.log('sorted');
+                    console.dir(sortedAlbums);
+                    renderSpecialAlbums.call(_this, '#top-albums', sortedAlbums, count);
+                },
+                function (err) {
+                    console.log(err.responseText);
+                }
+//                    var topAlbums =
+            );
+        };
+
         function renderSpecialAlbums(selector, albums, count) {
-            for (var i = 0; i < count; i++) {
-                var album = albums[i];
+            var _this = this,
+                albumNumber = 0;
+            albums.forEach(function (album) {
+                if (albumNumber >= count) {
+                    return false;
+                }
+
                 $(selector).append($('<li><a href="#/album/' + album.objectId + '" class="special-album" data-id="' + album.objectId + '">' + album.albumName + '</a></li>'));
-            }
+                albumNumber++;
+            });
+
+            $(selector).on('click', '.special-album', function (ev) {
+
+                var albumId = $(ev.target).attr('data-id');
+
+//                $('#albums-wrapper').remove();
+//                _this.loadPhotosByAlbumId(albumId);
+            });
         }
+
+        //TODO delete commented code
+        //=========================================================== Delete This Line
+        //View.prototype.listAllPhotos = function listAllPhotos() {
+        //    photoController.getAllPhotos().then(
+        //        function success(data) {
+        //            console.log(data);
+        //            var $ul = $('<ul/>').appendTo(document.body);
+        //            $.each(data.results, function (index, value) {
+        //                $('<li>' + value.photoName + '</li>').appendTo($ul);
+        //            });
+        //        }, function error(error) {
+        //            console.log(error);
+        //        });
+        //}
 
         //=========================================================== Delete This Line
         //View.prototype.listAllPhotos = function listAllPhotos() {
@@ -285,7 +344,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     var defaultImageUrl = 'images/no-image.png',
                         $categoryWrapper = $('<div/>').attr('id', 'category-wrapper');
                     $.each(data.results, function (index, value) {
-                        _this.createPhotoHolder(value.categoryName, 'category', defaultImageUrl, value.objectId, $categoryWrapper);
+                        _this.createPhotoHolder('Categoty: ' + value.categoryName, 'category', defaultImageUrl, value.objectId, $categoryWrapper);
                     });
                     $categoryWrapper.appendTo('#imagesView');
 
@@ -341,7 +400,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             return;
                         }
                         $.each(albums, function (index, value) {
-                            _this.createPhotoHolder(value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
+                            _this.createPhotoHolder('Album:' + value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
                         });
 
                         changeAlbumBackgroundPhoto();
@@ -405,7 +464,11 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         photos.forEach(function (photo) {
                             if (photo.content !== undefined) {
                                 photoUrlArray[counter] = photo.content.url;
-                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+
+                            //    _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+
+                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
+
                                 counter++;
                             }
                         });
@@ -657,7 +720,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
         View.prototype.ListAlbumsByUserLogged = function () {
 
-            var checkLoggedUser = userController.getLoggedUserData();
+            var checkLoggedUser = userController.getLoggedUserData(),
+                _this = this;
 
             if (checkLoggedUser != undefined) {
                 // alert(checkLoggedUser.username); uncoment to se what hapened when page is refreshing
@@ -671,7 +735,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     if ($('#logout-link').length < 1) {
                         $('#top-nav ul').append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
                         $('#logout-link').on('click', function logoutLinkClickHandler() {
-                            this.logout();
+                            _this.logout();
                         });
                     }
 
@@ -684,21 +748,24 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             $buttonAddAlbum.on('click', addAlbum);
                             $buttonRemoveAlbum.on('click', delAlbum);
 
+
                             function addAlbum() {
-                                alert('Add Album to ' + $(this).parent().find('h5').text());
+                                //  alert('Add Album to '+$(this).parent().find('h5').text());
+                                alert('Add Album to ' + $(this).parent().parent().data('catNam') + '!');
+
                             }
 
                             function delAlbum() {
-                                alert('Remove Album ' + $(this).parent().find('h6').text() + 'from');
+                                alert('Remove Album ' + $(this).parent().data('cat') + '!');
                             }
 
                             var $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
-                            var $Nature = $('<ul class="albumNature">').append('<li class="categoryName"><h5>Nature</h5></li>').appendTo($myAlbums);
-                            var $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName"><h5>Celebs</h5></li>').appendTo($myAlbums);
-                            var $Others = $('<ul class="albumOthers">').append('<li class="categoryName"><h5>Others</h5></li>').appendTo($myAlbums);
-                            var $Team = $('<ul class="albumTeam">').append('<li class="categoryName"><h5>TEAM</h5></li>').appendTo($myAlbums);
-                            var $Events = $('<ul class="albumEvents">').append('<li class="categoryName"><h5>Eventss</h5></li>').appendTo($myAlbums);
-                            var $City = $('<ul class="albumCity">').append('<li class="categoryName"><h5>City</h5></li>').appendTo($myAlbums);
+                            var $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').data('catNam', 'Nature').appendTo($myAlbums);
+                            var $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName">Celebs</li>').data('catNam', 'Celebs').appendTo($myAlbums);
+                            var $Others = $('<ul class="albumOthers">').append('<li class="categoryName">Others</li>').data('catNam', 'Others').appendTo($myAlbums);
+                            var $Team = $('<ul class="albumTeam">').append('<li class="categoryName">TEAM</li>').data('catNam', 'Team').appendTo($myAlbums);
+                            var $Events = $('<ul class="albumEvents">').append('<li class="categoryName">Eventss</li>').data('catNam', 'Events').appendTo($myAlbums);
+                            var $City = $('<ul class="albumCity">').append('<li class="categoryName">City</li>').data('catNam', 'City').appendTo($myAlbums);
 
                             $('.categoryName').append($buttonAddAlbum);
 
@@ -706,22 +773,36 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
                                 switch (object.categoryId.categoryName) {
                                     case 'Nature':
-                                        $Nature.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+
+                                        $Nature.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
                                         break;
                                     case 'Celebrities':
-                                        $Celebs.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        $Celebs.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
                                         break;
                                     case 'Others':
-                                        $Others.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        $Others.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
                                         break;
                                     case 'The Team':
-                                        $Team.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        $Team.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
                                         break;
                                     case 'Events':
-                                        $Events.append('<li class="albumUser"><h6>' + object.albumName + '</h6></li>');
+                                        $Events.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
                                         break;
                                     case 'City sightseeing':
-                                        $City.append('<li class="albumUser"><h6>' + object.albumName + '</li>');
+                                        $City.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
+                                    case 'Others':
+                                        $Others.append('<li class="albumUser">' + object.albumName + '</li>');
+                                        break;
+                                    case 'The Team':
+                                        $Team.append('<li class="albumUser">' + object.albumName + '</li>');
+                                        break;
+                                    case 'Events':
+                                        $Events.append('<li class="albumUser">' + object.albumName + '</li>');
+                                        break;
+                                    case 'City sightseeing':
+                                        $City.append('<li class="albumUser">' + object.albumName + '</li>');
+
                                         break;
                                 }
                                 //alert(object.albumName+"--"+object.categoryId.categoryName);
