@@ -80,8 +80,6 @@ define(['baseController'], function (baseController) {
         this.repository.users.getUserById(id,
             function success(data) {
                 defer.resolve(data);
-                console.log(data)
-                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             },
             function error(error) {
                 defer.reject(error);

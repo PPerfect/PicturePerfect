@@ -97,14 +97,17 @@ a {
     border-radius:5px;
     margin-left:30%;
     background-color: aliceblue;
+    text-wrap: normal;
 }
 
 #album-comments-wrapper{
 background-color: #cccccc;
     width: 95%;
+    padding:30px;
     margin-left: 2%;
     border-radius: 3px;
     text-align: center;
+
 }
 
 #comments-title{
@@ -115,7 +118,13 @@ background-color: #cccccc;
 #add-album-comment-wrapper{
     border:1px solid;
     border-radius:3px;
-    background-color: #ccc812;
+    background-color: aliceblue;
     width:50%;
     margin-left:30%;
+    padding: 10px;
+}
+
+#add-comment-content{
+    border-radius: 6px;
+    width: 90%;
 }

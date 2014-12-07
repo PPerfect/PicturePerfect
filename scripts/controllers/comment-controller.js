@@ -16,7 +16,7 @@ define(['baseController'], function (baseController) {
         this.repository.comments.getCommentsByAlbumId(albumId,
             function success(data) {
                 defer.resolve(data);
-                console.log( data);
+
 
             },
             function error(error) {
@@ -25,8 +25,17 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
-
-
+    CommentController.prototype.createComment=function(content,username,userId,albumId){
+        var defer = $.Deferred();
+        this.repository.comments.createComment(content,userId,albumId,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            });
+        return defer.promise();
+    }
 
     return new CommentController();
 });

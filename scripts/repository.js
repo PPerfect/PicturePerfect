@@ -190,7 +190,10 @@ define(['requestsExecutor'], function (requestsExecutor) {
             requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
         }
 
-        Comment.prototype.createComment = function (data, success, error) {
+        Comment.prototype.createComment = function (content, userId, albumId, success, error) {
+            var user = {'__type': "Pointer", 'className': '_User', 'objectId': userId},
+                album = {'__type': "Pointer", 'className': 'Album', 'objectId': albumId},
+                data = JSON.stringify({"content": content, "userId": user, "albumId": album});
             requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
         }
 

@@ -360,26 +360,26 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.loadCommentsForAlbum = function (albumId, parent) {
             var $albumCommentsWrapper = $('<div/>').attr('id', 'album-comments-wrapper').appendTo(parent),
-                $addCommentWrapper=this.generateAddCommentDiv(),
-                _this=this,
+                $commentsContainer=$('<div/>').attr('id','album-comments-container').appendTo($albumCommentsWrapper),
+                $addCommentWrapper = this.generateAddCommentDiv(),
+                _this = this,
                 $comment;
 
             commentController.getCommentsByAlbumId(albumId).then(
                 function success(data) {
                     var comments = data.results;
-                    $albumCommentsWrapper.append('<h3 id="comments-title">Comments</h3>');
+                    $commentsContainer.append('<h3 id="comments-title">Comments</h3>');
 
                     if (comments.length > 0) {
                         $.each(comments, function (index, value) {
                             console.log(value);
-                            _this.generateComment(value.content,value.userId.username,$albumCommentsWrapper);
+                            _this.generateComment(value.content, value.userId.username, $commentsContainer);
 
                         })
                         if (sessionStorage.getItem('PPUser') !== null) {
                             $addCommentWrapper.appendTo($albumCommentsWrapper);
+                            _this.attachClickSubmitAlbumCommentHandler(albumId);
                         }
-
-
                     }
                 },
                 function error(error) {
@@ -390,20 +390,39 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.generateAddCommentDiv = function () {
             var $addCommentWrapper = $('<div/>').attr('id', 'add-album-comment-wrapper'),
-                $content =  $('<textarea  />').attr('id','add-comment-content').appendTo($addCommentWrapper),
-                $addCommentBtn = $('<button>submit</button>').attr('id','add-comment-btn').appendTo($addCommentWrapper);
+                $content = $('<textarea  />').attr('id', 'add-comment-content').appendTo($addCommentWrapper),
+                $addCommentBtn = $('<button>submit</button>').attr('id', 'add-comment-btn').appendTo($addCommentWrapper);
 
             return $addCommentWrapper;
 
         }
-        View.prototype.generateComment= function (content,author,parent) {
-           var  $comment = $('<div/>').attr('class', 'comment-wrapper');
+        View.prototype.generateComment = function (content, author, parent) {
+            var $comment = $('<div/>').attr('class', 'comment-wrapper');
             $comment.append('<p class="comment-content">' + content + '</p>'),
-            $comment.append('<output class="comment-author">' + author + '</output>');
+                $comment.append('<output class="comment-author">' + author + '</output>');
             $comment.appendTo(parent);
         }
 
+        View.prototype.attachClickSubmitAlbumCommentHandler = function (albumId) {
+            var _this = this;
+            $('#add-comment-btn').on('click', function (ev) {
 
+                var commentContent = $('#add-comment-content').val(),
+                    loggedData = userController.getLoggedUserData(),
+                    loggedUsername = loggedData.username,
+                    loggedUserId = loggedData.userId;
+
+                commentController.createComment(commentContent, loggedUsername, loggedUserId, albumId).then(
+                    function success(data) {
+                        _this.generateComment(commentContent, loggedUsername, $('#album-comments-container'));
+                    },
+                    function error(error) {
+                        console.log(error);
+                    }
+                )
+                ev.preventDefault();
+            })
+        }
         // TODO check getLoggedUserData, visualizate Photos
 
 
