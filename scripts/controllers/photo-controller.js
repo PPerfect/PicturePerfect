@@ -1,4 +1,4 @@
-define([ 'baseController'], function (baseController) {
+define(['baseController'], function (baseController) {
 
     'use strict';
 
@@ -22,7 +22,7 @@ define([ 'baseController'], function (baseController) {
 
         return defer.promise();
     }
-    
+
     PhotoController.prototype.getPhotosByAlbumId = function (albumId) {
         console.log(this.repository.photos);
         var defer = $.Deferred();
@@ -34,12 +34,46 @@ define([ 'baseController'], function (baseController) {
                 defer.reject(error);
             }
         );
-        
+
         return defer.promise();
     }
-  
-    //getPhotosByUserId;
 
+    PhotoController.prototype.createPhoto = function (file, albumId, userId) {
+        var defer = $.Deferred(),
+            _this=this;
+
+        this.repository.photos.uploadFile(file,
+            function (data) {
+
+                _this.repository.photos.createPhoto(data, albumId, userId,
+                    function success(data) {
+                        defer.resolve(data);
+                     console.log(data);
+                    },
+                    function error(error) {
+                        defer.reject(error);
+                        console.log(error);
+                    }
+                );
+            },
+            function error(error) {
+                console.log(error);
+            })
+        return defer.promise();
+    }
+    PhotoController.prototype.uploadFile = function (file) {
+
+        var defer = $.Deferred();
+        this.repository.photos.createPhoto(file,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            }
+        );
+        return defer.promise();
+    }
 
     return new PhotoController();
 });

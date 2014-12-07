@@ -31,6 +31,28 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         }
 
+        Photo.prototype.uploadFile = function (file, success, error) {
+
+            var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+
+            $.ajax({
+                type: "POST",
+                beforeSend: function (request) {
+                    request.setRequestHeader("X-Parse-Application-Id", 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV');
+                    request.setRequestHeader("X-Parse-REST-API-Key", '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD');
+                    request.setRequestHeader("Content-Type", file.type);
+                },
+                url: serverUrl,
+                data: file,
+                processData: false,
+                contentType: false,
+                success: success,
+                error: error
+            });
+
+        }
+
+
         Photo.prototype.getAll = function (success, error) {
             requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
         }
@@ -40,9 +62,26 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         }
 
-        Photo.prototype.createPhoto = function (data, success, error) {
-            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
+        Photo.prototype.createPhoto = function (file, userId, albumId, success, error) {
+            var user = {'__type': 'Pointer', 'className': '_User', 'objectId': userId},
+                album = {'__type': 'Pointer', 'className': 'Album', 'objectId': albumId},
+                fileName = file.name,
+                content={"url": file.url, "name": "" + fileName + "", "__type": "File"},
+                photoData;
+
+            localStorage.setItem('newPhotoUrl',file.url);
+            photoData = JSON.stringify({
+                'photoName': fileName,
+                'content': content,
+                'userId': user,
+                'albumId': album
+            });
+            console.log(photoData);
+
+            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, photoData, success, error);
+
         }
+
 
         Photo.prototype.deletePhotoById = function (id, success, error) {
             requestsExecutor.delete(this.serviceUrl + '/' + id, contentTypes.JSON.success, error);

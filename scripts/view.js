@@ -288,33 +288,44 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         View.prototype.attachClickOnAlbum = function () {
             var _this = this;
             $('#imagesView').on('click', '.album', function (ev) {
-                var albumId = $(this).attr('id'),
-                    $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
+                var albumId = $(this).attr('id');
+
                 $('#albums-wrapper').remove();
+                _this.loadPhotosByAlbumId(albumId);
 
-                photoController.getPhotosByAlbumId(albumId).then(
-                    function success(data) {
-                        var photos = data.results,
-                            noPhotos = 'noPhotos',
-                            className = 'photo',
-                            defaultImageUrl = 'images/no-image.png';
-
-                        if (photos.length !== 0) {
-                            photos.forEach(function (photo) {
-                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
-                            });
-                        } else {
-                            _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
-                        }
-
-                        _this.loadCommentsForAlbum(albumId, $('#albums-view'));
-                    }, function error(error) {
-                        console.log(error);
-                    });
             });
 
             return _this;
         }
+
+        View.prototype.loadPhotosByAlbumId = function (albumId) {
+            var _this = this,
+                $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
+            photoController.getPhotosByAlbumId(albumId).then(
+                function success(data) {
+                    var photos = data.results,
+                        noPhotos = 'noPhotos',
+                        className = 'photo',
+                        defaultImageUrl = 'images/no-image.png';
+
+                    if (photos.length !== 0) {
+                        photos.forEach(function (photo) {
+                            if (photo.content !== undefined) {
+                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+                            }
+                        });
+                    } else {
+                        _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
+                    }
+
+                    _this.attachPhotoUploader(albumId);
+                    _this.loadCommentsForAlbum(albumId, $('#albums-view'));
+
+                }, function error(error) {
+                    console.log(error);
+                });
+        }
+
 
         View.prototype.attachClickOnPhoto = function () {
             var _this = this;
@@ -347,20 +358,21 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.createPhotoHolder = function (holderName, className, imageUrl, objectId, appendTo) {
             holderName = holderName || "";
-            $('<div>' + holderName + '</div>').attr('id', objectId)
-                .addClass(className)
-                .css({
-                    'background-image': 'url(' + imageUrl + ')',
-                    'background-repeat': 'no-repeat',
-                    'background-size': '100% 100%'
-                })
-                .appendTo(appendTo);
+            if (imageUrl !== undefined) {
+                $('<div>' + holderName + '</div>').attr('id', objectId)
+                    .addClass(className)
+                    .css({
+                        'background-image': 'url(' + imageUrl + ')',
+                        'background-repeat': 'no-repeat',
+                        'background-size': '100% 100%'
+                    })
+                    .appendTo(appendTo);
+            }
         }
 
-
         View.prototype.loadCommentsForAlbum = function (albumId, parent) {
-            var $albumCommentsWrapper = $('<div/>').attr('id', 'album-comments-wrapper').appendTo(parent),
-                $commentsContainer=$('<div/>').attr('id','album-comments-container').appendTo($albumCommentsWrapper),
+            var $albumCommentsWrapper = $('<div/>').attr('id', 'album-comments-wrapper'),
+                $commentsContainer = $('<div/>').attr('id', 'album-comments-container').appendTo($albumCommentsWrapper),
                 $addCommentWrapper = this.generateAddCommentDiv(),
                 _this = this,
                 $comment;
@@ -371,21 +383,23 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     $commentsContainer.append('<h3 id="comments-title">Comments</h3>');
 
                     if (comments.length > 0) {
+                        $albumCommentsWrapper.appendTo(parent);
                         $.each(comments, function (index, value) {
                             console.log(value);
                             _this.generateComment(value.content, value.userId.username, $commentsContainer);
 
                         })
-                        if (sessionStorage.getItem('PPUser') !== null) {
-                            $addCommentWrapper.appendTo($albumCommentsWrapper);
-                            _this.attachClickSubmitAlbumCommentHandler(albumId);
-                        }
                     }
                 },
                 function error(error) {
                     console.log(error);
                 }
             );
+            if (sessionStorage.getItem('PPUser') !== null) {
+                $albumCommentsWrapper.appendTo(parent);
+                $addCommentWrapper.appendTo($albumCommentsWrapper);
+                _this.attachClickSubmitAlbumCommentHandler(albumId);
+            }
         }
 
         View.prototype.generateAddCommentDiv = function () {
@@ -423,6 +437,45 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 ev.preventDefault();
             })
         }
+
+        View.prototype.attachPhotoUploader = function (albumId) {
+            var $uploadFieldSet = $('<fieldset/>').attr('id', 'upload-field-set'),
+                $inputFile = $('<input/>').attr('type', 'file').attr('id', 'file-select').attr('name', 'file-select').appendTo($uploadFieldSet),
+                $uploadBtn = $('<button>upload</button>').attr('id', 'upload-btn').appendTo($uploadFieldSet),
+                _this = this,
+                file;
+            if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
+
+                $uploadFieldSet.appendTo($('#albums-view'))
+            }
+
+            $inputFile.on('change', function (ev) {
+                var files = ev.target.files;
+                file = files[0];
+            });
+
+            $('#upload-btn').click(function () {
+
+                if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
+                    var userId = userController.getLoggedUserData().userId;
+                    photoController.createPhoto(file, userId, albumId).then(
+                        function success(data) {
+                           // $('#album-comments-wrapper').remove();
+                            //$('#photos-wrapper').remove();
+                           // $('#upload-field-set').remove();
+                            console.log(data);
+                            _this.createPhotoHolder(undefined, 'photo', localStorage.getItem('newPhotoUrl'), undefined, $('#photos-wrapper'));
+                           _this.attachClickOnPhoto();
+                            //_this.loadPhotosByAlbumId(albumId)
+                        },
+                        function error(error) {
+                            console.log(error);
+                        });
+                }
+            });
+        }
+
+
         // TODO check getLoggedUserData, visualizate Photos
 
 
@@ -461,10 +514,12 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 }
             }
         }
-
+        // new View().attachPhotoUploader();
         console.log(View);
         console.log(View.prototype);
 
 
         return new View();
-    });
+    }
+)
+;
