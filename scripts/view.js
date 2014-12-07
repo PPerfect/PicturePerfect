@@ -276,9 +276,15 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         };
 
         function renderSpecialAlbums(selector, albums, count) {
-            var _this = this;
-            albums.forEach(function(album){
+            var _this = this,
+                albumNumber = 0;
+            albums.forEach(function (album) {
+                if (albumNumber >= count) {
+                    return false;
+                }
+
                 $(selector).append($('<li><a href="#/album/' + album.objectId + '" class="special-album" data-id="' + album.objectId + '">' + album.albumName + '</a></li>'));
+                albumNumber++;
             });
 
             $(selector).on('click', '.special-album', function (ev) {
@@ -438,11 +444,11 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         photoUrlArray = [],
                         counter = 0,
                         defaultImageUrl = 'images/no-image.png';
-                        
+
                     if (photos.length !== 0) {
                         photos.forEach(function (photo) {
                             if (photo.content !== undefined) {
-                                photoUrlArray[counter] = photo.content.url; 
+                                photoUrlArray[counter] = photo.content.url;
                                 _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
                                 counter++;
                             }
@@ -451,9 +457,9 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     } else {
                         _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
-                
+
                     _this.attachPhotoUploader(albumId);
-                     _this.loadCommentsForAlbum(albumId, $('#albums-view'));
+                    _this.loadCommentsForAlbum(albumId, $('#albums-view'));
 
                 }, function error(error) {
                     console.log(error);
@@ -466,7 +472,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 ev.preventDefault();
                 ev.stopPropagation();
                 var $photoViewer = $('<div/>').attr('id', 'photo-viewer'),
-                currImgUrl = $(this).css('background-image');
+                    currImgUrl = $(this).css('background-image');
                 currImgUrl = currImgUrl.substr(4, currImgUrl.length - 5);
                 sessionStorage.setItem('currentImageIndex', $(this).attr('id')); // it is needed to know from where to start preview of next pictures
                 console.log(currImgUrl);
@@ -482,7 +488,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         'background-image': 'url(' + currImgUrl + ')',
                         'background-repeat': 'no-repeat',
                         'background-size': '100% 100%'
-                });
+                    });
                 var $previousButton = $('<button>Previous</button>').attr('id', 'previous-button');
                 var $nextButton = $('<button>Next</button>').attr('id', 'next-button');
                 //var $infoButton = $('<button>Information</button>').attr('id', 'info-button'); // TODO there is no property info in picture delete if you diside that is useless
@@ -490,15 +496,15 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 var $backButton = $('<button>Back to the Album</button>').attr('id', 'back-to-album-button');
 
                 $photoViewer
-                .append($previousButton)
-                .append($nextButton)
-                //.append($infoButton)
-                .append($deleteButton)
-                .append($backButton);
+                    .append($previousButton)
+                    .append($nextButton)
+                    //.append($infoButton)
+                    .append($deleteButton)
+                    .append($backButton);
 
                 $('#container').hide();
                 $photoViewer.appendTo($('body'));
-                            
+
             });
 
             return _this;
@@ -555,12 +561,12 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 photosUrlArr,
                 currentImageIndex,
                 nextUrl;
-         
+
             $('body').on('click', '#next-button', function (ev) {
                 getLocalStorageItems();
                 ev.preventDefault();
                 ev.stopPropagation();
-                var nextPhotoIndex =  parseInt(currentImageIndex) + 1;
+                var nextPhotoIndex = parseInt(currentImageIndex) + 1;
                 if (nextPhotoIndex <= photosUrlArr.length - 1) {
                     sessionStorage['currentImageIndex'] = nextPhotoIndex;
                     nextUrl = photosUrlArr[nextPhotoIndex];
@@ -569,9 +575,9 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     sessionStorage['currentImageIndex'] = '0';
                 }
 
-                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');               
+                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');
             });
-        
+
             $('body').on('click', '#previous-button', function (ev) {
                 getLocalStorageItems();
                 ev.preventDefault();
@@ -584,23 +590,23 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     nextUrl = photosUrlArr[photosUrlArr.length - 1];
                     sessionStorage['currentImageIndex'] = (photosUrlArr.length - 1).toString();
                 }
-            
-                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');              
+
+                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');
             });
-        
+
             // TODO implement this if you disede to delete picture from here !!!
             $('body').on('click', '#delete-button', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
             });
 
-        
+
             //$('body').on('click', '#info-button', function (ev) {
             //    ev.preventDefault();
             //    ev.stopPropagation();
             //    //todo diside if you use that                 
             //});
-        
+
             $('body').on('click', '#back-to-album-button', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
@@ -615,7 +621,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
             return _this;
         }
-    
+
 
         View.prototype.generateAddCommentDiv = function () {
             var $addCommentWrapper = $('<div/>').attr('id', 'add-album-comment-wrapper'),
@@ -697,7 +703,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
         View.prototype.ListAlbumsByUserLogged = function () {
 
-            var checkLoggedUser = userController.getLoggedUserData();
+            var checkLoggedUser = userController.getLoggedUserData(),
+                _this = this;
 
             if (checkLoggedUser != undefined) {
                 // alert(checkLoggedUser.username); uncoment to se what hapened when page is refreshing
@@ -711,7 +718,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     if ($('#logout-link').length < 1) {
                         $('#top-nav ul').append($('<li />').append($('<a href="#logout" id="logout-link">Logout</a>')));
                         $('#logout-link').on('click', function logoutLinkClickHandler() {
-                            this.logout();
+                            _this.logout();
                         });
                     }
 
@@ -721,37 +728,50 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             var $buttonAddAlbum = $('<button>Add Album</button>');
                             var $buttonRemoveAlbum = $('<button>Del</button>');
 
-                             $buttonAddAlbum.on('click', addAlbum);
-                             $buttonRemoveAlbum.on('click',delAlbum);
+                            $buttonAddAlbum.on('click', addAlbum);
+                            $buttonRemoveAlbum.on('click', delAlbum);
 
-                             function addAlbum(){
-                               //  alert('Add Album to '+$(this).parent().find('h5').text());
-                                 alert('Add Album to '+$(this).parent().parent().data('catNam')+'!');
+                            function addAlbum() {
+                                //  alert('Add Album to '+$(this).parent().find('h5').text());
+                                alert('Add Album to ' + $(this).parent().parent().data('catNam') + '!');
 
-                             }
-                             function delAlbum(){
-                                 alert('Remove Album '+$(this).parent().data('cat')+'!');
-                             }
+                            }
 
-                            var  $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
-                            var  $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').data('catNam','Nature').appendTo($myAlbums);
-                            var  $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName">Celebs</li>').data('catNam','Celebs').appendTo($myAlbums);
-                            var  $Others = $('<ul class="albumOthers">').append('<li class="categoryName">Others</li>').data('catNam','Others').appendTo($myAlbums);
-                            var    $Team = $('<ul class="albumTeam">').append('<li class="categoryName">TEAM</li>').data('catNam','Team').appendTo($myAlbums);
-                            var  $Events = $('<ul class="albumEvents">').append('<li class="categoryName">Eventss</li>').data('catNam','Events').appendTo($myAlbums);
-                            var  $City = $('<ul class="albumCity">').append('<li class="categoryName">City</li>').data('catNam','City').appendTo($myAlbums);
+                            function delAlbum() {
+                                alert('Remove Album ' + $(this).parent().data('cat') + '!');
+                            }
+
+                            var $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
+                            var $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').data('catNam', 'Nature').appendTo($myAlbums);
+                            var $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName">Celebs</li>').data('catNam', 'Celebs').appendTo($myAlbums);
+                            var $Others = $('<ul class="albumOthers">').append('<li class="categoryName">Others</li>').data('catNam', 'Others').appendTo($myAlbums);
+                            var $Team = $('<ul class="albumTeam">').append('<li class="categoryName">TEAM</li>').data('catNam', 'Team').appendTo($myAlbums);
+                            var $Events = $('<ul class="albumEvents">').append('<li class="categoryName">Eventss</li>').data('catNam', 'Events').appendTo($myAlbums);
+                            var $City = $('<ul class="albumCity">').append('<li class="categoryName">City</li>').data('catNam', 'City').appendTo($myAlbums);
 
                             $('.categoryName').append($buttonAddAlbum);
 
                             $.each(data.results, function (index, object) {
 
                                 switch (object.categoryId.categoryName) {
-                                    case 'Nature': $Nature.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
-                                    case 'Celebrities': $Celebs.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
-                                    case 'Others': $Others.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
-                                    case 'The Team':  $Team.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
-                                    case 'Events': $Events.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
-                                    case 'City sightseeing': $City.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
+                                    case 'Nature':
+                                        $Nature.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
+                                    case 'Celebrities':
+                                        $Celebs.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
+                                    case 'Others':
+                                        $Others.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
+                                    case 'The Team':
+                                        $Team.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
+                                    case 'Events':
+                                        $Events.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
+                                    case 'City sightseeing':
+                                        $City.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        break;
                                     case 'Others':
                                         $Others.append('<li class="albumUser">' + object.albumName + '</li>');
                                         break;
