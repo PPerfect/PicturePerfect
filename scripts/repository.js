@@ -8,7 +8,8 @@ define(['requestsExecutor'], function (requestsExecutor) {
             LOGIN: 'login',
             ALBUM: 'classes/Album',
             CATEGORY: 'classes/Category',
-            COMMENT: 'classes/Comment'
+            COMMENT: 'classes/Comment',
+            VOTE: 'classes/Vote'
         },
         contentTypes = {
             JSON: 'application/json',
@@ -22,6 +23,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         this.albums = new Album(baseUrl + uris.ALBUM);
         this.categories = new Category(baseUrl + uris.CATEGORY);
         this.comments = new Comment(baseUrl + uris.COMMENT);
+        this.votes = new Vote(baseUrl + uris.VOTE);
     }
 
     var Photo = (function () {
@@ -66,10 +68,10 @@ define(['requestsExecutor'], function (requestsExecutor) {
             var user = {'__type': 'Pointer', 'className': '_User', 'objectId': userId},
                 album = {'__type': 'Pointer', 'className': 'Album', 'objectId': albumId},
                 fileName = file.name,
-                content={"url": file.url, "name": "" + fileName + "", "__type": "File"},
+                content = {"url": file.url, "name": "" + fileName + "", "__type": "File"},
                 photoData;
 
-            localStorage.setItem('newPhotoUrl',file.url);
+            localStorage.setItem('newPhotoUrl', file.url);
             photoData = JSON.stringify({
                 'photoName': fileName,
                 'content': content,
@@ -173,7 +175,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         //TODO getAlbumsByUserId------>oconne
         Album.prototype.getAlbumsByUserId = function (UserId, success, error) {
             //alert(userId);
-            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + UserId+ '"}}&include=categoryId';
+            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + UserId + '"}}&include=categoryId';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
 
         }
@@ -253,6 +255,18 @@ define(['requestsExecutor'], function (requestsExecutor) {
         return Comment;
     }());
 
+    var Vote = (function () {
+        function Vote(url) {
+            this.serviceUrl = url;
+        }
+
+        Vote.prototype.getVotesWithAlbums = function getVotesWithAlbums(success, error) {
+            var serviceUrl = this.serviceUrl + '?include=albumId';
+            requestsExecutor.get(serviceUrl, contentTypes.JSON, success, error);
+        };
+
+        return Vote;
+    }());
 
     return {
         get: function get(baseUrl) {
