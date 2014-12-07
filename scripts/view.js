@@ -686,31 +686,33 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                              $buttonRemoveAlbum.on('click',delAlbum);
 
                              function addAlbum(){
-                                 alert('Add Album to '+$(this).parent().find('h5').text());
+                               //  alert('Add Album to '+$(this).parent().find('h5').text());
+                                 alert('Add Album to '+$(this).parent().parent().data('catNam')+'!');
+
                              }
                              function delAlbum(){
-                                 alert('Remove Album '+$(this).parent().find('h6').text()+'from');
+                                 alert('Remove Album '+$(this).parent().data('cat')+'!');
                              }
 
                             var  $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
-                            var  $Nature = $('<ul class="albumNature">').append('<li class="categoryName"><h5>Nature</h5></li>').appendTo($myAlbums);
-                            var  $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName"><h5>Celebs</h5></li>').appendTo($myAlbums);
-                            var  $Others = $('<ul class="albumOthers">').append('<li class="categoryName"><h5>Others</h5></li>').appendTo($myAlbums);
-                            var    $Team = $('<ul class="albumTeam">').append('<li class="categoryName"><h5>TEAM</h5></li>').appendTo($myAlbums);
-                            var  $Events = $('<ul class="albumEvents">').append('<li class="categoryName"><h5>Eventss</h5></li>').appendTo($myAlbums);
-                            var  $City = $('<ul class="albumCity">').append('<li class="categoryName"><h5>City</h5></li>').appendTo($myAlbums);
+                            var  $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').data('catNam','Nature').appendTo($myAlbums);
+                            var  $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName">Celebs</li>').data('catNam','Celebs').appendTo($myAlbums);
+                            var  $Others = $('<ul class="albumOthers">').append('<li class="categoryName">Others</li>').data('catNam','Others').appendTo($myAlbums);
+                            var    $Team = $('<ul class="albumTeam">').append('<li class="categoryName">TEAM</li>').data('catNam','Team').appendTo($myAlbums);
+                            var  $Events = $('<ul class="albumEvents">').append('<li class="categoryName">Eventss</li>').data('catNam','Events').appendTo($myAlbums);
+                            var  $City = $('<ul class="albumCity">').append('<li class="categoryName">City</li>').data('catNam','City').appendTo($myAlbums);
 
                             $('.categoryName').append($buttonAddAlbum);
 
                             $.each(data.results, function(index,object) {
 
                                 switch(object.categoryId.categoryName){
-                                    case 'Nature': $Nature.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
-                                    case 'Celebrities': $Celebs.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
-                                    case 'Others': $Others.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
-                                    case 'The Team':  $Team.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
-                                    case 'Events': $Events.append('<li class="albumUser"><h6>'+object.albumName+'</h6></li>') ;break;
-                                    case 'City sightseeing': $City.append('<li class="albumUser"><h6>'+object.albumName+'</li>') ;break;
+                                    case 'Nature': $Nature.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
+                                    case 'Celebrities': $Celebs.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
+                                    case 'Others': $Others.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
+                                    case 'The Team':  $Team.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
+                                    case 'Events': $Events.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
+                                    case 'City sightseeing': $City.append($('<li class="albumUser">'+object.albumName+'</li>').data('cat',object.albumName)) ;break;
                                 }
                                 //alert(object.albumName+"--"+object.categoryId.categoryName);
                             });
