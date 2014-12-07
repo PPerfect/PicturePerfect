@@ -149,8 +149,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             if ($('#register-frm').length < 1) {
                 $(selector).append($('<form id="register-frm" action=""></form>')
                     .append($('<label>username <input type="text" id="username-reg-input" class="register-input"/></label>'))
-                    .append($('<label>password <input type="text" id="password-reg-input" class="register-input"/></label>'))
-                    .append($('<label>repeat password <input type="text" id="password-repeat-input" class="register-input"/></label>'))
+                    .append($('<label>password <input type="password" id="password-reg-input" class="register-input"/></label>'))
+                    .append($('<label>repeat password <input type="password" id="password-repeat-input" class="register-input"/></label>'))
                     .append($('<input type="submit" id="reg-btn" value="Register"/>')));
             }
         };
@@ -163,7 +163,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             if ($('#login-frm').length < 1) {
                 $(selector).append($('<form id="login-frm" action=""></form>')
                     .append($('<label>username <input type="text" id="username-login-input" class="login-input"/></label>'))
-                    .append($('<label>password <input type="text" id="password-login-input" class="login-input"/></label>'))
+                    .append($('<label>password <input type="password" id="password-login-input" class="login-input"/></label>'))
                     .append($('<input type="submit" id="login-btn" value="Login"/>')));
             }
         };
