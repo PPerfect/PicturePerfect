@@ -32,7 +32,8 @@
             
             //TODO call check function oconne;
             view.ListAlbumsByUserLogged();
-
+            view.uploadImage();
+            
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
             view.attachClickOnPhoto();

@@ -47,6 +47,17 @@
 
     </div>
     </div>
+
+    <button id="uploadPic">Upload Picture</button>
+    <input type="file" id="fileselect" />
+    <script>
+        $('#fileselect').bind("change", function (e) {
+            var files = e.target.files || e.dataTransfer.files;
+            // Our file var now holds the selected file
+            file = files[0];
+        });
+    </script>
+
     <footer class="footer">
         <p>
             <!--make the links-->
