@@ -26,8 +26,8 @@
             view.loadRegisterLink('#top-nav ul');
             view.loadLoginLink('#top-nav ul');
 
-            view.listAllPhotos();
-            view.listAllAlbums();
+            //view.listAllPhotos();
+            //view.listAllAlbums();
             view.listAllCategories();
             
             //TODO call check function oconne;
@@ -36,5 +36,6 @@
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
             view.attachClickOnPhoto();
+            view.eventsListener();
         });
 }());
