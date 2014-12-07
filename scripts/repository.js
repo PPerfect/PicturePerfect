@@ -94,7 +94,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         Photo.prototype.getPhotosByAlbumId = function (albumId, success, error) {
             var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
-        }
+        };
 
         return Photo;
 
@@ -109,7 +109,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         User.prototype.getAllUsers = function (success, error) {
 
             requestsExecutor.get(this.serviceUrl + uris.USERS, contentTypes.JSON, success, error);
-        }
+        };
 
         User.prototype.login = function (username, password, success, error) {
 
@@ -117,14 +117,14 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
             requestsExecutor.get(url, contentTypes.JSON, success, error);
 
-        }
+        };
 
         User.prototype.register = function (username, password, success, error) {
 
             var data = JSON.stringify({'username': username, 'password': password});
 
             requestsExecutor.post(this.serviceUrl + uris.USERS, contentTypes.JSON, data, success, error);
-        }
+        };
 
         User.prototype.getUserById = function (id, success, error) {
             requestsExecutor.get(this.serviceUrl + uris.USERS + '/' + id, contentTypes.JSON, success, error);
@@ -142,18 +142,18 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         Album.prototype.getAll = function (success, error) {
             requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
-        }
+        };
 
         Album.prototype.getAlbumById = function (id, success, error) {
             requestsExecutor.get(this.serviceUrl + '/' + id, contentTypes.JSON, success, error);
 
-        }
+        };
 
         Album.prototype.createAlbum = function (userObjectId, data, success, error) {
             var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userObjectId + '"}}';
 
             requestsExecutor.post(url, contentTypes.JSON, data, success, error);
-        }
+        };
 
         Album.prototype.deleteAlbumById = function (id, success, error) {
             requestsExecutor.delete(this.serviceUrl + '/' + id, success, error);
@@ -171,9 +171,9 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
 
         //TODO getAlbumsByUserId------>oconne
-        Album.prototype.getAlbumsByUserId = function (userId, success, error) {
+        Album.prototype.getAlbumsByUserId = function (UserId, success, error) {
             //alert(userId);
-            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"Albums","userId":"' + userId + '"}}';
+            var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + UserId+ '"}}&include=categoryId';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
 
         }

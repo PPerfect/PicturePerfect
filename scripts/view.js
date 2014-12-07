@@ -7,6 +7,77 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         function View() {
         }
 
+    View.prototype.uploadImage = function () {
+        
+        var file;
+
+        // Set an event listener on the Choose File field.
+        $('#fileselect').bind("change", function (e) {
+            var files = e.target.files || e.dataTransfer.files;
+            // Our file var now holds the selected file
+            file = files[0];
+        });
+        
+        // This function is called when the user clicks on Upload to Parse. It will create the REST API request to upload this image to Parse.
+        $('#uploadPic').click(function () {
+            var serverUrl = 'https://api.parse.com/1/files/' + file.name;
+            
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+                    'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+                },
+                contentType: file.type,
+                url: serverUrl,
+                data: file,
+                processData: false,
+                dataType: 'json',
+                success: function (data) {
+                    
+                    //Change variable to reflect your class to upload to
+                    var classUrl = "https://api.parse.com/1/classes/Photo";
+                    
+                    if (data) {
+                        var fileName = "" + data.name;
+                        var finalData = {
+                            "photoName" : file.name, 
+                            "content" : { "name" : "" + fileName + "", "__type" : "File" }
+                        };
+                        finalData = JSON.stringify(finalData);
+                        
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-Parse-Application-Id': 'yXjxSDbNHW3w3rBzf4TuM0rGrvtrLvGs3hd7g1pV',
+                                'X-Parse-REST-API-Key': '0tFoO1UlPQn4q7CPi5LrXMgbrGne1cUGFFFXkSlD'
+                            },
+                            contentType: 'application/json',
+                            url: classUrl,
+                            data: finalData,
+                            processData: false,
+
+                            success: function(data) {
+                                console.log("Image successfully uploaded.");
+                            },
+
+                            error: function(error) {
+                                console.log("Error: " + error.message);
+                            }
+                        });
+                    } else {
+                        //Data is null
+                        console.log("Data IS NULL");
+                    }
+                },
+                error: function (data) {
+                    var obj = jQuery.parseJSON(data);
+                    alert(obj.error);
+                }
+            });
+        });
+        };
+
         View.prototype.loadRegisterLink = function loadRegisterLink(linkParent) {
             var _this = this;
             if ($('#reg-link').length < 1) {
@@ -502,13 +573,38 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
                     albumController.getAlbumsByUserId(checkLoggedUser.userId).then(
                         function success(data) {
+                            //  alert(JSON.stringify(data));
+                            var $buttonAddAlbum=$('<button>Add Album</button>');
+                            var $buttonRemoveAlbum=$('<button>Del</button>');
+                            var  $myAlbums = $('<ul class="albums">').append('<li>My Albums</li>').insertBefore('#imagesView');
+                            var  $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').appendTo($myAlbums);
+                            var  $Celebs = $('<ul class="albumCelebs">').append('<li class="categoryName">Celebs</li>').appendTo($myAlbums);
+                            var  $Others = $('<ul class="albumOthers">').append('<li class="categoryName">Others</li>').appendTo($myAlbums);
+                            var    $Team = $('<ul class="albumTeam">').append('<li class="categoryName">TEAM</li>').appendTo($myAlbums);
+                            var  $Events = $('<ul class="albumEvents">').append('<li class="categoryName">Eventss</li>').appendTo($myAlbums);
+                            var  $City = $('<ul class="albumCity">').append('<li class="categoryName">City</li>').appendTo($myAlbums);
 
-                            alert(JSON.stringify(data));
+                            $('.categoryName').append($buttonAddAlbum);
 
+                            $.each(data.results, function(index,object) {
 
+                                switch(object.categoryId.categoryName){
+                                    case 'Nature': $Nature.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                    case 'Celebrities': $Celebs.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                    case 'Others': $Others.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                    case 'The Team':  $Team.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                    case 'Events': $Events.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                    case 'City sightseeing': $City.append('<li class="albumUser">'+object.albumName+'</li>') ;break;
+                                }
+                                //alert(object.albumName+"--"+object.categoryId.categoryName);
+                            });
+
+                            $('.albumUser').append( $buttonRemoveAlbum);
+
+                            
                         },
                         function error(error) {
-                            console.log(error); //alert(JSON.stringify(error));
+                            console.log(error); alert(JSON.stringify(error));
                         }
                     );
                 }
