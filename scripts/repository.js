@@ -7,7 +7,8 @@ define(['requestsExecutor'], function (requestsExecutor) {
             PHOTO: 'classes/Photo',
             LOGIN: 'login',
             ALBUM: 'classes/Album',
-            CATEGORY: 'classes/Category'
+            CATEGORY: 'classes/Category',
+            VOTE: 'classes/Vote'
         },
         contentTypes = {
             JSON: 'application/json',
@@ -20,6 +21,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         this.users = new User(baseUrl);
         this.albums = new Album(baseUrl + uris.ALBUM);
         this.categories = new Category(baseUrl + uris.CATEGORY);
+        this.votes = new Vote(baseUrl + uris.VOTE)
     }
 
     var Photo = (function () {
@@ -150,6 +152,21 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
         return Category;
+    }());
+
+    var Vote = (function () {
+
+        function Vote(url) {
+            this.serviceUrl = url;
+
+        }
+
+        Vote.prototype.getAll = function (success, error) {
+            requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
+        }
+
+        return Vote;
+
     }());
 
     return {

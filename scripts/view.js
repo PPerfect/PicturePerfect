@@ -1,4 +1,4 @@
-define(['photoController', 'albumController', 'categoryController'], function (photoController, albumController, categoryController) { // added categoryController
+define(['photoController', 'albumController', 'categoryController','voteController'], function (photoController, albumController, categoryController, voteController) { // added categoryController
 
     'use strict';
 
@@ -84,6 +84,25 @@ define(['photoController', 'albumController', 'categoryController'], function (p
                     $('#imagesView').css('display', 'inline-block'); // TODO REMOVE THIS !!!
 
                 });
+            }, function error(error) {
+                console.log(error);
+            });
+    }
+
+    View.prototype.listTopAlbums = function () {
+
+        VoteController.getAllVotes().then(
+            function success(data) {
+                console.log('Bravo!');
+                console.log(data);
+
+               var dataSort = data.results.sort;
+                for (var i = dataSort.length; i >=6 ; i--) {
+
+                    $('<li>' + data.results[i] + '</li>').appendTo('#topAlbumsList');
+                }
+
+
             }, function error(error) {
                 console.log(error);
             });
