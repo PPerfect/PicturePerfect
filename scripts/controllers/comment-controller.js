@@ -17,7 +17,7 @@ define(['baseController'], function (baseController) {
             function success(data) {
                 defer.resolve(data);
                 console.log( data);
-                console.log( '----------');
+
             },
             function error(error) {
                 defer.reject(error);

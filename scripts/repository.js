@@ -56,7 +56,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
             var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
-    
+
         return Photo;
 
     }());
@@ -85,6 +85,10 @@ define(['requestsExecutor'], function (requestsExecutor) {
             var data = JSON.stringify({'username': username, 'password': password});
 
             requestsExecutor.post(this.serviceUrl + uris.USERS, contentTypes.JSON, data, success, error);
+        }
+
+        User.prototype.getUserById = function (id, success, error) {
+            requestsExecutor.get(this.serviceUrl + uris.USERS + '/' + id, contentTypes.JSON, success, error);
         }
 
         return User;
@@ -129,13 +133,11 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         //TODO getAlbumsByUserId------>oconne
         Album.prototype.getAlbumsByUserId = function (userId, success, error) {
-           //alert(userId);
+            //alert(userId);
             var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"Albums","userId":"' + userId + '"}}';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
 
         }
-
-
 
 
         //-------------------END-------->oconne
@@ -201,9 +203,10 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
         Comment.prototype.getCommentsByAlbumId = function (albumID, success, error) {
-            var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumID + '"}}';
-
-            requestsExecutor.get(url, success, error);
+            console.log()
+            var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumID + '"}}&include=userId';
+            console.log(url);
+            requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
         return Comment;
     }());

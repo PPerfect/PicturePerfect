@@ -86,3 +86,36 @@ a {
     cursor: pointer;
     border: 2px solid transparent;
 }
+
+.comment-wrapper{
+    width: 50%;
+    border:1px solid;
+    margin-top:5px;
+    margin-bottom: 5px;
+    padding:10px;
+    display: block;
+    border-radius:5px;
+    margin-left:30%;
+    background-color: aliceblue;
+}
+
+#album-comments-wrapper{
+background-color: #cccccc;
+    width: 95%;
+    margin-left: 2%;
+    border-radius: 3px;
+    text-align: center;
+}
+
+#comments-title{
+
+
+}
+
+#add-album-comment-wrapper{
+    border:1px solid;
+    border-radius:3px;
+    background-color: #ccc812;
+    width:50%;
+    margin-left:30%;
+}

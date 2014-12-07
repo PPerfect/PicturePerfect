@@ -74,8 +74,27 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     };
 
+    UserController.prototype.getUserById = function (id) {
+
+        var defer = $.Deferred();
+        this.repository.users.getUserById(id,
+            function success(data) {
+                defer.resolve(data);
+                console.log(data)
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+            },
+            function error(error) {
+                defer.reject(error);
+                console.log(error);
+            })
+
+        return defer.promise();
+    }
+
+
     //TODO Log LoggedUser--->oconne automaticLogin
-    UserController.prototype.autoLogin = function () {};
+    UserController.prototype.autoLogin = function () {
+    };
 
     return new UserController();
 });
