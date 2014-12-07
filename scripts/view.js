@@ -284,7 +284,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     var defaultImageUrl = 'images/no-image.png',
                         $categoryWrapper = $('<div/>').attr('id', 'category-wrapper');
                     $.each(data.results, function (index, value) {
-                        _this.createPhotoHolder(value.categoryName, 'category', defaultImageUrl, value.objectId, $categoryWrapper);
+                        _this.createPhotoHolder('Categoty: ' + value.categoryName, 'category', defaultImageUrl, value.objectId, $categoryWrapper);
                     });
                     $categoryWrapper.appendTo('#imagesView');
 
@@ -340,7 +340,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             return;
                         }
                         $.each(albums, function (index, value) {
-                            _this.createPhotoHolder(value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
+                            _this.createPhotoHolder('Album:' + value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
                         });
 
                         changeAlbumBackgroundPhoto();

@@ -74,6 +74,7 @@ a {
 
 /*css whriten from js view If don like can be canget ;)*/
 .category, .album, .photo {
+    word-wrap: break-word;
     color: dimgrey;
     font-weight: bold;
     width: 180px;
