@@ -30,8 +30,8 @@
             view.loadLastAddedAlbums(6);
 
 
-            view.listAllPhotos();
-            view.listAllAlbums();
+            //view.listAllPhotos();
+            //view.listAllAlbums();
             view.listAllCategories();
 
             //TODO call check function oconne;
@@ -41,5 +41,6 @@
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
             view.attachClickOnPhoto();
+            view.eventsListener();
         });
 }());

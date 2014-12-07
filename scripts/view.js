@@ -309,11 +309,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             function succesed(dataPhotos) {
                                 var photos = dataPhotos.results;
                                 var randomPhoto = photos[Math.floor(Math.random() * photos.length)];
-                                var randomPhotoUrl = randomPhoto.content.url;
-                                if (randomPhotoUrl) {
+                                if (randomPhoto.content.url) {
                                     var categoryIdStr = '#' + categoryId;
                                     $(categoryIdStr).css({
-                                        'background-image': 'url(' + randomPhotoUrl + ')'
+                                        'background-image': 'url(' + randomPhoto.content.url + ')'
                                     });
                                 }
                             }, function errored(errored) {
@@ -387,10 +386,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 _this.loadPhotosByAlbumId(albumId);
 
             });
-
             return _this;
         }
-
         View.prototype.loadPhotosByAlbumId = function (albumId) {
             var _this = this,
                 $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');
@@ -400,7 +397,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         noPhotos = 'noPhotos',
                         className = 'photo',
                         defaultImageUrl = 'images/no-image.png';
-
+                
                     if (photos.length !== 0) {
                         photos.forEach(function (photo) {
                             if (photo.content !== undefined) {
@@ -410,7 +407,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     } else {
                         _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
-
+                
                     _this.attachPhotoUploader(albumId);
                     _this.loadCommentsForAlbum(albumId, $('#albums-view'));
 
@@ -419,31 +416,46 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 });
         }
 
-
         View.prototype.attachClickOnPhoto = function () {
             var _this = this;
             $('#imagesView').on('click', '.photo', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
-                $('#photos-wrapper').remove();
                 var $photoViewer = $('<div/>').attr('id', 'photo-viewer'),
-                    currImgUrl = $(this).css('background-image');
+                currImgUrl = $(this).css('background-image');
                 currImgUrl = currImgUrl.substr(4, currImgUrl.length - 5);
-
+                sessionStorage.setItem('currentImageIndex', $(this).attr('id')); // it is needed to know from where to start preview of next pictures
                 console.log(currImgUrl);
+
                 $photoViewer
                     .css({
                         // todo move this in css file
                         'position': 'absolute',
-                        'top': '10%',
+                        'top': '15%',
                         'left': '10%',
-                        'width': '80%',
-                        'height': '80%',
+                        'width': '75%',
+                        'height': '75%',
                         'background-image': 'url(' + currImgUrl + ')',
                         'background-repeat': 'no-repeat',
                         'background-size': '100% 100%'
-                    }).appendTo($('#imagesView'));
+                });
+                    // todo Make those functionable
+                var $previousButton = $('<button>Previous</button>').attr('id', 'previous-button');
+                var $nextButton = $('<button>Next</button>').attr('id', 'next-button');
+                //var $infoButton = $('<button>Information</button>').attr('id', 'info-button'); // TODO there is no property info in picture delete if you diside that is useless
+                var $deleteButton = $('<button>Delete Picture</button>').attr('id', 'delete-button');
+                var $backButton = $('<button>Back to the Album</button>').attr('id', 'back-to-album-button');
 
+                $photoViewer
+                .append($previousButton)
+                .append($nextButton)
+                //.append($infoButton)
+                .append($deleteButton)
+                .append($backButton);
+
+                $('#container').hide();
+                $photoViewer.appendTo($('body'));
+                            
             });
 
             return _this;
@@ -481,7 +493,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             console.log(value);
                             _this.generateComment(value.content, value.userId.username, $commentsContainer);
 
-                        })
+                        });
                     }
                 },
                 function error(error) {
@@ -494,6 +506,73 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 _this.attachClickSubmitAlbumCommentHandler(albumId);
             }
         }
+
+        View.prototype.eventsListener = function () {
+            var _this = this,
+                photosUrlArr,
+                currentImageIndex,
+                nextUrl;
+         
+            $('body').on('click', '#next-button', function (ev) {
+                getLocalStorageItems();
+                ev.preventDefault();
+                ev.stopPropagation();
+                var nextPhotoIndex =  parseInt(currentImageIndex) + 1;
+                if (nextPhotoIndex <= photosUrlArr.length - 1) {
+                    sessionStorage['currentImageIndex'] = nextPhotoIndex;
+                    nextUrl = photosUrlArr[nextPhotoIndex];
+                } else {
+                    nextUrl = photosUrlArr[0];
+                    sessionStorage['currentImageIndex'] = '0';
+                }
+
+                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');               
+            });
+        
+            $('body').on('click', '#previous-button', function (ev) {
+                getLocalStorageItems();
+                ev.preventDefault();
+                ev.stopPropagation();
+                var previousPhotoIndex = parseInt(currentImageIndex) - 1;
+                if (previousPhotoIndex >= 0) {
+                    sessionStorage['currentImageIndex'] = previousPhotoIndex;
+                    nextUrl = photosUrlArr[previousPhotoIndex];
+                } else {
+                    nextUrl = photosUrlArr[photosUrlArr.length - 1];
+                    sessionStorage['currentImageIndex'] = (photosUrlArr.length - 1).toString();
+                }
+            
+                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');              
+            });
+        
+            // TODO implement this if you disede to delete picture from here !!!
+            $('body').on('click', '#delete-button', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+            });
+
+        
+            //$('body').on('click', '#info-button', function (ev) {
+            //    ev.preventDefault();
+            //    ev.stopPropagation();
+            //    //todo diside if you use that                 
+            //});
+        
+            $('body').on('click', '#back-to-album-button', function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                $('#container').show();
+                $('#photo-viewer').remove();
+            });
+
+            function getLocalStorageItems() {
+                photosUrlArr = JSON.parse(sessionStorage.getItem('photUrlsString'));
+                currentImageIndex = sessionStorage.getItem('currentImageIndex');
+            }
+
+            return _this;
+        }
+    
 
         View.prototype.generateAddCommentDiv = function () {
             var $addCommentWrapper = $('<div/>').attr('id', 'add-album-comment-wrapper'),
@@ -526,7 +605,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     function error(error) {
                         console.log(error);
                     }
-                )
+                );
                 ev.preventDefault();
             })
         }
