@@ -396,20 +396,25 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     var photos = data.results,
                         noPhotos = 'noPhotos',
                         className = 'photo',
+                        photoUrlArray = [],
+                        counter = 0,
                         defaultImageUrl = 'images/no-image.png';
-                
+                        
                     if (photos.length !== 0) {
                         photos.forEach(function (photo) {
                             if (photo.content !== undefined) {
+                                photoUrlArray[counter] = photo.content.url; 
                                 _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+                                counter++;
                             }
                         });
+                        sessionStorage.setItem('photUrlsString', JSON.stringify(photoUrlArray));
                     } else {
                         _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
                 
                     _this.attachPhotoUploader(albumId);
-                    _this.loadCommentsForAlbum(albumId, $('#albums-view'));
+                     _this.loadCommentsForAlbum(albumId, $('#albums-view'));
 
                 }, function error(error) {
                     console.log(error);
@@ -439,7 +444,6 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         'background-repeat': 'no-repeat',
                         'background-size': '100% 100%'
                 });
-                    // todo Make those functionable
                 var $previousButton = $('<button>Previous</button>').attr('id', 'previous-button');
                 var $nextButton = $('<button>Next</button>').attr('id', 'next-button');
                 //var $infoButton = $('<button>Information</button>').attr('id', 'info-button'); // TODO there is no property info in picture delete if you diside that is useless
