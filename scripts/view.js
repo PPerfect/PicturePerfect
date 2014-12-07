@@ -404,7 +404,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         photos.forEach(function (photo) {
                             if (photo.content !== undefined) {
                                 photoUrlArray[counter] = photo.content.url; 
-                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
                                 counter++;
                             }
                         });
