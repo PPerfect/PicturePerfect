@@ -395,7 +395,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     function success(data) {
                         var albums = data.results,
                             defaultImageUrl = 'images/no-image.png';
-                        console.log(albums);
+                            $('#holdersHeder').text('Albums');
+                            console.log(albums);
                         if (albums.length === 0) {
                             _this.createPhotoHolder('No Albums', 'album', defaultImageUrl, undefined, $albumWrapper);
                             return;
@@ -447,7 +448,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 var albumId = $(this).attr('id'),
                     albumOwnerId = $(this).find(' > .album-owner-id').val(),
                     votedUsers = $(this).find(' > .voted-users').val();
-
+                    $('#holdersHeder').text('Pictures');
                 $('#albums-wrapper').remove();
                 _this.loadPhotosByAlbumId(albumId);
 
@@ -458,6 +459,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             });
             return _this;
         }
+
         View.prototype.loadPhotosByAlbumId = function (albumId) {
             var _this = this,
                 $photosWrapper = $('<div/>').attr('id', 'photos-wrapper').appendTo('#imagesView');

@@ -106,8 +106,9 @@ li a:visited{
     padding: 30px;
 }
 
-#imagesView h3{
-    margin-left: 43%;
+#holdersHeder{
+    margin-left: auto;
+    text-align: center;
 }
 #imagesView, aside {
     margin: 0px 100px 50px 100px;
@@ -195,7 +196,7 @@ input:focus{
     border-radius: 10px;
 }
 
-#imagesView, aside>li, .category,.albums>ul  {
+#imagesView, aside>li, .category, .album, .photo, .albums>ul  {
     display: inline-block;
     vertical-align: top;
 }
@@ -235,6 +236,7 @@ aside>li{
     border: 2px solid transparent;
     -webkit-text-fill-color: rgba(255,255,255,0.1);
     -webkit-background-clip: text;
+    /*Should discuse the way that pictures hides*/
 }
 
 #top-header{
