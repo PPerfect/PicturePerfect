@@ -33,9 +33,6 @@
             view.loadLastAddedAlbums(6);
             view.loadTopAlbums(6);
 
-
-
-         //   view.listAllPhotos();
            // view.listAllAlbums();
             view.listAllCategories();
 
