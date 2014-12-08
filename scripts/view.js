@@ -18,9 +18,9 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     if ($('#register-frm').length < 1) {
                         _this.loadUserRegisterForm('#top-nav');
                         $('#reg-btn').on('click', function onRegisterButtonClick(ev) {
-                            var username = encodeURI($('#username-reg-input').val()),
-                                password = encodeURI($('#password-reg-input').val()),
-                                repeatPassword = encodeURI($('#password-repeat-input').val());
+                            var username = $('#username-reg-input').val(),
+                                password = $('#password-reg-input').val(),
+                                repeatPassword = $('#password-repeat-input').val();
                             ev.preventDefault();
                             _this.registerUser(username, password, repeatPassword);
                         });
@@ -46,8 +46,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         // _this.removeLoginLink();
                         $('#login-btn').on('click', function onLoginButtonClick(ev) {
                             // TODO: send login data to server, hide login form, hide login link
-                            var username = encodeURI($('#username-login-input').val()),
-                                password = encodeURI($('#password-login-input').val());
+                            var username =$('#username-login-input').val(),
+                                password = $('#password-login-input').val();
                             ev.preventDefault();
                             _this.loginUser(username, password);
                         });
