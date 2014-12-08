@@ -26,6 +26,8 @@
             if (!userController.getLoggedUserData()) {
                 view.loadRegisterLink('#top-nav ul');
                 view.loadLoginLink('#top-nav ul');
+            } else{
+                view.ListAlbumsByUserLogged();
             }
 
             view.loadLastAddedAlbums(6);

@@ -206,14 +206,24 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         //TODO getAlbumsByUserId------>oconne
         Album.prototype.getAlbumsByUserId = function (userId, success, error) {
-            //alert(userId);
-            // var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"Albums","userId":"' + userId + '"}}';
-
             var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userId + '"}}&include=categoryId';
-
             requestsExecutor.get(url, contentTypes.JSON, success, error);
-
         }
+
+        //TODO putAlbumsByUserIdByCategory------>oconne
+
+        Album.prototype.addAlbumByUserCategoryACL = function( userId, categoryId,albumName,success, error){
+
+           // var ACLobject={};
+            var user = {'__type': "Pointer", 'className': '_User', 'objectId': userId},
+                category = {'__type': "Pointer", 'className': 'Category', 'objectId': categoryId},
+                ACL = {"ACL": { "*":{"read":'true'}, userId:{"write":'true',"read":'true'} }},
+                data = JSON.stringify({"userId": user, "categoryId": category, "albumName":albumName,"ACL":ACL});
+            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
+        }
+
+
+
 
         return Album;
 

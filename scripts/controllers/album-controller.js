@@ -24,12 +24,12 @@ define(['baseController'], function (baseController) {
 
         return defer.promise();
     }
-    
+
     AlbumController.prototype.getAlbumsByCategoryId = function (categoryId) {
         console.log(this.repository.albums);
-        
+
         var defer = $.Deferred();
-        
+
         this.repository.albums.getAlbumsByCategoryId(categoryId,
             function success(data) {
                 defer.resolve(data);
@@ -38,12 +38,12 @@ define(['baseController'], function (baseController) {
                 defer.reject(error);
             }
         );
-        
+
         return defer.promise();
     }
 
     //TODO getAlbumsByUserId---->oconne
-    AlbumController.prototype.getAlbumsByUserId=function (UserId){
+    AlbumController.prototype.getAlbumsByUserId = function (UserId) {
         console.log(this.repository.albums);
 
         var defer = $.Deferred();
@@ -61,7 +61,27 @@ define(['baseController'], function (baseController) {
 
     }
 
-    AlbumController.prototype.getAlbumById= function (id) {
+    AlbumController.prototype.addAlbumByUserCategoryACL = function (userId, categoryId, albumName) {
+        console.log(this.repository.albums);
+
+        var defer = $.Deferred();
+
+        this.repository.albums.addAlbumByUserCategoryACL(userId, categoryId, albumName,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            }
+        );
+
+        return defer.promise();
+
+    }
+
+
+
+    AlbumController.prototype.getAlbumById = function (id) {
         var defer = $.Deferred();
 
         this.repository.albums.getAlbumById(id,
@@ -74,12 +94,13 @@ define(['baseController'], function (baseController) {
         );
 
         return defer.promise();
-    }
+    };
 
-    AlbumController.prototype.updateAlbum= function (id,userId) {
+    AlbumController.prototype.updateAlbum = function (id, userId) {
+
         var defer = $.Deferred();
 
-        this.repository.albums.updateAlbumWithNewVoteUser(id,userId,
+        this.repository.albums.updateAlbumWithNewVoteUser(id, userId,
             function success(data) {
                 defer.resolve(data);
                 console.log(data);
@@ -93,7 +114,18 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
-
+    AlbumController.prototype.deleteAlbumById = function deleteAlbumById(albumId) {
+        var defer = $.Deferred();
+        this.repository.albums.deleteAlbumById(albumId,
+            function success(deletedAlbumData) {
+                defer.resolve(deletedAlbumData);
+            },
+            function (err) {
+                defer.reject(err);
+            }
+        );
+        return defer.promise();
+    };
 
     return new AlbumController();
 });
