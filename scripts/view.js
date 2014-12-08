@@ -751,7 +751,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         }
 
 
-        // TODO check getLoggedUserData, visualizate Photos
+        // TODO event functions
 
 
         // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
@@ -776,6 +776,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         });
                     }
 
+
                     albumController.getAlbumsByUserId(checkLoggedUser.userId).then(
                         function success(data) {
                             //  alert(JSON.stringify(data));
@@ -785,25 +786,34 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             $buttonAddAlbum.on('click', addAlbum);
                             $buttonRemoveAlbum.on('click', delAlbum);
 
-
                             function addAlbum() {
                                 var storedData= $(this).parent().parent().data('catNam');
-                                var userChoiceToAdd=confirm('Add Album to ' + storedData + '?');
-                                if(userChoiceToAdd){
 
-                                   // alert('Added'); must create success function here again
+                                var userChoiceToAdd=prompt('Add Album to ' + storedData + '?','album name');
+
+                                if(userChoiceToAdd){
+                                    var $del=$('<button>Del</button>');
+                                    $del.on('click', delAlbum);
+                                    $(this).parent().append($('<li class="albumUser">' + userChoiceToAdd + '</li>').append($del));
+                                    // alert('Added'); must create success function here again
+                                    
+
+
                                 }
 
                             }
 
-                            function delAlbum() {
+                            function delAlbum( butt) {
                                 var storedData=$(this).parent().data('storedData');
                                 var userChoiceToDelete=confirm('Remove Album ' + storedData.album +' from '+storedData.ctgr+ '?');
                                 if(userChoiceToDelete){
+                                    $(this).parent().remove();
 
-                                   // alert('Deleted'); must create success function here again
+                                    // alert('Deleted'); must create success function here again
                                 }
                             }
+
+
 
                             var $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
                             var $Nature = $('<ul class="albumNature">').append('<li class="categoryName">Nature</li>').data('catNam', 'Nature').appendTo($myAlbums);
