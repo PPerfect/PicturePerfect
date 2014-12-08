@@ -214,10 +214,10 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         Album.prototype.addAlbumByUserCategoryACL = function( userId, categoryId,albumName,success, error){
 
-            var  ACL = "{ '*':{'read':true},"+ userId+":{'write':true,'read':true}} ";
+           // var  ACL = "{ '*':{'read':true},"+ userId+":{'write':true,'read':true}} ";
             var user = {'__type': "Pointer", 'className': '_User', 'objectId': userId},
                 category = {'__type': "Pointer", 'className': 'Category', 'objectId': categoryId},
-                data = JSON.stringify({"userId": user, "categoryId": category, "albumName":albumName,"ACL":ACL});
+                data = JSON.stringify({"userId": user, "categoryId": category, "albumName":albumName});
             requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
         }
 
