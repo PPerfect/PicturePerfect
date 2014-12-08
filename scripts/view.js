@@ -479,8 +479,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
                                 //    _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
 
-                                _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
-
+                            _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
+                            
                                 counter++;
                             }
                         });
@@ -527,13 +527,15 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 //var $infoButton = $('<button>Information</button>').attr('id', 'info-button'); // TODO there is no property info in picture delete if you diside that is useless
                 var $deleteButton = $('<button>Delete Picture</button>').attr('id', 'delete-button');
                 var $backButton = $('<button>Back to the Album</button>').attr('id', 'back-to-album-button');
+                var $DownloadButton = $("<a href='" + currImgUrl + "' download><button>Download</button></a>");
 
                 $photoViewer
                     .append($previousButton)
                     .append($nextButton)
                     //.append($infoButton)
                     .append($deleteButton)
-                    .append($backButton);
+                    .append($backButton)
+                    .append($DownloadButton);
 
                 $('#container').hide();
                 $photoViewer.appendTo($('body'));
