@@ -61,6 +61,27 @@ define(['baseController'], function (baseController) {
 
     }
 
+    AlbumController.prototype.addAlbumByUserCategoryACL=function (userId, categoryId,albumName){
+        console.log(this.repository.albums);
+
+        var defer = $.Deferred();
+
+        this.repository.albums.addAlbumByUserCategoryACL(userId, categoryId,albumName,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            }
+        );
+
+        return defer.promise();
+
+    }
+
+
+
+
     AlbumController.prototype.getAlbumById= function (id) {
         var defer = $.Deferred();
 
