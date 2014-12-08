@@ -451,7 +451,6 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     $('#holdersHeder').text('Pictures');
                 $('#albums-wrapper').remove();
                 _this.loadPhotosByAlbumId(albumId);
-
                 _this.attachPhotoUploader(albumId, albumOwnerId);
                 _this.attachVoteElements(albumId, albumOwnerId, votedUsers);
                 _this.loadVotesByAlbumId(albumId);

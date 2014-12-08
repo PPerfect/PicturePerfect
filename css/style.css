@@ -98,33 +98,31 @@ li a:visited{
     margin-right: 12px;
 
 }
-.content h3{
-  font-size: 50px;
+
+#container h3 {
+    font-size: 50px;
     font-family: Arial, Helvetica;
-    margin-left: 40%;
+    margin: auto auto;
+    text-align: center;
     color: dimgrey;
     padding: 30px;
-}
-
-#holdersHeder{
-    margin-left: auto;
-    text-align: center;
 }
 #imagesView, aside {
     margin: 0px 100px 50px 100px;
 }
 
-#category-wrapper, aside{
+#category-wrapper, #albums-wrapper, #photos-wrapper , aside{
+    margin: auto auto;
+    text-align: center;
     margin: 20px 100px 20px 100px ;
 }
 
-#category-wrapper>div, aside>li, .albums>ul{
+#category-wrapper>div, #albums-wrapper>div, #photos-wrapper>div, aside>li, .albums>ul{
     margin: 50px;
     border-radius: 12px;
     border: solid #ffffff 5px;
     padding-top: 180px;
     font-size: 28px;
-
 }
 
 .albums{
@@ -214,6 +212,7 @@ input:focus{
     background-image: url("../images/album%20tumbnail.jpg");
     /*float: left;*/
 }
+
 .albums>ul{
     color: aliceblue;
     padding-top: 80px;
@@ -230,12 +229,17 @@ aside>li{
     background-image: url("../images/album%20tumbnail2.jpg");
 }
 
-
 .category:hover, .album:hover, .photo:hover {
     cursor: pointer;
     border: 2px solid transparent;
-    -webkit-text-fill-color: rgba(255,255,255,0.1);
-    -webkit-background-clip: border-box;
+    /*check*/
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    /*-webkit-text-fill-color: rgba(255,255,255,0.1);
+    -webkit-background-clip: border-box;*/
     /*Should discuse the way that pictures hides*/
 }
 
@@ -246,6 +250,7 @@ aside>li{
     background-repeat: no-repeat;
     background-size : 100% auto
 }
+
 @-webkit-keyframes myfirst {
 
     from { background-image: url("../images/Relax_baner.jpg");}
@@ -274,16 +279,16 @@ background-color: #cccccc;
     margin-left: 2%;
     border-radius: 3px;
     text-align: center;
-
 }
 
 #comments-title{
 
-
 }
+
 .comment-content{
     word-wrap: break-word;
 }
+
 #add-album-comment-wrapper{
     border:1px solid;
     border-radius:3px;
@@ -305,6 +310,7 @@ background-color: #cccccc;
     border-radius: 10px;
     border: solid;
 }
+
 #upload-btn{
     width: 91px;
     border: solid;
@@ -314,10 +320,10 @@ background-color: #cccccc;
 #upload-field-set{
     
 }
+
 #footer-line{
     margin-left:30%;
 }
-
 
 #album-rating{
     margin: 0 auto;
@@ -329,10 +335,8 @@ background-color: #cccccc;
     margin-left:2%;
 }
 
-
 #vote-select{
     height: 27px;
-    
 }
 
 #back-to-album-button, #previous-button, #next-button, #delete-button, #back-to-album-button, #download-button {
@@ -345,7 +349,7 @@ background-color: #cccccc;
       text-decoration: none;
       text-transform: uppercase;
       border-radius: 0.5em;
-      border-bottom: 0.25em solid #909090;
+      border-bottom: 0.25em solid #606060;
       -moz-transition: 0.1s;
       -webkit-transition: 0.1s;
       transition: 0.1s;
@@ -353,7 +357,7 @@ background-color: #cccccc;
       position: relative;
 }
 #back-to-album-button:hover, #previous-button:hover, #next-button:hover, #delete-button:hover, #back-to-album-button:hover, #download-button:hover {
-     background-color: #909090;
+     background-color: #606060;
      border-bottom-width: 0;
      top: 0.2em;
 }
