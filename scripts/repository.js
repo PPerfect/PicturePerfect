@@ -96,7 +96,7 @@ define(['requestsExecutor'], function (requestsExecutor) {
         }
 
         Photo.prototype.getPhotosByAlbumId = function (albumId, success, error) {
-            var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}';
+            var url = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + albumId + '"}}&include=userId';
             requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
 
@@ -173,6 +173,13 @@ define(['requestsExecutor'], function (requestsExecutor) {
             requestsExecutor.get(url, contentTypes.JSON, success, error);
         }
 
+
+        Album.prototype.updateAlbumWithNewVoteUser = function (id, userId, success, error) {
+            var arr = [userId],
+                data = JSON.stringify({"votedUsers": {"__op": "AddUnique", "objects": arr}});
+
+            requestsExecutor.put(this.serviceUrl + '/' + id, contentTypes.JSON, data, success, error);
+        }
 
         //TODO getAlbumsByUserId------>oconne
         Album.prototype.getAlbumsByUserId = function (userId, success, error) {
@@ -270,6 +277,13 @@ define(['requestsExecutor'], function (requestsExecutor) {
             var serviceUrl = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + id + '"}}';
             console.log(serviceUrl)
             requestsExecutor.get(serviceUrl, contentTypes.JSON, success, error);
+        }
+
+        Vote.prototype.createVote = function (albumId, value, success, error) {
+            var album = {"__type": "Pointer", "className": "Album", "objectId": albumId},
+                data = JSON.stringify({"value": parseInt(value), "albumId": album});
+
+            requestsExecutor.post(this.serviceUrl, contentTypes.JSON, data, success, error);
         }
 
         return Vote;

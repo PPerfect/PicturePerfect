@@ -155,7 +155,16 @@ background-color: #cccccc;
 
 #album-rating{
     margin: 0 auto;
-  
     display: inline;
-    margin-left: 1%;
+    margin-left: 2%;
+}
+#vote-album-wrapper{
+    display:inline;
+    margin-left:2%;
+}
+
+
+#vote-select{
+    height: 27px;
+    
 }
