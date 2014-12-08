@@ -223,7 +223,7 @@ input:focus{
     padding-top: 80px;
 }
 
-.categoryName>button{
+.categoryName>button {
     background-color: grey;
     border: 2px solid #606060;
     outline: none;
