@@ -791,7 +791,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                                 var userChoiceToAdd=confirm('Add Album to ' + storedData + '?');
                                 if(userChoiceToAdd){
 
-                                    alert('Added');
+                                   // alert('Added'); must create success function here again
                                 }
 
                             }
@@ -801,7 +801,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                                 var userChoiceToDelete=confirm('Remove Album ' + storedData.album +' from '+storedData.ctgr+ '?');
                                 if(userChoiceToDelete){
 
-                                    alert('Deleted');
+                                   // alert('Deleted'); must create success function here again
                                 }
                             }
 
