@@ -76,8 +76,6 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
-
-
     AlbumController.prototype.updateAlbum= function (id,userId) {
         var defer = $.Deferred();
 

@@ -57,9 +57,6 @@ define(['baseController'], function (baseController) {
     }
 
 
-
-
-
     return new VoteController();
 });
 
