@@ -98,5 +98,25 @@ define(['baseController'], function (baseController) {
     }
 
 
+
+    AlbumController.prototype.updateAlbum= function (id,userId) {
+        var defer = $.Deferred();
+
+        this.repository.albums.updateAlbumWithNewVoteUser(id,userId,
+            function success(data) {
+                defer.resolve(data);
+                console.log(data);
+            },
+            function error(error) {
+                defer.reject(error);
+                console.log(error);
+            }
+        );
+
+        return defer.promise();
+    }
+
+
+
     return new AlbumController();
 });

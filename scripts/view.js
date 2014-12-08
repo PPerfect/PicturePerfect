@@ -1,5 +1,5 @@
-define(['photoController', 'albumController', 'categoryController', 'userController', "commentController", "voteController"],
-    function (photoController, albumController, categoryController, userController, commentController, voteController) {
+define(['photoController', 'albumController', 'categoryController', 'userController', "commentController", "voteController", "jquery"],
+    function (photoController, albumController, categoryController, userController, commentController, voteController, $) {
         // added categoryController
         'use strict';
         //TODO we should take decision whether to separate the view
@@ -401,7 +401,8 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             return;
                         }
                         $.each(albums, function (index, value) {
-                            _this.createPhotoHolder('Album:' + value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper);
+                            _this.createPhotoHolder('Album:' + value.albumName, 'album', defaultImageUrl, value.objectId, $albumWrapper, value.userId.objectId, value.votedUsers);
+
                         });
 
                         changeAlbumBackgroundPhoto();
@@ -440,12 +441,20 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         View.prototype.attachClickOnAlbum = function () {
             var _this = this;
+
+
             $('#imagesView').on('click', '.album', function (ev) {
-                var albumId = $(this).attr('id');
+                var albumId = $(this).attr('id'),
+                    albumOwnerId = $(this).find(' > .album-owner-id').val(),
+                    votedUsers = $(this).find(' > .voted-users').val();
 
                 $('#albums-wrapper').remove();
                 _this.loadPhotosByAlbumId(albumId);
 
+                _this.attachPhotoUploader(albumId, albumOwnerId);
+                _this.attachVoteElements(albumId, albumOwnerId, votedUsers);
+                _this.loadVotesByAlbumId(albumId);
+                _this.loadCommentsForAlbum(albumId, $('#albums-view'));
             });
             return _this;
         }
@@ -473,13 +482,15 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                                 counter++;
                             }
                         });
+                        console.log(photos);
                         sessionStorage.setItem('photUrlsString', JSON.stringify(photoUrlArray));
+                        //if(photos[1].userId!==undefined) {
+                        //    sessionStorage.setItem('currentAlbumOwnerId', photos[1].userId.objectId);
+                        //}
+
                     } else {
                         _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
-                    _this.loadVotesByAlbumId(albumId);
-                    _this.attachPhotoUploader(albumId);
-                    _this.loadCommentsForAlbum(albumId, $('#albums-view'));
 
                 }, function error(error) {
                     console.log(error);
@@ -530,10 +541,10 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             return _this;
         }
 
-        View.prototype.createPhotoHolder = function (holderName, className, imageUrl, objectId, appendTo) {
+        View.prototype.createPhotoHolder = function (holderName, className, imageUrl, objectId, appendTo, albumOwnerId, votedUsers) {
             holderName = holderName || "";
             if (imageUrl !== undefined) {
-                $('<div>' + holderName + '</div>').attr('id', objectId)
+                $('<div>' + holderName + '</div>').attr('id', objectId).data('albumOwnerId', albumOwnerId)
                     .addClass(className)
                     .css({
                         'background-image': 'url(' + imageUrl + ')',
@@ -541,6 +552,14 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         'background-size': '100% 100%'
                     })
                     .appendTo(appendTo);
+                if (albumOwnerId !== undefined) {
+                    var $inputHiddenAlbumUserIdHolder = $('<input type="hidden"/>').attr('class', 'album-owner-id').attr('value', albumOwnerId);
+                    $('#' + objectId).append($inputHiddenAlbumUserIdHolder);
+                }
+                if (votedUsers !== undefined) {
+                    var $inputHiddenVotedUsers = $('<input type="hidden"/>').attr('class', 'voted-users').attr('value', votedUsers);
+                    $('#' + objectId).append($inputHiddenVotedUsers);
+                }
             }
         }
 
@@ -679,7 +698,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             })
         }
 
-        View.prototype.attachPhotoUploader = function (albumId) {
+        View.prototype.attachPhotoUploader = function (albumId, albumOwnerId) {
             var $uploadFieldSet = $('<fieldset/>').attr('id', 'upload-field-set').appendTo($('#albums-view')),
                 $inputFile = $('<input/>').attr('type', 'file').attr('id', 'file-select').attr('name', 'file-select'),
                 $uploadBtn = $('<button>upload</button>').attr('id', 'upload-btn'),
@@ -687,22 +706,11 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 file;
             if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
 
-                albumController.getAlbumById(albumId).then(
-                    function success(data) {
-                        if (data.userId.objectId === userController.getLoggedUserData().userId) {
-
-                            $inputFile.appendTo($uploadFieldSet);
-                            $uploadBtn.appendTo($uploadFieldSet);
-                        }
-                    },
-                    function error(error) {
-                        console.log(error)
-                    }
-                )
-
-
+                if (albumOwnerId === userController.getLoggedUserData().userId) {
+                    $inputFile.appendTo($uploadFieldSet);
+                    $uploadBtn.appendTo($uploadFieldSet);
+                }
             }
-
             $inputFile.on('change', function (ev) {
                 var files = ev.target.files;
                 file = files[0];
@@ -740,7 +748,6 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
                     rating = rating == 0 ? 0 : rating / votesObj.length;
 
-                    console.log(rating);
                     $('#upload-field-set').append('<h3 id="album-rating">Rating: ' + rating + '</h3>')
 
                 },
@@ -750,11 +757,79 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
             );
         }
 
+        View.prototype.attachVoteElements = function (albumId, albumOwnerId, votedUsers) {
+            var $voteElements = this.generateVoteElements(),
+                loggedUserId = userController.getLoggedUserData().userId,
+                $parentFieldSet = $('#upload-field-set'),
+                $uploadVoteBtn = $voteElements.find(' > button'),
+                 $selectedVoteValue=$voteElements.find(' > select').val(),
+                  votedUsersArr = votedUsers.split(',');
+
+            console.log('album ownerId: ' + albumOwnerId + " ---- logged user id: " + userController.getLoggedUserData().userId);
+            console.log(votedUsersArr);
+
+            if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
+                if (albumOwnerId != loggedUserId) {
+
+                    if (votedUsers.indexOf(loggedUserId) === -1) {
+                        $uploadVoteBtn.removeAttr('disabled');
+                    } else {
+
+                        $uploadVoteBtn.attr('disabled','disabled');
+                    }
+                    $parentFieldSet.append($voteElements);
+
+
+                    $uploadVoteBtn.on('click', function (ev) {
+                        ev.preventDefault();
+                        var btn_this
+                        voteController.Vote(albumId,$selectedVoteValue).then(
+                            function (data) {
+
+                                albumController.updateAlbum(albumId,loggedUserId).then(
+                                    function (data) {
+                                        console.log(data);
+                                        alert('hee');
+                                        $(btn_this).attr('disabled','disabled');
+                                    },
+                                    function (error) {
+                                        console.log(error);
+                                    }
+
+                                )
+
+                            },
+                            function (error) {
+                                console.log(error);
+
+                            }
+                        )
+
+                    })
+                }
+            }
+        }
+
+        View.prototype.generateVoteElements = function () {
+            var $voteWrapper = $('<div/>').attr('id', 'vote-album-wrapper'),
+                $voteSelect = $('<select/>').attr('id', 'vote-select').appendTo($voteWrapper),
+                $uploadVoteBtn = $('<button>Vote</button>').attr('id', 'upload-album-vote-btn').appendTo($voteWrapper),
+                $option;
+
+            for (var i = 0; i <= 10; i++) {
+                $option = $('<option>' + i + '<option/>').attr('value', i);
+                $voteSelect.append($option);
+            }
+            return $voteWrapper;
+        }
+
+
 
         // TODO event functions
 
 
-        // TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
+
+// TODO check  getLoggedUserData, visualizate Photos.Albums ------> oconne
         View.prototype.ListAlbumsByUserLogged = function () {
 
             var checkLoggedUser = userController.getLoggedUserData(),

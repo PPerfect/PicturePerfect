@@ -37,6 +37,30 @@ define(['baseController'], function (baseController) {
 
       return defer.promise();
   }
-    
+
+    VoteController.prototype.Vote= function (albumId,value) {
+
+        var defer = $.Deferred();
+
+        this.repository.votes.createVote(albumId,value,
+            function success(data) {
+                defer.resolve(data);
+                console.log(data);
+            },
+            function error(err) {
+                defer.reject(err);
+                console.log(err);
+            }
+        );
+
+        return defer.promise();
+    }
+
+
+
+
+
     return new VoteController();
 });
+
+
