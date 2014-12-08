@@ -105,19 +105,50 @@ li a:visited{
     color: dimgrey;
     padding: 30px;
 }
+
+#imagesView h3{
+    margin-left: 43%;
+}
+#imagesView, aside {
+    margin: 0px 100px 50px 100px;
+}
+
 #category-wrapper, aside{
     margin: 20px 100px 20px 100px ;
 }
 
-#category-wrapper>div, aside>li{
+#category-wrapper>div, aside>li, .albums>ul{
     margin: 50px;
     border-radius: 12px;
     border: solid #ffffff 5px;
-    padding-top: 45px;
+    padding-top: 180px;
     font-size: 28px;
 
 }
 
+.albums{
+    margin: 0px 100px 0px 100px;
+}
+
+aside>li, .albums>ul {
+    padding-top: 40px;
+
+}
+
+.albums>ul{
+
+    margin: 0px 50px 50px 50px;
+}
+
+.albums>ul:hover{
+    -webkit-animation: myAlbums 3s infinite linear;
+    background-color: rgba(50,50,50,0.5);
+}
+@-webkit-keyframes myAlbums{
+
+    from { background-image: url("../images/album%20tumbnail2.jpg");}
+
+}
 .special-album{
     background-color: transparent;
 }
@@ -133,14 +164,45 @@ li a:visited{
     color: ghostwhite;
 }
 
-#imagesView, aside>li, .category {
+.login-input, .register-input{
+    color: #303030;
+}
+input:focus{
+    background-color: lightyellow;
+    outline: none;
+}
+
+#reg-btn,#login-btn{
+    background-color: rgba(100,100,100,0.8);
+    color: aliceblue;
+    padding: 5px;
+    border: solid 1px #cccccc;
+}
+
+#reg-btn:hover, #login-btn:hover{
+    background-color: greenyellow ;
+    color: #303030;
+    border: solid 2px #303030;
+}
+
+#user-greeting{
+    color: aliceblue;
+    margin-right: 10px;
+    padding: 10px;
+    float: right;
+    font-size: 25px;
+    background-color: rgba(50,50,50,0.8);
+    border-radius: 10px;
+}
+
+#imagesView, aside>li, .category,.albums>ul  {
     display: inline-block;
     vertical-align: top;
 }
 
 
 /*css whriten from js view If don like can be canget ;)*/
-.category, .album, .photo, aside>li {
+.category, .album, .photo, aside>li, .albums>ul {
     word-wrap: break-word;
     color: dimgrey;
     font-weight: bold;
@@ -148,9 +210,25 @@ li a:visited{
     height: 180px;
     text-align: center;
     /*background: linear-gradient(top, rgba(0,0,0,0.84) 0%,rgba(0,0,0,0) 100%);*/
-    background-image: url("../images/album%20tumbnail2.jpg");
+    background-image: url("../images/album%20tumbnail.jpg");
     /*float: left;*/
 }
+.albums>ul{
+    color: aliceblue;
+    padding-top: 80px;
+}
+
+.categoryName>button{
+    background-color: grey;
+    border: 2px solid #606060;
+    outline: none;
+    border-radius: 8px;
+}
+
+aside>li{
+    background-image: url("../images/album%20tumbnail2.jpg");
+}
+
 
 .category:hover, .album:hover, .photo:hover {
     cursor: pointer;
@@ -227,7 +305,6 @@ background-color: #cccccc;
 }
 #upload-btn{
     width: 91px;
-    
     border: solid;
     border-radius: 10px;
 }
