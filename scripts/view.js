@@ -787,13 +787,22 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
 
                             function addAlbum() {
-                                //  alert('Add Album to '+$(this).parent().find('h5').text());
-                                alert('Add Album to ' + $(this).parent().parent().data('catNam') + '!');
+                                var storedData= $(this).parent().parent().data('catNam');
+                                var userChoiceToAdd=confirm('Add Album to ' + storedData + '?');
+                                if(userChoiceToAdd){
+
+                                    alert('Added');
+                                }
 
                             }
 
                             function delAlbum() {
-                                alert('Remove Album ' + $(this).parent().data('cat') + '!');
+                                var storedData=$(this).parent().data('storedData');
+                                var userChoiceToDelete=confirm('Remove Album ' + storedData.album +' from '+storedData.ctgr+ '?');
+                                if(userChoiceToDelete){
+
+                                    alert('Deleted');
+                                }
                             }
 
                             var $myAlbums = $('<ul class="albums">').append('<li><h3>My Albums</h3></li>').insertBefore('#imagesView');
@@ -808,39 +817,29 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
                             $.each(data.results, function (index, object) {
 
+                                var localData= {album: object.albumName, ctgr:object.categoryId.categoryName,albumID:object.objectId,ctgrID:object.categoryId.objectId};
+
                                 switch (object.categoryId.categoryName) {
                                     case 'Nature':
 
-                                        $Nature.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        $Nature.append($('<li class="albumUser">' + object.albumName + '</li>').data('storedData', localData));
                                         break;
                                     case 'Celebrities':
-                                        $Celebs.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        $Celebs.append($('<li class="albumUser">' + object.albumName + '</li>').data('storedData', localData));
                                         break;
                                     case 'Others':
-                                        $Others.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        $Others.append($('<li class="albumUser">' + object.albumName + '</li>').data('storedData', localData));
                                         break;
                                     case 'The Team':
-                                        $Team.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        $Team.append($('<li class="albumUser">' + object.albumName + '</li>').data('storedData', localData));
                                         break;
                                     case 'Events':
-                                        $Events.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        $Events.append($('<li class="albumUser">' + object.albumName + '</li>').data('storedData', localData));
                                         break;
                                     case 'City sightseeing':
-                                        $City.append($('<li class="albumUser">' + object.albumName + '</li>').data('cat', object.albumName));
+                                        $City.append($('<li class="albumUser">' + object.albumName + '</li>').data('storedData', localData));
                                         break;
-                                    case 'Others':
-                                        $Others.append('<li class="albumUser">' + object.albumName + '</li>');
-                                        break;
-                                    case 'The Team':
-                                        $Team.append('<li class="albumUser">' + object.albumName + '</li>');
-                                        break;
-                                    case 'Events':
-                                        $Events.append('<li class="albumUser">' + object.albumName + '</li>');
-                                        break;
-                                    case 'City sightseeing':
-                                        $City.append('<li class="albumUser">' + object.albumName + '</li>');
 
-                                        break;
                                 }
                                 //alert(object.albumName+"--"+object.categoryId.categoryName);
                             });
