@@ -235,7 +235,7 @@ aside>li{
     cursor: pointer;
     border: 2px solid transparent;
     -webkit-text-fill-color: rgba(255,255,255,0.1);
-    -webkit-background-clip: text;
+    -webkit-background-clip: border-box;
     /*Should discuse the way that pictures hides*/
 }
 
@@ -333,5 +333,33 @@ background-color: #cccccc;
 #vote-select{
     height: 27px;
     
+}
+
+#back-to-album-button, #previous-button, #next-button, #delete-button, #back-to-album-button, #download-button {
+      display: inline-block;
+      background-color: #999;
+      color: #fff;
+      font-size: 0.8em;
+      font-family: Courier, sans-serif;
+      padding: 0.5em 0.5em ;
+      text-decoration: none;
+      text-transform: uppercase;
+      border-radius: 0.5em;
+      border-bottom: 0.25em solid #909090;
+      -moz-transition: 0.1s;
+      -webkit-transition: 0.1s;
+      transition: 0.1s;
+      box-shadow: 4px 2px 3px #ccc;
+      position: relative;
+}
+#back-to-album-button:hover, #previous-button:hover, #next-button:hover, #delete-button:hover, #back-to-album-button:hover, #download-button:hover {
+     background-color: #909090;
+     border-bottom-width: 0;
+     top: 0.2em;
+}
+
+#download-button a {
+    text-decoration: none;
+    color: #ffffff;
 }
 

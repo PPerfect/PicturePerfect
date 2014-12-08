@@ -527,7 +527,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                 //var $infoButton = $('<button>Information</button>').attr('id', 'info-button'); // TODO there is no property info in picture delete if you diside that is useless
                 var $deleteButton = $('<button>Delete Picture</button>').attr('id', 'delete-button');
                 var $backButton = $('<button>Back to the Album</button>').attr('id', 'back-to-album-button');
-                var $DownloadButton = $("<a href='" + currImgUrl + "' download><button>Download</button></a>");
+                var $DownloadButton = $("<button><a href='" + currImgUrl + "' download>Download</a></button>").attr('id', 'download-button');
 
                 $photoViewer
                     .append($previousButton)
