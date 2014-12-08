@@ -23,6 +23,20 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     };
 
+  VoteController.prototype.getVotesByAlbumId= function (id) {
+      var defer = $.Deferred();
 
+      this.repository.votes.getVotesByAlbumId(id,
+          function success(data) {
+              defer.resolve(data);
+          },
+          function error(err) {
+              defer.reject(err);
+          }
+      );
+
+      return defer.promise();
+  }
+    
     return new VoteController();
 });

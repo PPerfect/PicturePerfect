@@ -6,6 +6,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
 
         function View() {
         }
+
         //TODO delete commented code
         //View.prototype.uploadImage = function () {
         //
@@ -465,7 +466,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                             if (photo.content !== undefined) {
                                 photoUrlArray[counter] = photo.content.url;
 
-                            //    _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
+                                //    _this.createPhotoHolder(photo.photoName, className, photo.content.url, photo.objectId, $photosWrapper);
 
                                 _this.createPhotoHolder(photo.photoName, className, photo.content.url, counter, $photosWrapper);
 
@@ -476,7 +477,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     } else {
                         _this.createPhotoHolder(noPhotos, className, defaultImageUrl, noPhotos, $photosWrapper);
                     }
-
+                    _this.loadVotesByAlbumId(albumId);
                     _this.attachPhotoUploader(albumId);
                     _this.loadCommentsForAlbum(albumId, $('#albums-view'));
 
@@ -679,14 +680,27 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
         }
 
         View.prototype.attachPhotoUploader = function (albumId) {
-            var $uploadFieldSet = $('<fieldset/>').attr('id', 'upload-field-set'),
-                $inputFile = $('<input/>').attr('type', 'file').attr('id', 'file-select').attr('name', 'file-select').appendTo($uploadFieldSet),
-                $uploadBtn = $('<button>upload</button>').attr('id', 'upload-btn').appendTo($uploadFieldSet),
+            var $uploadFieldSet = $('<fieldset/>').attr('id', 'upload-field-set').appendTo($('#albums-view')),
+                $inputFile = $('<input/>').attr('type', 'file').attr('id', 'file-select').attr('name', 'file-select'),
+                $uploadBtn = $('<button>upload</button>').attr('id', 'upload-btn'),
                 _this = this,
                 file;
             if (sessionStorage.getItem('PPUser') != null && sessionStorage.getItem('PPUser') != undefined) {
 
-                $uploadFieldSet.appendTo($('#albums-view'))
+                albumController.getAlbumById(albumId).then(
+                    function success(data) {
+                        if (data.userId.objectId === userController.getLoggedUserData().userId) {
+
+                            $inputFile.appendTo($uploadFieldSet);
+                            $uploadBtn.appendTo($uploadFieldSet);
+                        }
+                    },
+                    function error(error) {
+                        console.log(error)
+                    }
+                )
+
+
             }
 
             $inputFile.on('change', function (ev) {
@@ -711,6 +725,29 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                         });
                 }
             });
+        }
+
+        View.prototype.loadVotesByAlbumId = function (id) {
+
+            voteController.getVotesByAlbumId(id).then(
+                function success(data) {
+                    var votesObj = data.results,
+                        length = votesObj.length || 1,
+                        rating = 0;
+                    $.each(votesObj, function (index, value) {
+                        rating += value.value;
+                    });
+
+                    rating = rating == 0 ? 0 : rating / votesObj.length;
+
+                    console.log(rating);
+                    $('#upload-field-set').append('<h3 id="album-rating">Rating: ' + rating + '</h3>')
+
+                },
+                function error(error) {
+                    console.log(error);
+                }
+            );
         }
 
 

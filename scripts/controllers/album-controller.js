@@ -42,7 +42,6 @@ define(['baseController'], function (baseController) {
         return defer.promise();
     }
 
-
     //TODO getAlbumsByUserId---->oconne
     AlbumController.prototype.getAlbumsByUserId=function (UserId){
         console.log(this.repository.albums);
@@ -62,11 +61,20 @@ define(['baseController'], function (baseController) {
 
     }
 
+    AlbumController.prototype.getAlbumById= function (id) {
+        var defer = $.Deferred();
 
+        this.repository.albums.getAlbumById(id,
+            function success(data) {
+                defer.resolve(data);
+            },
+            function error(error) {
+                defer.reject(error);
+            }
+        );
 
-
-
-    //ot getAlbumsByCategoryId
+        return defer.promise();
+    }
 
 
     return new AlbumController();

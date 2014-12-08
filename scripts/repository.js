@@ -54,7 +54,6 @@ define(['requestsExecutor'], function (requestsExecutor) {
 
         }
 
-
         Photo.prototype.getAll = function (success, error) {
             requestsExecutor.get(this.serviceUrl, contentTypes.JSON, success, error);
         }
@@ -178,17 +177,13 @@ define(['requestsExecutor'], function (requestsExecutor) {
         //TODO getAlbumsByUserId------>oconne
         Album.prototype.getAlbumsByUserId = function (userId, success, error) {
             //alert(userId);
-           // var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"Albums","userId":"' + userId + '"}}';
+            // var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"Albums","userId":"' + userId + '"}}';
 
             var url = this.serviceUrl + '?where={"userId":{"__type":"Pointer","className":"_User","objectId":"' + userId + '"}}&include=categoryId';
 
             requestsExecutor.get(url, contentTypes.JSON, success, error);
 
         }
-
-
-        //-------------------END-------->oconne
-
 
         return Album;
 
@@ -270,6 +265,12 @@ define(['requestsExecutor'], function (requestsExecutor) {
             var serviceUrl = this.serviceUrl + '?include=albumId';
             requestsExecutor.get(serviceUrl, contentTypes.JSON, success, error);
         };
+
+        Vote.prototype.getVotesByAlbumId = function (id, success, error) {
+            var serviceUrl = this.serviceUrl + '?where={"albumId":{"__type":"Pointer","className":"Album","objectId":"' + id + '"}}';
+            console.log(serviceUrl)
+            requestsExecutor.get(serviceUrl, contentTypes.JSON, success, error);
+        }
 
         return Vote;
     }());

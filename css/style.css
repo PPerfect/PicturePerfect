@@ -135,7 +135,7 @@ background-color: #cccccc;
 #file-select{
     display: inline;
     /* width: 91px; */
-    margin-left: 34%;
+    margin-left: 2%;
     border-radius: 10px;
     border: solid;
 }
@@ -151,4 +151,11 @@ background-color: #cccccc;
 }
 #footer-line{
     margin-left:30%;
+}
+
+#album-rating{
+    margin: 0 auto;
+  
+    display: inline;
+    margin-left: 1%;
 }
