@@ -33,12 +33,7 @@
             view.loadLastAddedAlbums(6);
             view.loadTopAlbums(6);
 
-           // view.listAllAlbums();
             view.listAllCategories();
-
-            //TODO call check function oconne;
-            view.ListAlbumsByUserLogged();
-          //  view.uploadImage();
 
             view.attachClickOnCategory();
             view.attachClickOnAlbum();
