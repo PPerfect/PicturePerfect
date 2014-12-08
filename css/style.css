@@ -1,6 +1,8 @@
 ﻿html, body {
     width: 100%;
     height: 100%;
+    background-image: url("../images/PP_BG_dark_grey_wave.jpg");
+    background-repeat: repeat;
 }
 
 html, body, div, span, header, footer, main, aside, a, ul, li, nav, section, article, h1, h2, p, img, figure, aside, small, time {
@@ -9,6 +11,16 @@ html, body, div, span, header, footer, main, aside, a, ul, li, nav, section, art
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+#top-header, .footer, .content{
+    background-color: rgba(255,255,255,0.6);
+    width: 90%;
+    height: 90%;
+    position: relative;
+    margin-left: 5%;
+    margin-bottom: 1%;
+    border-radius: 12px;
 }
 
 img {
@@ -44,48 +56,122 @@ a {
 #top-logo {
     display: inline;
     float: left;
+    margin: 6px;
 }
 
 #top-header h1, #top-header h2 {
-    width: 50%;
+
+    color: #303030;
+    line-height: 4;
 }
 
 #top-nav {
-
+    background-color: rgba(5,5,5,0.7);
+    padding: 5px ;
+    border-radius: 0px 0px 12px 12px;
+    position: absolute;
+    bottom:0;
+    width: 100%;
 }
 
 #top-nav li {
     display: inline-block;
     margin: 0 15px;
 }
+li a{
+    text-decoration: none;
+    background-color: rgba(100,100,100,0.8);
+    color: aliceblue;
+    padding: 20px;
+}
+li a:hover{
+    color: greenyellow;
+    text-decoration: none;
+}
+li a:visited{
+    color: greenyellow;
+    text-decoration: none;
+}
+#top-nav li:nth-child(5),#top-nav li:nth-child(6){
+    position: relative;
+    float: right;
+    margin-right: 12px;
+
+}
+.content h3{
+  font-size: 50px;
+    font-family: Arial, Helvetica;
+    margin-left: 40%;
+    color: dimgrey;
+    padding: 30px;
+}
+#category-wrapper, aside{
+    margin: 20px 100px 20px 100px ;
+}
+
+#category-wrapper>div, aside>li{
+    margin: 50px;
+    border-radius: 12px;
+    border: solid #ffffff 5px;
+    padding-top: 45px;
+    font-size: 28px;
+
+}
+
+.special-album{
+    background-color: transparent;
+}
+
 
 #login-frm, #register-frm {
     text-align: right;
+
 }
 
 #login-frm label, #register-frm label {
     display: block;
+    color: ghostwhite;
 }
 
-#imagesView {
+#imagesView, aside>li, .category {
     display: inline-block;
+    vertical-align: top;
 }
 
 
 /*css whriten from js view If don like can be canget ;)*/
-.category, .album, .photo {
+.category, .album, .photo, aside>li {
     word-wrap: break-word;
     color: dimgrey;
     font-weight: bold;
     width: 180px;
     height: 180px;
     text-align: center;
-    float: left;
+    /*background: linear-gradient(top, rgba(0,0,0,0.84) 0%,rgba(0,0,0,0) 100%);*/
+    background-image: url("../images/album%20tumbnail2.jpg");
+    /*float: left;*/
 }
 
 .category:hover, .album:hover, .photo:hover {
     cursor: pointer;
     border: 2px solid transparent;
+    -webkit-text-fill-color: rgba(255,255,255,0.1);
+    -webkit-background-clip: text;
+}
+
+#top-header{
+    height: 300px;
+    -webkit-animation: myfirst 5s infinite linear; /* Chrome, Safari, Opera */
+    animation: myfirst 10s  infinite;
+    background-repeat: no-repeat;
+    background-size : 100% auto
+}
+@-webkit-keyframes myfirst {
+
+    from { background-image: url("../images/Relax_baner.jpg");}
+    to { background-image: url("../images/Dominican_baner.jpg");}
+    to { background-image: url("../images/Spa_baner.jpg");}
+
 }
 
 .comment-wrapper{
@@ -135,7 +221,7 @@ background-color: #cccccc;
 #file-select{
     display: inline;
     /* width: 91px; */
-    margin-left: 2%;
+    margin-left: 34%;
     border-radius: 10px;
     border: solid;
 }
@@ -153,6 +239,7 @@ background-color: #cccccc;
     margin-left:30%;
 }
 
+
 #album-rating{
     margin: 0 auto;
     display: inline;
@@ -168,3 +255,4 @@ background-color: #cccccc;
     height: 27px;
     
 }
+
