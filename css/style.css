@@ -117,7 +117,7 @@ li a:visited{
     margin: 20px 100px 20px 100px ;
 }
 
-#category-wrapper>div, #albums-wrapper>div, #photos-wrapper>div, aside>li, .albums>ul{
+#category-wrapper>div, #albums-wrapper>div, #photos-wrapper>div, aside>li, .albums>ul, .albumUser{
     margin: 50px;
     border-radius: 12px;
     border: solid #ffffff 5px;
@@ -150,7 +150,7 @@ aside>li, .albums>ul {
 }
 @-webkit-keyframes myAlbums{
 
-    from { background-image: url("../images/album%20tumbnail2.jpg");}
+    from { background-image: url("../images/PP_BG_dark_grey.jpg");}
 
 }
 .special-album{
@@ -199,28 +199,49 @@ input:focus{
     border-radius: 10px;
 }
 
-#imagesView, aside>li, .category, .album, .photo, .albums>ul  {
+#imagesView, aside>li, .category, .album, .photo, .albums>ul, .albumUser   {
     display: inline-block;
     vertical-align: top;
 }
 
 
 /*css whriten from js view If don like can be canget ;)*/
-.category, .album, .photo, aside>li, .albums>ul {
+.category, .album, .photo, aside>li, .albums>ul, .albumUser  {
     word-wrap: break-word;
     color: dimgrey;
     font-weight: bold;
     width: 180px;
     height: 180px;
     text-align: center;
-    /*background: linear-gradient(top, rgba(0,0,0,0.84) 0%,rgba(0,0,0,0) 100%);*/
-    background-image: url("../images/album%20tumbnail.jpg");
-    /*float: left;*/
 }
+.albums>ul:hover{
+	    width: auto;
+    	    height: auto;
+   	}
+	.albumNature{
+          	    background-image: url("../images/Categories_nature.jpg");
+       	}
+	.albumCelebs{
+          	    background-image: url("../images/Categories_celebs2.jpg");
+       	}
+	.albumOthers{
+    	    background-image: url("../images/Categories_others.jpg");
+     	}
+	.albumTeam{
+       	    background-image: url("../images/Categories_team.jpg");
+         	}
+	.albumEvents{
+      	    background-image: url("../images/Categories_events.jpg");
+      	}
+	.albumCity{
+         	    background-image: url("../images/Categories_city.jpg");
+      	}
 
 .albums>ul{
     color: aliceblue;
     padding-top: 80px;
+    background-repeat: no-repeat;
+    background-size : 100% auto;
 }
 
 .categoryName>button {
@@ -243,14 +264,11 @@ aside>li{
     -webkit-transform:scale(0.95);
     -o-transform:scale(0.95);
     transform:scale(0.95);
-    /*-webkit-text-fill-color: rgba(255,255,255,0.1);
-    -webkit-background-clip: border-box;*/
-    /*Should discuse the way that pictures hides*/
 }
 
 #top-header{
     height: 300px;
-    -webkit-animation: myfirst 5s infinite linear; /* Chrome, Safari, Opera */
+    -webkit-animation: myfirst 5s infinite linear;
     animation: myfirst 10s  infinite;
     background-repeat: no-repeat;
     background-size : 100% auto
@@ -374,4 +392,15 @@ background-color: #cccccc;
 footer {
     margin: auto;
     text-align: center;
+}
+
+.albumUser{
+    color: aliceblue;
+    background-image: url("../images/album%20tumbnail3.jpg");
+
+}
+.albumUser>button{
+    float: right;
+    vertical-align: bottom;
+    color: #606060;
 }
