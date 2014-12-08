@@ -223,7 +223,7 @@ input:focus{
     padding-top: 80px;
 }
 
-.categoryName>button{
+.categoryName>button {
     background-color: grey;
     border: 2px solid #606060;
     outline: none;
@@ -286,10 +286,6 @@ background-color: #cccccc;
     text-align: center;
 }
 
-#comments-title{
-
-}
-
 .comment-content{
     word-wrap: break-word;
 }
@@ -320,10 +316,6 @@ background-color: #cccccc;
     width: 91px;
     border: solid;
     border-radius: 10px;
-}
-
-#upload-field-set{
-    
 }
 
 #footer-line{
@@ -379,3 +371,7 @@ background-color: #cccccc;
     color: #ffffff;
 }
 
+footer {
+    margin: auto;
+    text-align: center;
+}
