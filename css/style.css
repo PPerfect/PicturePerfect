@@ -125,6 +125,11 @@ li a:visited{
     font-size: 28px;
 }
 
+#photo-viewer {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
 .albums{
     margin: 0px 100px 0px 100px;
 }
@@ -231,13 +236,13 @@ aside>li{
 
 .category:hover, .album:hover, .photo:hover {
     cursor: pointer;
-    border: 2px solid transparent;
-    /*check*/
     margin: 0;
     padding: 0;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
+
+    -moz-transform:scale(0.95);
+    -webkit-transform:scale(0.95);
+    -o-transform:scale(0.95);
+    transform:scale(0.95);
     /*-webkit-text-fill-color: rgba(255,255,255,0.1);
     -webkit-background-clip: border-box;*/
     /*Should discuse the way that pictures hides*/
@@ -355,7 +360,14 @@ background-color: #cccccc;
       transition: 0.1s;
       box-shadow: 4px 2px 3px #ccc;
       position: relative;
+      margin-left: 5px;
+      margin-top: 5px;
 }
+
+#previous-button {
+    margin-left: 15px;
+}
+
 #back-to-album-button:hover, #previous-button:hover, #next-button:hover, #delete-button:hover, #back-to-album-button:hover, #download-button:hover {
      background-color: #606060;
      border-bottom-width: 0;

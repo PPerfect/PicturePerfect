@@ -617,7 +617,11 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     sessionStorage['currentImageIndex'] = '0';
                 }
 
-                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');
+            $('#photo-viewer').animate({ opacity: 0 }, 'slow', function () {
+                $(this)
+                    .css({ 'background-image': 'url(' + nextUrl + ')'})
+                    .animate({ opacity: 1 });
+                });
             });
 
             $('body').on('click', '#previous-button', function (ev) {
@@ -633,10 +637,13 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                     sessionStorage['currentImageIndex'] = (photosUrlArr.length - 1).toString();
                 }
 
-                $('#photo-viewer').css('background-image', 'url(' + nextUrl + ')');
-            });
-
-            // TODO implement this if you disede to delete picture from here !!!
+                $('#photo-viewer').animate({ opacity: 0 }, 'slow', function () {
+                    $(this)
+                        .css({ 'background-image': 'url(' + nextUrl + ')' })
+                        .animate({ opacity: 1 });
+                    });
+                });
+        
             $('body').on('click', '#delete-button', function (ev) {
                 ev.preventDefault();
                 ev.stopPropagation();
