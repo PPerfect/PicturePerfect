@@ -365,8 +365,8 @@ background-color: #cccccc;
       text-transform: uppercase;
       border-radius: 0.5em;
       border-bottom: 0.25em solid #606060;
-      -moz-transition: 0.1s;
-      -webkit-transition: 0.1s;
+      /*-moz-transition: 0.1s;
+      -webkit-transition: 0.1s;*/
       transition: 0.1s;
       box-shadow: 4px 2px 3px #ccc;
       position: relative;
