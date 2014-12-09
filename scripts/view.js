@@ -758,7 +758,7 @@ define(['photoController', 'albumController', 'categoryController', 'userControl
                                 albumController.updateAlbum(albumId, loggedUserId).then(
                                     function (data) {
                                         console.log(data);
-                                        alert('hee');
+
                                         $(btn_this).attr('disabled', 'disabled');
                                     },
                                     function (error) {
