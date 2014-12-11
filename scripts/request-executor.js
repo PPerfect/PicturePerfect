@@ -12,7 +12,7 @@ define([], function () {
             method: method,
             url: url,
             contentType: contentType,
-            data: data,
+            data: JSON.stringify(data),
             success: success,
             error: error
         });
